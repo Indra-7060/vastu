@@ -1,0 +1,50 @@
+# --- Secrets: environment files (database passwords, API keys) ---
+.env
+.env.*
+!.env.example
+auth.json
+
+# --- Dependencies (installed by Composer / npm) ---
+/vendor
+/node_modules
+
+# --- Build output ---
+/public/build
+/public/hot
+
+# --- Uploaded images and user files (kept out of Git; back them up separately) ---
+/public/storage
+/storage/*.key
+
+# --- Logs, caches and compiled files ---
+/storage/logs/*
+!/storage/logs/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+!/storage/framework/cache/data/
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/bootstrap/cache/*.php
+npm-debug.log
+yarn-error.log
+.phpunit.result.cache
+.phpunit.cache
+
+# --- Database dumps and local databases ---
+*.sql
+*.sql.gz
+/database/*.sqlite*
+
+# --- Editor and OS files ---
+.DS_Store
+Thumbs.db
+/.idea
+/.vscode
+/.fleet
+*.swp
+Homestead.json
+Homestead.yaml

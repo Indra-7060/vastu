@@ -1,0 +1,69 @@
+@php $pageTitle = 'Forgot Password - Vastutathastu'; @endphp
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{{ $pageTitle }}</title>
+  <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-2">
+  <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-2">
+  <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
+  @include('frontend.partials.site-config')
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=72">
+  <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
+</head>
+<body class="pp-auth-page">
+  <div class="wrapper ovh">
+    <div id="page">
+      <div class="text-center py-4">
+        <a href="{{ route('home') }}"><img src="{{ asset('vastu/images/logo.svg') }}?v=2" alt="Vastutathastu" style="max-height:56px;"></a>
+      </div>
+      <main class="body_content_wrapper">
+        <section class="registration-section pt40 pb80">
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-lg-5 col-md-7">
+                <div class="section-title text-center mb-4">
+                  <h2 class="title">Forgot password</h2>
+                  <p class="sub-title mb-0">Enter your account email and we’ll send a reset link. You can request this up to 2 times every 24 hours.</p>
+                </div>
+                <div class="pp-auth-card">
+                  <form id="customer-forgot-form" method="POST" action="{{ route('customer.password.email') }}" novalidate>
+                    @csrf
+                    <div class="auth-form-alert alert d-none mb-3" role="alert" hidden></div>
+                    @if(session('success'))
+                      <div class="alert alert-success mb-3">{{ session('success') }}</div>
+                    @endif
+                    @if($errors->any())
+                      <div class="alert alert-danger mb-3">{{ $errors->first() }}</div>
+                    @endif
+                    <div class="form-floating mb-3">
+                      <input type="email" name="email" id="forgot-email" class="form-control shadow-none" placeholder="Email address" value="{{ old('email') }}" autocomplete="email" maxlength="255">
+                      <label for="forgot-email">Email address</label>
+                      <div class="field-error text-danger mt-1"></div>
+                    </div>
+                    <button type="submit" class="su-btn-4 su-btn-16-black w-100 su-left-right">
+                      <span class="mr10 su-text d-inline-block">Send reset link</span>
+                    </button>
+                    <p class="text-center mt-4 mb-0">
+                      <a href="{{ route('login') }}">Back to login</a>
+                    </p>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      @include('frontend.partials.site-footer')
+    </div>
+  </div>
+  <script src="{{ asset('frontend/js/jquery.js') }}"></script>
+  <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
+  <script src="{{ asset('frontend/js/customer-auth.js') }}?v=pw-loader-1"></script>
+  @include('frontend.partials.cart-script')
+</body>
+</html>

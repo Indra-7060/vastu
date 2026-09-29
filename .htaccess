@@ -1,0 +1,21 @@
+# Upload to LIVE as: /public_html/.htaccess
+# (same folder as app/, public/, vendor/, .env)
+#
+# Why needed:
+# /storage on the server root is Laravel's PRIVATE folder (403 Forbidden).
+# Product images live in /public/storage. This rewrite sends public URLs there.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force product/media URLs to the PUBLIC storage folder
+    RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+
+    # Other public assets
+    RewriteRule ^(css|js|images|frontend|vendor|build)/(.*)$ public/$1/$2 [L]
+    RewriteRule ^(favicon\.ico|robots\.txt|web\.config)$ public/$1 [L]
+
+    # Everything else → Laravel public front controller
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

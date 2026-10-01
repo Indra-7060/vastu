@@ -27,7 +27,7 @@
       @if($flag)
         <span class="vt-tile__flag">{{ $flag }}</span>
       @endif
-      <h3 class="vt-tile__name">{{ $product->title }}</h3>
+      <h3 class="vt-tile__name" data-vt-orig="{{ $product->title }}">{{ $product->title }}</h3>
       @if($subtitle)
         <p class="vt-tile__sub">{{ $subtitle }}</p>
       @endif

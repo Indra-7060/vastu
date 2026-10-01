@@ -21,7 +21,7 @@ class OrderController extends Controller
     {
         $perPage = $this->perPage($request);
         [$sort, $dir] = $this->sortParams($request, [
-            'order_number', 'user_name', 'user_phone', 'ordered_at', 'status', 'payable_amount',
+            'order_number', 'user_name', 'user_phone', 'ordered_at', 'status', 'payment_status', 'payable_amount',
         ], 'ordered_at', 'desc');
 
         $query = Order::query()->with('user');

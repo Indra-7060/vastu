@@ -30,7 +30,7 @@
   }
 
   function loggedInAccountIconHtml() {
-    return '<span class="site-account-avatar" aria-hidden="true">' + userInitials() + '</span>';
+    return '<span class="site-account-avatar notranslate" translate="no" aria-hidden="true">' + userInitials() + '</span>';
   }
 
   function applyLoggedInAccountIcons() {

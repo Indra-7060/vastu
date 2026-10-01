@@ -10,7 +10,7 @@
             <label>Expected Delivery Date:</label>
             <div class="delivery-date-controls">
                 <input type="text" id="expected-delivery-date" placeholder="DD-MM-YYYY" autocomplete="off">
-                <button type="button" class="btn btn-delivery-update" id="btn-update-delivery">@include('admin.partials.icon', ['name' => 'edit', 'size' => 15]) Update</button>
+                <button type="button" class="btn btn-delivery-update" id="btn-update-delivery" title="Save the delivery date (and the status, if one is selected)">@include('admin.partials.icon', ['name' => 'calendar', 'size' => 15]) Update</button>
             </div>
         </div>
 
@@ -32,8 +32,9 @@
                     <textarea name="description" id="order-status-description" rows="4" placeholder="Enter short description"></textarea>
                 </div>
             </div>
-            <div class="offer-form-actions">
-                <button type="submit" class="btn btn-primary" id="order-status-save">Save</button>
+            <div class="offer-form-actions order-status-actions">
+                <p class="order-status-actions__hint">Saves the new status and any change to the delivery date.</p>
+                <button type="submit" class="btn btn-primary order-status-save" id="order-status-save">@include('admin.partials.icon', ['name' => 'truck', 'size' => 16]) Save status</button>
             </div>
         </form>
     </div>

@@ -424,8 +424,10 @@
       ['.vt-carousel__slide', 100, 4],
       ['.vt-article', 120, 3],
       ['.vt-footer__main > *', 80, 5],
-      ['.vt-insta__tile', 100, 6],
-      ['.vt-insta__head', 0, 1],
+      ['.vt-insta__tile, .vt-journal__card', 120, 3],
+      ['.vt-insta__head, .vt-journal__head', 0, 1],
+      ['.vt-yantra__media, .vt-yantra__copy', 140, 2],
+      ['.vt-review', 110, 3],
       ['.vt-section-head, .vt-intro__inner, .vt-wisdom__head, .vt-products .vt-h3, .vt-split, .vt-cta', 0, 1]
     ];
     var pending = [];
@@ -623,7 +625,11 @@
       copy.classList.add('is-clone', 'is-animated');
       copy.setAttribute('aria-hidden', 'true');
       copy.querySelectorAll('a, button').forEach(function (el) { el.tabIndex = -1; });
+      // A copy made while a photo was still loading would inherit the hidden "loading" state with
+      // nothing to clear it; reset it so the copy tracks its own photo.
+      copy.querySelectorAll('[data-vt-skel]').forEach(function (box) { box.removeAttribute('data-vt-skel'); box.classList.remove('vt-skel'); });
       track.appendChild(copy);
+      skeletonImages(copy);
     });
     carousel.classList.add('is-marquee');
 

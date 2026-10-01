@@ -10,15 +10,15 @@
   <meta name="description" content="Vastutathastu unites Vedic Vastushastra, astrology and numerology with authentic sacred products for harmonious homes, workplaces and lives.">
   <!-- css file -->
   <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-2">
+  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-3">
+  <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
   <link rel="stylesheet" href="{{ asset('frontend/css/journal.css') }}?v=vastu-2">
 
   <!-- Title -->
   <title>{{ $pageTitle ?? ($product->title ?? 'Product') . ' - Vastutathastu' }}</title>
 
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=72">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=117">
   <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
 </head>
@@ -97,7 +97,7 @@
             <div class="pdp-panel pdp-panel--info">
               <div class="product-design__head">
                 @if($product->badge)<p class="pdp-flag">{{ $product->badge }}</p>@elseif($product->is_new_arrival)<p class="pdp-flag">New</p>@endif
-                <h1 id="product-design-title" class="pdp-title">{{ $product->title }}@if($subtitle)<span class="pdp-subtitle">{{ $subtitle }}</span>@endif</h1>
+                <h1 id="product-design-title" class="pdp-title"><span data-vt-orig="{{ $product->title }}">{{ $product->title }}</span>@if($subtitle)<span class="pdp-subtitle">{{ $subtitle }}</span>@endif</h1>
                 <div class="pdp-price">
                   <p class="product-design__price" data-product-price>
                     @include('frontend.partials.product-price', ['product' => $product, 'hideLabels' => true])
@@ -264,12 +264,12 @@
   <script src="{{ asset('frontend/js/jquery-scrolltofixed-min.js') }}"></script>
   <script src="{{ asset('frontend/js/jarallax.js') }}"></script>
   <script src="{{ asset('frontend/js/wow.min.js') }}"></script>
-  <script src="{{ asset('frontend/js/script.js?v=vastu-2') }}"></script>
-  <script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-5"></script>
+  <script src="{{ asset('frontend/js/script.js?v=vastu-3') }}"></script>
+  <script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-6"></script>
   <script src="{{ asset('frontend/js/frontend-search.js') }}?v=live-3"></script>
   @include('frontend.partials.cart-script')
   <script src="{{ asset('frontend/js/wishlist-toggle.js') }}?v=vastu-3"></script>
-  <script src="{{ asset('vastu/js/pdp.js') }}?v=10"></script>
+  <script src="{{ asset('vastu/js/pdp.js') }}?v=11"></script>
 </body>
 
 </html>

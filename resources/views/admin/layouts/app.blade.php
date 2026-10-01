@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v=vastu-pro-13">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v=vastu-pro-25">
     <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
 </head>
 <body class="sidebar-collapsed">
@@ -221,6 +221,27 @@
             e.stopPropagation();
         });
     }
+})();
+</script>
+<script>
+// Phones: list tables turn into stacked cards; each cell gets its column name as a label.
+(function () {
+    document.querySelectorAll('table.admin-table, table.table, table.dash-table').forEach(function (table) {
+        var heads = Array.prototype.map.call(table.querySelectorAll('thead th'), function (th) { return th.textContent.replace(/[^\p{L}\p{N} &\/().'-]/gu, '').replace(/\s+/g, ' ').trim(); });
+        if (!heads.length) return;
+        table.classList.add('vt-cards');
+        table.querySelectorAll('tbody tr').forEach(function (tr) {
+            Array.prototype.forEach.call(tr.children, function (td, i) {
+                if (td.tagName !== 'TD') return;
+                if (td.hasAttribute('colspan')) { td.setAttribute('data-label', ''); return; }
+                if (/₹/.test(td.textContent) && td.textContent.trim().length < 20) td.classList.add('vt-nowrap');
+                var label = heads[i] || '';
+                td.setAttribute('data-label', label);
+                if (!label && td.querySelector('input[type="checkbox"]')) td.classList.add('vt-cards__check');
+                if (/^(action|actions|update)$/i.test(label) || td.querySelector('.user-row-actions, .row-actions')) td.classList.add('vt-cards__actions');
+            });
+        });
+    });
 })();
 </script>
 @stack('scripts')

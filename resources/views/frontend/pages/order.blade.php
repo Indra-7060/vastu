@@ -9,15 +9,15 @@
 <meta name="description" content="Vastutathastu unites Vedic Vastushastra, astrology and numerology with authentic sacred products for harmonious homes, workplaces and lives.">
 <!-- css file -->
 <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-2">
-<link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-2">
+<link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-3">
+<link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
 <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
 <link rel="stylesheet" href="{{ asset('frontend/css/journal.css') }}?v=vastu-2">
 
 <!-- Title -->
 <title>{{ $pageTitle ?? 'Order - Vastutathastu' }}</title>
 
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=72">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=117">
   <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
 </head>
@@ -79,6 +79,16 @@
               </div>
               <h2 class="title mb15">ORDER RECEIVED</h2>
               <div class="text">Thank you. Your order has been received.</div>
+              @if(session('vt_order_placed') === $placedOrder->order_number)
+                {{-- Straight from checkout: gently take the customer back to the home page. --}}
+                <div class="vt-order-next" data-vt-order-next data-seconds="10" data-home="{{ route('home') }}" role="status">
+                  <p class="vt-order-next__text">Taking you back to the home page in <span class="vt-order-next__count notranslate" translate="no" data-vt-order-count>10</span> seconds for your next shopping.</p>
+                  <div class="vt-order-next__actions">
+                    <a class="vt-btn vt-btn--solid" href="{{ route('home') }}">Continue shopping now</a>
+                    <button type="button" class="vt-btn vt-btn--outline" data-vt-order-stay>Stay on this page</button>
+                  </div>
+                </div>
+              @endif
             </div>
           </div>
         </div>
@@ -169,10 +179,36 @@
 <script src="{{ asset('frontend/js/jarallax.js') }}"></script>
 <script src="{{ asset('frontend/js/wow.min.js') }}"></script>
 <!-- Custom script for all pages --> 
-<script src="{{ asset('frontend/js/script.js?v=vastu-2') }}"></script>
-<script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-5"></script>
+<script src="{{ asset('frontend/js/script.js?v=vastu-3') }}"></script>
+<script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-6"></script>
 <script src="{{ asset('frontend/js/frontend-search.js') }}?v=live-3"></script>
 @include('frontend.partials.cart-script')
+  <script>
+    // Order complete → home page after a short, visible countdown (can be stopped or skipped).
+    (function () {
+      var box = document.querySelector('[data-vt-order-next]');
+      if (!box) return;
+      var left = parseInt(box.getAttribute('data-seconds'), 10) || 10;
+      var textEl = box.querySelector('.vt-order-next__text');
+      var L = window.vtLang;
+      var localized = L && L.lang !== 'en' && L.say('orderNext', '0');
+      if (localized) { textEl.classList.add('notranslate'); textEl.setAttribute('translate', 'no'); }   // written below per language
+      var show = function (n) {
+        if (localized) textEl.innerHTML = L.say('orderNext', String(n));
+        else box.querySelector('[data-vt-order-count]').textContent = String(n);
+      };
+      show(left);
+      var timer = setInterval(function () {
+        left -= 1;
+        if (left <= 0) { clearInterval(timer); window.location.href = box.getAttribute('data-home'); return; }
+        show(left);
+      }, 1000);
+      box.querySelector('[data-vt-order-stay]').addEventListener('click', function () {
+        clearInterval(timer);
+        box.classList.add('is-stopped');
+      });
+    })();
+  </script>
 </body>
 
 </html>

@@ -197,7 +197,7 @@
       var parts = name.split(/\s+/);
       var initials = (parts[0] || 'U').charAt(0).toUpperCase();
       if (parts[1]) initials += parts[1].charAt(0).toUpperCase();
-      accountIcon = '<span class="site-account-avatar" aria-hidden="true">' + initials + '</span>';
+      accountIcon = '<span class="site-account-avatar notranslate" translate="no" aria-hidden="true">' + initials + '</span>';
     }
 
     var headerHTML =

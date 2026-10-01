@@ -34,6 +34,11 @@ return [
     */
 
     'mailers' => [
+        // Local test inbox: emails are saved and shown at /dev/mailbox instead of being sent.
+        'outbox' => [
+            'transport' => 'outbox',
+        ],
+
         'smtp' => [
             'transport' => 'smtp',
             'host' => env('MAIL_HOST', 'smtp.mailgun.org'),

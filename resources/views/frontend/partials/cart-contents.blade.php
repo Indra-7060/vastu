@@ -17,10 +17,11 @@
     @endif
 
     @if($cartItems->isEmpty())
-      <div class="pp-cart-empty text-center py-5">
-        <h3 class="mb-3">Your cart is empty</h3>
-        <p class="mb-4 text-muted">Browse the collection and add pieces you love.</p>
-        <a class="btn btn-dark" href="{{ route('shop') }}">Continue shopping</a>
+      <div class="pp-cart-empty">
+        @include('frontend.partials.vastu-empty-state', [
+            'title' => 'Your cart is empty',
+            'text' => 'Browse the collection and add pieces you love.',
+        ])
       </div>
     @else
       <div class="row mt15">
@@ -45,7 +46,7 @@
                           <img src="{{ $item['image'] }}" alt="{{ $item['title'] }}" width="90" height="110" style="object-fit:cover;">
                         </a>
                         <div>
-                          <a class="cart_title" href="{{ $item['url'] }}">{{ $item['title'] }}</a>
+                          <a class="cart_title" href="{{ $item['url'] }}" data-vt-orig="{{ $item['title'] }}">{{ $item['title'] }}</a>
                           @if($item['color'] || $item['size'])
                             <div class="text small mt-1">
                               @if($item['color'])Colour: {{ $item['color'] }}@endif
@@ -101,7 +102,7 @@
                     <a href="{{ $item['url'] }}"><img src="{{ $item['image'] }}" alt="{{ $item['title'] }}" width="90"></a>
                   </div>
                   <div class="item-details ms-3 position-relative flex-grow-1">
-                    <a class="cart_title" href="{{ $item['url'] }}">{{ $item['title'] }}</a>
+                    <a class="cart_title" href="{{ $item['url'] }}" data-vt-orig="{{ $item['title'] }}">{{ $item['title'] }}</a>
                     <div class="cart_price mb-1" data-cart-line-total>{{ $item['line_total_formatted'] }}</div>
                     @if($item['color'] || $item['size'])
                       <div class="text mb-2">

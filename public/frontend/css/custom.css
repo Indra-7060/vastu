@@ -51,7 +51,7 @@ form.site-account-form.is-active .site-account-tabs {
 
 .about-story__copy h1 {
     margin: 0 0 45px;
-    font-family: "Times New Roman", Georgia, serif;
+    font-family: var(--vt-serif, "Gentium Book Plus", Georgia, serif);
     font-size: 60px;
     font-weight: 400;
     line-height: 1;
@@ -59,7 +59,7 @@ form.site-account-form.is-active .site-account-tabs {
 }
 
 .about-story__text {
-    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--vt-sans, "Nunito", Arial, sans-serif);
     font-size: 24px;
     font-weight: 500;
     line-height: 1.6667
@@ -283,7 +283,7 @@ section.home21-banner .bg.bg-position.banner-mobile {
     width: 100%;
 }
 .collection-page__filters a {
-    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--vt-sans, "Nunito", Arial, sans-serif);
     font-size: 13px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -1016,7 +1016,7 @@ section.home21-banner .bg.bg-position.banner-mobile {
   display: inline-flex;
 }
 .pp-cart-empty h3 {
-  font-family: Georgia, serif;
+  font-family: var(--vt-serif, "Gentium Book Plus", Georgia, serif);
   color: #0b251f;
 }
 .product-design__cart.is-added {
@@ -1534,7 +1534,7 @@ button.collection-page__quick.is-busy,
   margin: 0;
   font-size: 22px;
   color: #0b251f;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--vt-serif, "Gentium Book Plus", Georgia, serif);
 }
 .customer-account-page .account-order-meta {
   display: grid;
@@ -1717,7 +1717,7 @@ button.collection-page__quick.is-busy,
 }
 .pp-confirm__title {
   margin: 0 0 10px;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--vt-serif, "Gentium Book Plus", Georgia, serif);
   font-size: 24px;
   font-weight: 500;
   color: #0b251f;
@@ -2003,7 +2003,7 @@ body.product-detail-page .product-size-guide__image img {
 .about-editorial__eyebrow {
   margin: 0 0 34px;
   color: #071a15;
-  font-family: "Times New Roman", Georgia, serif;
+  font-family: var(--vt-serif, "Gentium Book Plus", Georgia, serif);
   font-size: 22px;
   font-style: italic;
   font-weight: 400;
@@ -2014,7 +2014,7 @@ body.product-detail-page .product-size-guide__image img {
 .about-editorial__intro h1 {
   margin: 0;
   color:#0b251f;
-  font-family: "Times New Roman", Georgia, serif;
+  font-family: var(--vt-serif, "Gentium Book Plus", Georgia, serif);
   font-size:38px !important;
   font-weight: 400;
   line-height: 1.27;
@@ -2055,7 +2055,7 @@ body.product-detail-page .product-size-guide__image img {
 .about-editorial__content h2 {
   margin: 0 0 30px;
   color: #171717;
-  font-family: "Times New Roman", Georgia, serif;
+  font-family: var(--vt-serif, "Gentium Book Plus", Georgia, serif);
   font-size: clamp(34px, 3vw, 48px);
   font-weight: 400;
   line-height: 1.2;

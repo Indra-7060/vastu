@@ -8,10 +8,10 @@
   <meta name="robots" content="noindex">
   <meta name="description" content="Page not found - Vastutathastu">
   <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-2">
+  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-3">
+  <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=72">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=117">
   <title>404 - Page Not Found | Vastutathastu</title>
   <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
 </head>
@@ -39,8 +39,8 @@
   <script src="{{ asset('frontend/js/mmenu.js') }}"></script>
   <script src="{{ asset('frontend/js/lazysize.min.js') }}"></script>
   <script src="{{ asset('frontend/js/swiper-bundle.min.js') }}"></script>
-  <script src="{{ asset('frontend/js/script.js?v=vastu-2') }}"></script>
-  <script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-5"></script>
+  <script src="{{ asset('frontend/js/script.js?v=vastu-3') }}"></script>
+  <script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-6"></script>
   <script src="{{ asset('frontend/js/frontend-search.js') }}?v=live-3"></script>
   @include('frontend.partials.cart-script')
 </body>

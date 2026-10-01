@@ -1,14 +1,16 @@
-<div class="blog-header pb90">
+<div class="blog-header pb-5">
   <div class="text-center">
-    <h2 class="title text-uppercase">{{ optional($journalBanner)->subtitle ?: 'JOURNAL' }}</h2>
+    <h1 class="title vt-journal__title">{{ optional($journalBanner)->subtitle ?: 'Journal' }}</h1>
     <h5 class="sub-title mt20">{{ optional($journalBanner)->description ?: "Vedic wisdom for harmonious living" }}</h5>
   </div>
-  <div class="blog-filter d-flex flex-wrap mt25">
-    <a href="{{ route('blog') }}" class="filter-btn flex-grow-1 text-center {{ ! $activeType ? 'active' : '' }}">All Post</a>
+  @if(count($newsTypes))
+  <div class="blog-filter vt-journal__filters d-flex flex-wrap mt25">
+    <a href="{{ route('blog') }}" class="filter-btn flex-grow-1 text-center {{ ! $activeType ? 'active' : '' }}">All posts</a>
     @foreach($newsTypes as $type)
     <a href="{{ route('blog', ['type' => $type->slug]) }}" class="filter-btn flex-grow-1 text-center {{ ($activeType?->id === $type->id) ? 'active' : '' }}">{{ $type->title }}</a>
     @endforeach
   </div>
+  @endif
 </div>
 
 @if($featuredPost)
@@ -44,7 +46,7 @@
 </div>
 @endif
 
-<div class="row g-4 mt60">
+<div class="row g-4 mt-0">
   @forelse($posts as $blogPost)
   <div class="col-lg-4 col-sm-6">
     <div class="for-blog position-relative">
@@ -78,8 +80,12 @@
     </div>
   </div>
   @empty
-  <div class="col-12 text-center py-5">
-    <p class="mb-0">No journal posts yet.</p>
+  <div class="col-12">
+    @include('frontend.partials.vastu-empty-state', [
+        'title' => 'Articles coming soon',
+        'text' => 'Vedic insights, Vastu tips and product guidance will be published here soon. Please check back later.',
+        'icon' => 'info',
+    ])
   </div>
   @endforelse
 </div>

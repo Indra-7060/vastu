@@ -1,21 +1,34 @@
-# Upload to LIVE as: /public_html/.htaccess
-# (same folder as app/, public/, vendor/, .env)
+# Root .htaccess — for hosting where the project folder itself is the web root
+# (e.g. Hostinger /public_html/vastu → https://hostdemo.co.in/vastu, or /public_html → the domain).
+# Works both in a subfolder and at the domain root; nothing to edit when moving.
 #
-# Why needed:
-# /storage on the server root is Laravel's PRIVATE folder (403 Forbidden).
-# Product images live in /public/storage. This rewrite sends public URLs there.
+# - Static files (css, js, images, fonts, uploaded photos in public/storage) are served from public/
+# - Everything else goes to the root index.php, so Laravel knows the site lives in this folder
+#   (sending it to public/index.php makes Laravel see "/vastu" as the page → 404).
+# - Private files (.env, composer.json, storage/, vendor/ …) are never served; they reach Laravel → 404.
+
+# Never serve hidden files (.env, .htaccess, .git …) in this folder or below.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
 
 <IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
     RewriteEngine On
 
-    # Force product/media URLs to the PUBLIC storage folder
-    RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Other public assets
-    RewriteRule ^(css|js|images|frontend|vendor|build)/(.*)$ public/$1/$2 [L]
-    RewriteRule ^(favicon\.ico|robots\.txt|web\.config)$ public/$1 [L]
+    # Already rewritten (public file or the front controller) → stop
+    RewriteRule ^(public/|index\.php$) - [L]
 
-    # Everything else → Laravel public front controller
-    RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(.*)$ public/$1 [L]
+    # Static files (css, js, images, fonts, video, uploaded photos) → public/
+    RewriteRule ^(.+\.(?:css|js|mjs|map|jpe?g|png|gif|webp|avif|svg|ico|bmp|woff2?|ttf|otf|eot|mp4|webm|mp3|pdf|txt|xml|webmanifest))$ public/$1 [L,NC]
+
+    # Everything else → Laravel
+    RewriteRule ^ index.php [L]
 </IfModule>

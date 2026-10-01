@@ -10,15 +10,15 @@
 <meta name="description" content="Vastutathastu unites Vedic Vastushastra, astrology and numerology with authentic sacred products for harmonious homes, workplaces and lives.">
 <!-- css file -->
 <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-2">
-<link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-2">
+<link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-3">
+<link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
 <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
 <link rel="stylesheet" href="{{ asset('frontend/css/journal.css') }}?v=vastu-2">
 
 <!-- Title -->
 <title>{{ $pageTitle ?? 'Journal - Vastutathastu' }}</title>
 
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=72">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=117">
   <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
 </head>
@@ -49,33 +49,6 @@
     <!-- Instagram Feed -->
 
     <!-- feature-area-start -->
-    <section class="feature-16-area pt90 pb-0">
-      <div class="container">
-        <div class="row g-4">
-          <div class="col-lg-4 col-md-6">
-            <div class="icon-box-home1 text-center">
-              <div class="icon title-color"><i class="flaticon-world-wide"></i></div>
-              <h6 class="title text-uppercase">WORLDWIDE SHIPPING</h6>
-              <div class="text title-color">Receive your order an estimated 3-5 days after shipment</div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="icon-box-home1 text-center">
-              <div class="icon title-color"><i class="flaticon-return-1"></i></div>
-              <h6 class="title text-uppercase">EASY RETURNS</h6>
-              <div class="text title-color">Your exchange ships out as soon as you email us.</div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <div class="icon-box-home1 text-center">
-              <div class="icon title-color"><i class="flaticon-feedback"></i></div>
-              <h6 class="title text-uppercase">PRIVATE SESSION</h6>
-              <div class="text title-color">We are available from Monday to Friday to answer your questions.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
     <!-- feature-area-end -->
     <a class="scrollToHome" href="#"><i class="fas fa-angle-up"></i></a>
   </main>
@@ -94,8 +67,8 @@
 <script src="{{ asset('frontend/js/jarallax.js') }}"></script>
 <script src="{{ asset('frontend/js/wow.min.js') }}"></script>
 <!-- Custom script for all pages --> 
-<script src="{{ asset('frontend/js/script.js?v=vastu-2') }}"></script>
-<script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-5"></script>
+<script src="{{ asset('frontend/js/script.js?v=vastu-3') }}"></script>
+<script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-6"></script>
 <script src="{{ asset('frontend/js/frontend-search.js') }}?v=live-3"></script>
 @include('frontend.partials.cart-script')
 </body>

@@ -48,3 +48,6 @@ Thumbs.db
 *.swp
 Homestead.json
 Homestead.yaml
+
+# Local test inbox (MAIL_MAILER=outbox)
+/storage/app/mail-outbox

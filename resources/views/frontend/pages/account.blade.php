@@ -13,13 +13,13 @@
   <title>{{ $pageTitle }}</title>
   <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('frontend/css/mmenu.css') }}">
-  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-2">
+  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-3">
+  <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
   <link rel="stylesheet" href="{{ asset('frontend/css/font-awesome.css') }}">
   @include('frontend.partials.site-config')
 
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=72">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=117">
   <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
 </head>
@@ -69,13 +69,13 @@
   <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
   <script src="{{ asset('frontend/js/mmenu.js') }}"></script>
   <script src="{{ asset('frontend/js/swiper-bundle.min.js') }}"></script>
-  <script src="{{ asset('frontend/js/script.js?v=vastu-2') }}?v=shared-header-1"></script>
+  <script src="{{ asset('frontend/js/script.js?v=vastu-3') }}?v=shared-header-1"></script>
   <script src="{{ asset('frontend/js/shell-menu-search.js') }}?v=2"></script>
   <script src="{{ asset('frontend/js/frontend-search.js') }}?v=live-3"></script>
 @include('frontend.partials.cart-script')
-  <script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-5"></script>
+  <script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-6"></script>
   <script src="{{ asset('frontend/js/account-data.js') }}"></script>
-  <script src="{{ asset('frontend/js/account-dashboard.js') }}?v=notify-1"></script>
+  <script src="{{ asset('frontend/js/account-dashboard.js') }}?v=track-1"></script>
   <script src="{{ asset('frontend/js/account-pages-laravel.js') }}"></script>
 </body>
 </html>

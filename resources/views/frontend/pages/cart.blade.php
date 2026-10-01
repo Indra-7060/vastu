@@ -10,14 +10,14 @@
   <meta name="description" content="Vastutathastu unites Vedic Vastushastra, astrology and numerology with authentic sacred products for harmonious homes, workplaces and lives.">
   <!-- css file -->
   <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-2">
-<link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-2">
+  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-3">
+<link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
 <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
 <link rel="stylesheet" href="{{ asset('frontend/css/journal.css') }}?v=vastu-2">
 
   <!-- Title -->
   <title>{{ $pageTitle ?? 'Cart - Vastutathastu' }}</title>
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=72">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=117">
   <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
 </head>
@@ -49,7 +49,7 @@
                 <li class="breadcrumb-list list-inline-item"><a href="#"><i class="far fa-angle-right"></i></a></li>
                 <li class="breadcrumb-list list-inline-item is-disabled"><span>ORDER COMPLETE</span></li>
               </ul>
-              <h4 class="d-block d-lg-none">SHOPPING CART</h4>
+              <h4 class="d-block d-lg-none">Shopping cart</h4>
             </div>
           </div>
         </div>
@@ -86,8 +86,8 @@
 <script src="{{ asset('frontend/js/jarallax.js') }}"></script>
 <script src="{{ asset('frontend/js/wow.min.js') }}"></script>
 <!-- Custom script for all pages --> 
-<script src="{{ asset('frontend/js/script.js?v=vastu-2') }}"></script>
-<script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-5"></script>
+<script src="{{ asset('frontend/js/script.js?v=vastu-3') }}"></script>
+<script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-6"></script>
 <script src="{{ asset('frontend/js/frontend-search.js') }}?v=live-3"></script>
 @include('frontend.partials.cart-script')
 <script src="{{ asset('frontend/js/wishlist-toggle.js') }}?v=vastu-3"></script>

@@ -62,6 +62,12 @@
                 </div>
             </div>
             <div id="order-bulk-ids"></div>
+            {{-- Shown as soon as an order is ticked --}}
+            <div class="bulk-bar" id="order-bulk-bar" role="region" aria-live="polite" hidden>
+                <span class="bulk-bar__count" id="order-bulk-count">0 orders selected</span>
+                <button type="submit" name="action" value="delete" class="bulk-bar__delete js-bulk-confirm" data-confirm-title="Delete selected orders?">@include('admin.partials.icon', ['name' => 'trash', 'size' => 16]) Delete selected</button>
+                <button type="button" class="bulk-bar__clear" id="order-bulk-clear">Clear selection</button>
+            </div>
         </form>
     </div>
 </div>
@@ -76,6 +82,7 @@
                 <th>@include('admin.partials.sort-link', ['column' => 'user_phone', 'label' => 'User Phone'])</th>
                 <th>@include('admin.partials.sort-link', ['column' => 'ordered_at', 'label' => 'Ordered On'])</th>
                 <th>@include('admin.partials.sort-link', ['column' => 'status', 'label' => 'Status'])</th>
+                <th>@include('admin.partials.sort-link', ['column' => 'payment_status', 'label' => 'Payment'])</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -98,8 +105,11 @@
                         <span class="status-badge {{ $order->status_badge_class }}">{{ $order->status_label }}</span>
                     </td>
                     <td>
+                        <span class="{{ $order->payment_badge_class }}">{{ $order->payment_label }}</span>
+                    </td>
+                    <td>
                         <div class="user-row-actions">
-                            <button type="button" class="action-sq action-status js-open-status" data-order-id="{{ $order->id }}" title="Update Status">@include('admin.partials.icon', ['name' => 'status', 'size' => 16])</button>
+                            <button type="button" class="action-status-btn js-open-status" data-order-id="{{ $order->id }}" title="Update order status and expected delivery date">@include('admin.partials.icon', ['name' => 'truck', 'size' => 16])<span>Update<span class="vt-hide-md"> status</span></span></button>
                             <a href="{{ route('admin.orders.print', $order) }}" target="_blank" class="action-sq action-print" title="Print">@include('admin.partials.icon', ['name' => 'printer', 'size' => 16])</a>
                             <form method="POST" action="{{ route('admin.orders.destroy', $order) }}" class="js-delete-form" data-confirm-title="Are you sure?">
                                 @csrf
@@ -137,5 +147,5 @@
 window.ORDER_STATUS_URL = @json(url('/admin/orders'));
 window.CSRF_TOKEN = @json(csrf_token());
 </script>
-<script src="{{ asset('js/order-admin.js') }}?v=loader-1"></script>
+<script src="{{ asset('js/order-admin.js') }}?v=bulk-1"></script>
 @endpush

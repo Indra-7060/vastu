@@ -240,6 +240,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
+// Local test inbox (MAIL_MAILER=outbox): only on the developer's computer, only for signed-in admins.
+if (app()->environment('local')) {
+    Route::middleware(['auth:admin', 'admin'])->group(function () {
+        Route::get('/dev/mailbox/{id?}', [\App\Http\Controllers\DevMailboxController::class, 'index'])->name('dev.mailbox');
+        Route::post('/dev/mailbox/clear', [\App\Http\Controllers\DevMailboxController::class, 'clear'])->name('dev.mailbox.clear');
+    });
+}
+
 // Clean category URLs: /accessories, /shirts, etc. (keep after all fixed routes)
 Route::get('/{categorySlug}', [FrontendController::class, 'collection'])
     ->where('categorySlug', '^(?!shop|collection|founder|stores|gallery|consultation|info|product|cart|checkout|order|search|blog|about|support|login|signup|admin|account|newsletter|forgot-password|reset-password|check-email|logout|cart-api|account-api|storage|frontend|css|js|images|vendor|build).*$')

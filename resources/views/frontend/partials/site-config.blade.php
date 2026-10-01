@@ -75,6 +75,41 @@
       tiktok: "https://www.tiktok.com/"
     }
   };
+
+  // CSRF token helper. Signing in/out (also in another tab) or an expired session gives the
+  // browser a new token, so a page that was already open would get "CSRF token mismatch".
+  // Scripts retry once after refresh(); the token is also refreshed when the tab is shown again.
+  (function () {
+    var url = @json(route('csrf.refresh'));
+    var pending = null;
+    function apply(token) {
+      if (!token) return;
+      window.PP_SITE.csrf = token;
+      var meta = document.querySelector('meta[name="csrf-token"]');
+      if (meta) meta.setAttribute('content', token);
+      document.querySelectorAll('input[name="_token"]').forEach(function (i) { i.value = token; });
+    }
+    window.PP_CSRF = {
+      current: function () {
+        var meta = document.querySelector('meta[name="csrf-token"]');
+        return (meta && meta.getAttribute('content')) || window.PP_SITE.csrf || '';
+      },
+      refresh: function () {
+        if (pending) return pending;
+        pending = fetch(url, { credentials: 'same-origin', cache: 'no-store', headers: { 'Accept': 'application/json' } })
+          .then(function (r) { return r.ok ? r.json() : {}; })
+          .then(function (d) { apply(d && d.token); return window.PP_CSRF.current(); })
+          .catch(function () { return window.PP_CSRF.current(); })
+          .finally(function () { pending = null; });
+        return pending;
+      }
+    };
+    var hiddenAt = 0;
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { hiddenAt = Date.now(); return; }
+      if (hiddenAt && Date.now() - hiddenAt > 5000) window.PP_CSRF.refresh();
+    });
+  })();
 </script>
 <script src="{{ asset('frontend/js/pp-loader.js') }}?v=1"></script>
 <script src="{{ asset('frontend/js/pp-confirm.js') }}?v=1"></script>

@@ -10,14 +10,14 @@
   <meta name="description" content="Vastutathastu unites Vedic Vastushastra, astrology and numerology with authentic sacred products for harmonious homes, workplaces and lives.">
   <!-- css file -->
   <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-2">
-<link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-2">
+  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-3">
+<link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
 <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
 <link rel="stylesheet" href="{{ asset('frontend/css/journal.css') }}?v=vastu-2">
 
   <!-- Title -->
   <title>{{ $pageTitle ?? 'Checkout - Vastutathastu' }}</title>
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=72">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=117">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="{{ asset('vastu/css/checkout.css') }}?v=2">
@@ -149,7 +149,7 @@
                 <li class="vt-co-item">
                   <span class="vt-co-item__img"><img src="{{ $item['image'] }}" alt="" width="64" height="64" loading="lazy"></span>
                   <span class="vt-co-item__info">
-                    <span class="vt-co-item__name">{{ $item['title'] }}</span>
+                    <span class="vt-co-item__name" data-vt-orig="{{ $item['title'] }}">{{ $item['title'] }}</span>
                     <span class="vt-co-item__meta">Quantity: {{ $item['quantity'] }}</span>
                     @if(!empty($item['size']))<span class="vt-co-item__meta">Size: {{ $item['size'] }}</span>@endif
                     @if(!empty($item['color']))<span class="vt-co-item__meta">Colour: {{ $item['color'] }}</span>@endif
@@ -224,8 +224,8 @@
 <script src="{{ asset('frontend/js/jarallax.js') }}"></script>
 <script src="{{ asset('frontend/js/wow.min.js') }}"></script>
 <!-- Custom script for all pages --> 
-<script src="{{ asset('frontend/js/script.js?v=vastu-2') }}"></script>
-<script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-5"></script>
+<script src="{{ asset('frontend/js/script.js?v=vastu-3') }}"></script>
+<script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-6"></script>
 <script src="{{ asset('frontend/js/frontend-search.js') }}?v=live-3"></script>
 @include('frontend.partials.cart-script')
 <script src="{{ asset('frontend/js/checkout.js') }}?v=vastu-2"></script>

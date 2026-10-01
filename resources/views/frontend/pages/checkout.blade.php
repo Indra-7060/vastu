@@ -10,17 +10,17 @@
   <meta name="description" content="Vastutathastu unites Vedic Vastushastra, astrology and numerology with authentic sacred products for harmonious homes, workplaces and lives.">
   <!-- css file -->
   <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-3">
+  <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
 <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
 <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
 <link rel="stylesheet" href="{{ asset('frontend/css/journal.css') }}?v=vastu-2">
 
   <!-- Title -->
   <title>{{ $pageTitle ?? 'Checkout - Vastutathastu' }}</title>
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=117">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=120">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="{{ asset('vastu/css/checkout.css') }}?v=2">
+  <link rel="stylesheet" href="{{ asset('vastu/css/checkout.css') }}?v=3">
   <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
 </head>

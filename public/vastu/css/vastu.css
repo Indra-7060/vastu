@@ -1,12 +1,12 @@
 /* Vastutathastu storefront theme — header, footer and homepage (Figma: Vastutathastu Main) */
-@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,500..700&family=Cormorant+Garamond:wght@400;500;600;700&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,500..700&family=Cormorant+Garamond:wght@400;500;600;700&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&family=Manrope:wght@400;500;600;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
 
 :root {
   /* Fonts from the final Figma (Vastutathastu-Home, Page 4 — 625:3005): Manrope + Cormorant Garamond */
   --vt-serif: "Cormorant Garamond", "Gentium Book Plus", Georgia, serif;
   --vt-sans: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-sans-alt: "Nunito Sans", "Nunito", system-ui, sans-serif;
-  --vt-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --vt-ui: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
   --vt-display: "Cormorant Garamond", "Gentium Book Plus", Georgia, serif;
   --vt-news: "Playfair Display", Georgia, serif;
   --vt-jakarta: "Plus Jakarta Sans", "Nunito", system-ui, sans-serif;
@@ -1355,7 +1355,7 @@ html.vt-header-stuck .vt-plp__toolbar { top: 60px; }
    hover (background .3s linear, links .3s ease-in-out). Always white on
    pages without a hero.
    ===================================================================== */
-:root { --vt-hdr-h: 76px; --vt-hdr-font: "Archivo", "Inter", system-ui, sans-serif; }
+:root { --vt-hdr-h: 76px; --vt-hdr-font: "Archivo", "Manrope", system-ui, sans-serif; }
 .vt-hdr, .vt-hdr.vt-header--overlay {
   position: fixed;
   top: 0;
@@ -3334,7 +3334,7 @@ body { font-family: var(--vt-sans); }
 .vt-home .vt-intro .vt-h2 { font-family: var(--vt-sans); font-weight: 400; letter-spacing: -1.41px; color: #271101; }
 .vt-home .vt-intro .vt-body { font-family: var(--vt-sans); font-size: 16px; line-height: 25.6px; letter-spacing: .4px; color: #6d3913; }
 
-/* Shop by Category — stone section, card labels in Inter */
+/* Shop by Category — stone section, card labels (Manrope) */
 .vt-home .vt-categories { background: #f0eee4; }
 .vt-home #vt-cat-title { font-family: var(--vt-sans-alt); font-weight: 400; letter-spacing: -1.41px; color: #000; }
 .vt-home .vt-cat { background: #f7f6f1; }
@@ -3357,7 +3357,7 @@ body { font-family: var(--vt-sans); }
 .vt-home .vt-insta__btn { background: #f0eee4; border: .8px solid #1c1411; border-radius: 8px; color: #11332a; font-weight: 400; }
 .vt-home .vt-insta__btn:hover, .vt-home .vt-insta__btn:focus-visible { background: #fff; border-color: #f0eee4; color: #11332a; transform: translateY(-2px); box-shadow: 0 12px 22px -12px rgba(0, 0, 0, .55); }
 
-/* Consultation CTA button size (Figma: Inter SemiBold 20) */
+/* Consultation CTA button size (SemiBold 20) */
 .vt-footer .vt-cta__btn { height: auto; min-height: 74px; padding: 28px; font-size: 20px; line-height: 18px; }
 @media (max-width: 767px) { .vt-footer .vt-cta__btn { min-height: 60px; padding: 20px 24px; font-size: 17px; } }
 
@@ -3394,7 +3394,7 @@ body { font-family: var(--vt-sans); }
 .vt-home .vt-intro .vt-h2 { font-family: var(--vt-sans); font-weight: 400; font-size: clamp(30px, 1.6vw + 25px, 48px); line-height: 1.175; letter-spacing: 1px; color: #201209; }
 .vt-home .vt-intro .vt-body { font-family: var(--vt-sans); font-size: clamp(16px, .2vw + 15px, 18px); line-height: 25.6px; letter-spacing: .4px; color: #6d3913; }
 
-/* Shop by Category: unchanged (Nunito Sans title, Inter labels, #f0eee4) */
+/* Shop by Category: Nunito Sans title, Manrope labels, #f0eee4 */
 .vt-home #vt-cat-title { font-size: clamp(30px, 1.6vw + 25px, 48px); }
 
 /* Shree Yantra: text in Manrope */
@@ -3558,4 +3558,21 @@ body { font-family: var(--vt-sans); }
 @media (min-width: 1200px) {
   .vt-ftr__nav, .vt-ftr__news { padding-top: 0; }
   .vt-ftr__heading, .vt-footer .vt-ftr .vt-ftr__heading--news { margin-top: 0; }
+}
+
+/* ---------- Header: 16px menu links, one icon size, matching language button ---------- */
+.vt-hdr .vt-hdr__link { font-size: 16px; letter-spacing: .9px; }
+.vt-hdr .vt-hdr__icon svg { width: 22px; height: 22px; }
+.vt-header.vt-hdr .vt-hdr__icon .site-account-avatar { width: 24px; height: 24px; min-width: 24px; font-size: 9.5px !important; }
+html[data-lang="hi"] .vt-header.vt-hdr .vt-hdr__icon .site-account-avatar, html[data-lang="mr"] .vt-header.vt-hdr .vt-hdr__icon .site-account-avatar { font-size: 8.5px !important; }
+@media (min-width: 576px) { .vt-hdr .vt-lang__btn { height: 36px; padding: 0 12px; font-size: 12px; } }
+
+/* ---------- Footer: five evenly spaced columns (brand · Category · Guidance · Quick links · Stay connected) ---------- */
+@media (min-width: 1200px) {
+  .vt-ftr__inner { grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 1fr)) minmax(0, 1.3fr); column-gap: clamp(28px, 3.3vw, 56px); }
+  .vt-ftr__brand { grid-column: 1; }
+  .vt-ftr__nav { grid-column: 2 / 5; display: grid; grid-template-columns: subgrid; column-gap: inherit; }
+  .vt-ftr__group, .vt-ftr__group--explore, .vt-ftr__group--guidance, .vt-ftr__group--company { min-width: 0; margin: 0; }
+  .vt-ftr__news { grid-column: 5; padding-left: 0; }
+  .vt-ftr__signup { max-width: none; }
 }

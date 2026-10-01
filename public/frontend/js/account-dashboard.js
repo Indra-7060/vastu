@@ -193,6 +193,26 @@
       '<tbody>' + (rows || '<tr><td colspan="4">No items</td></tr>') + '</tbody></table></div>';
   }
 
+  // Flipkart-style tracker: arrival date + Ordered → Packed → Shipped → Delivered with dates.
+  function trackingHtml(o) {
+    var t = o.tracking;
+    if (!t || !t.steps) return '';
+    var head;
+    if (t.cancelled) head = '<p class="account-track-eta is-cancelled">Order cancelled' + (t.cancelled_on ? ' on ' + esc(t.cancelled_on) : '') + '</p>';
+    else if (t.delivered) head = '<p class="account-track-eta is-done">Delivered' + (t.steps[3].date ? ' on ' + esc(t.steps[3].date) : '') + '</p>';
+    else if (o.expected_delivery) head = '<p class="account-track-eta">Arriving by <strong>' + esc(o.expected_delivery) + '</strong></p>';
+    else head = '<p class="account-track-eta">We will share the expected delivery date soon.</p>';
+    var steps = t.steps.map(function (s) {
+      return '<li class="account-track-step' + (s.done ? ' is-done' : '') + (s.current ? ' is-current' : '') + '">' +
+        '<span class="account-track-dot" aria-hidden="true"></span>' +
+        '<span class="account-track-label">' + esc(s.label) + '</span>' +
+        '<span class="account-track-date">' + (s.date && s.done ? esc(s.date) : '&nbsp;') + '</span></li>';
+    }).join('');
+    return '<div class="account-track' + (t.cancelled ? ' is-cancelled' : '') + '">' + head +
+      '<ol class="account-track-steps">' + steps + '</ol>' +
+      (t.latest_note ? '<p class="account-track-note">' + esc(t.latest_note) + '</p>' : '') + '</div>';
+  }
+
   function orderDetailHtml(o) {
     if (!o) return '';
     var ship = (o.shipping_lines || []).map(function (line) { return esc(line); }).join('<br>');
@@ -204,14 +224,15 @@
       '<div class="account-order-meta">' +
         '<div><span>Date</span><strong>' + esc(o.date_long || o.date) + '</strong></div>' +
         '<div><span>Status</span><strong class="account-status">' + esc(o.status) + '</strong></div>' +
-        '<div><span>Payment</span><strong>' + esc(o.payment_mode) + '</strong></div>' +
+        '<div><span>Payment</span><strong>' + esc(o.payment_mode) + (o.payment_status ? ' · <em class="account-pay account-pay--' + esc(String(o.payment_status).toLowerCase()) + '">' + esc(o.payment_status) + '</em>' : '') + '</strong></div>' +
         '<div><span>Total</span><strong>' + esc(o.total_formatted || money(o.total)) + '</strong></div>' +
       '</div>' +
+      trackingHtml(o) +
       orderItemsTable(o.items) +
       '<div class="account-order-totals">' +
         '<div><span>Subtotal</span><strong>' + esc(o.subtotal_formatted || money(o.subtotal)) + '</strong></div>' +
         '<div><span>Shipping</span><strong>' + esc(o.shipping_formatted || money(o.shipping)) + '</strong></div>' +
-        '<div class="is-grand"><span>Total paid</span><strong>' + esc(o.total_formatted || money(o.total)) + '</strong></div>' +
+        '<div class="is-grand"><span>' + (o.payment_status && o.payment_status !== 'Paid' ? 'Total' : 'Total paid') + '</span><strong>' + esc(o.total_formatted || money(o.total)) + '</strong></div>' +
       '</div>' +
       '<div class="account-order-ship">' +
         '<h4><i class="far fa-truck" aria-hidden="true"></i> Shipping to</h4>' +
@@ -233,7 +254,8 @@
         '<td data-label="Order"><span class="account-order-id"><i class="far fa-receipt" aria-hidden="true"></i>' + esc(o.number) + '</span></td>' +
         '<td data-label="Date">' + esc(o.date) + '</td>' +
         '<td data-label="Items">' + esc(o.items_count || (o.items || []).length || 0) + '</td>' +
-        '<td data-label="Status"><span class="account-status">' + esc(o.status) + '</span></td>' +
+        '<td data-label="Status"><span class="account-status">' + esc(o.status) + '</span>' +
+          (o.tracking && !o.tracking.delivered && !o.tracking.cancelled && o.expected_delivery ? '<small class="account-row-eta">Arriving ' + esc(o.expected_delivery) + '</small>' : '') + '</td>' +
         '<td data-label="Total"><strong>' + totalLabel + '</strong></td>' +
         (canOpen ? '<td data-label=""><button type="button" class="account-order-view" data-open-order="' + esc(o.id) + '">View</button></td>' : '') +
         '</tr>';

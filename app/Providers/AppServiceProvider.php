@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        \Illuminate\Support\Facades\Mail::extend('outbox', fn () => new \App\Mail\Transport\OutboxTransport());
+
         Paginator::defaultView('vendor.pagination.admin');
         Paginator::defaultSimpleView('vendor.pagination.admin');
 

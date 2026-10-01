@@ -7,16 +7,17 @@
       <button type="button" class="minicart-close-icon" data-minicart-close aria-label="Close bag">&times;</button>
     </div>
 
-    <div class="ship-bar text-center">
-      <h4 class="ship-title" data-minicart-ship>Free shipping calculated at checkout</h4>
-      <div class="progress" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
-        <div class="progress-bar" data-minicart-ship-bar style="width: 40%"></div>
+    {{-- Free-shipping progress: filled live by cart.js from the bag subtotal --}}
+    <div class="ship-bar pp-ship" data-minicart-shipbar>
+      <p class="pp-ship__msg notranslate" translate="no" data-minicart-ship aria-live="polite">Free shipping on eligible orders</p>
+      <div class="pp-ship__track" role="progressbar" aria-label="Progress to free shipping" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        <div class="pp-ship__fill" data-minicart-ship-bar style="width: 0%"></div>
       </div>
     </div>
 
     <div class="cart-content">
       <ul class="product pp-minicart-live" data-minicart-items>
-        <li class="list-content pp-minicart-empty">Your bag is empty.</li>
+        <li class="list-content pp-minicart-empty">Your bag is empty.<a class="pp-minicart-empty__link" href="{{ route('shop') }}">Explore the shop →</a></li>
       </ul>
 
       <div class="pp-minicart-footer">

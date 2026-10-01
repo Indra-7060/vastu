@@ -20,6 +20,7 @@
                 <tr><th>Ordered On</th><td>{{ $order->ordered_at?->format('d-m-Y h:i A') }}</td></tr>
                 <tr><th>Payment Mode</th><td>{{ $order->payment_mode ?: '—' }}</td></tr>
                 <tr><th>Payment ID</th><td>{{ $order->payment_id ?: '—' }}</td></tr>
+                <tr><th>Payment Status</th><td><span class="{{ $order->payment_badge_class }}">{{ $order->payment_label }}</span></td></tr>
                 <tr>
                     <th>Order Status</th>
                     <td><span class="status-badge {{ $order->status_badge_class }}">{{ $order->status_label }}</span></td>
@@ -86,7 +87,7 @@
                         <td>₹ {{ number_format($item->total_price, 2) }}</td>
                         <td><span class="status-badge {{ \App\Support\OrderStatuses::badgeClass($item->status) }}">{{ \App\Support\OrderStatuses::label($item->status) }}</span></td>
                         <td>
-                            <button type="button" class="action-sq action-status js-open-status" data-order-id="{{ $order->id }}" title="Update Status">@include('admin.partials.icon', ['name' => 'status', 'size' => 16])</button>
+                            <button type="button" class="action-status-btn js-open-status" data-order-id="{{ $order->id }}" title="Update order status and expected delivery date">@include('admin.partials.icon', ['name' => 'truck', 'size' => 16])<span>Update<span class="vt-hide-md"> status</span></span></button>
                         </td>
                     </tr>
                 @empty
@@ -118,5 +119,5 @@
 window.ORDER_STATUS_URL = @json(url('/admin/orders'));
 window.CSRF_TOKEN = @json(csrf_token());
 </script>
-<script src="{{ asset('js/order-admin.js') }}?v=loader-1"></script>
+<script src="{{ asset('js/order-admin.js') }}?v=bulk-1"></script>
 @endpush

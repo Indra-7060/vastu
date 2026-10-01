@@ -267,7 +267,7 @@
       var qty = (cart.items || []).reduce(function (sum, item) {
         return sum + (Number(item.product_id) === productId ? Number(item.quantity) || 0 : 0);
       }, 0);
-      inBag.textContent = qty ? qty + ' in your cart' : '';
+      inBag.textContent = qty ? ((window.vtLang && window.vtLang.say('inCart', String(qty))) || (qty + ' in your cart')) : '';
       inBag.hidden = !qty;
       // Already in the bag: the bottom-bar button opens the bag instead of adding again.
       openMode = qty > 0;

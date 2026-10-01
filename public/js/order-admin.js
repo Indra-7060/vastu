@@ -65,6 +65,9 @@
 
         const checkboxes = () => qsa('.order-check');
 
+        const bar = qs('#order-bulk-bar');
+        const countEl = qs('#order-bulk-count');
+
         function syncSelectAll() {
             const boxes = checkboxes();
             const checked = boxes.filter(c => c.checked);
@@ -72,7 +75,18 @@
                 selectAll.checked = boxes.length > 0 && checked.length === boxes.length;
                 selectAll.indeterminate = checked.length > 0 && checked.length < boxes.length;
             }
+            // Visible "N selected · Delete selected" bar whenever something is ticked.
+            if (bar) {
+                bar.hidden = checked.length === 0;
+                if (countEl) countEl.textContent = checked.length + (checked.length === 1 ? ' order selected' : ' orders selected');
+            }
+            boxes.forEach(c => { const row = c.closest('tr'); if (row) row.classList.toggle('is-selected', c.checked); });
         }
+        qs('#order-bulk-clear') && qs('#order-bulk-clear').addEventListener('click', function () {
+            checkboxes().forEach(c => { c.checked = false; });
+            syncSelectAll();
+        });
+        syncSelectAll();
 
         function collectIds() {
             idsBox.innerHTML = '';
@@ -126,7 +140,10 @@
                     msg.className = 'confirm-msg';
                     titleEl.insertAdjacentElement('afterend', msg);
                 }
-                msg.textContent = 'Do you really want to perform?';
+                const n = idsBox.querySelectorAll('input').length;
+                msg.textContent = submitter.value === 'delete'
+                    ? n + (n === 1 ? ' order' : ' orders') + ' will be permanently deleted. This cannot be undone.'
+                    : 'Do you really want to perform?';
                 overlay.classList.add('is-open');
                 modal.classList.add('is-open');
                 document.body.classList.add('modal-open');
@@ -152,10 +169,14 @@
         });
     }
 
+    let loadedDate = '';
     let currentOrderId = null;
 
     function openStatusModal(orderId) {
         currentOrderId = orderId;
+        // Always start with working buttons (in case a previous save was interrupted).
+        setBusy(qs('#order-status-save'), false);
+        setBusy(qs('#btn-update-delivery'), false);
         const overlay = qs('#order-status-overlay');
         const modal = qs('#order-status-modal');
         if (!modal) return;
@@ -166,6 +187,7 @@
             .then(r => r.json())
             .then(data => {
                 qs('#expected-delivery-date').value = data.expected_delivery_date || '';
+                loadedDate = data.expected_delivery_date || '';
                 const select = qs('#order-status-select');
                 select.innerHTML = '<option value="">---Select Status---</option>';
                 const next = data.next_statuses || {};
@@ -240,16 +262,8 @@
         const deliveryInput = qs('#expected-delivery-date');
         bindDatePicker(deliveryInput);
 
-        qs('#btn-update-delivery') && qs('#btn-update-delivery').addEventListener('click', function () {
-            if (!currentOrderId) return;
-            const date = qs('#expected-delivery-date').value;
-            if (!date) {
-                if (window.Toast) Toast.error('Please select a delivery date.');
-                return;
-            }
-            const btn = qs('#btn-update-delivery');
-            setBusy(btn, true, 'Updating…');
-            fetch((window.ORDER_STATUS_URL || '/admin/orders') + '/' + currentOrderId + '/delivery-date', {
+        function send(path, body) {
+            return fetch((window.ORDER_STATUS_URL || '/admin/orders') + '/' + currentOrderId + '/' + path, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -257,64 +271,57 @@
                     'X-CSRF-TOKEN': window.CSRF_TOKEN,
                     'X-Requested-With': 'XMLHttpRequest',
                 },
-                body: JSON.stringify({ expected_delivery_date: date }),
-            })
-                .then(async function (r) {
-                    const data = await r.json().catch(() => ({}));
-                    if (!r.ok) {
-                        throw new Error(data.message || 'Failed to update delivery date.');
-                    }
-                    return data;
-                })
-                .then(function (data) {
-                    setBusy(btn, false);
-                    if (window.Toast) Toast.success(data.message || 'Delivery date updated.');
+                body: JSON.stringify(body),
+            }).then(async function (r) {
+                const data = await r.json().catch(() => ({}));
+                if (!r.ok) {
+                    throw new Error(data.message || (data.errors && ((data.errors.status && data.errors.status[0]) || (data.errors.expected_delivery_date && data.errors.expected_delivery_date[0]))) || 'Could not save. Please try again.');
+                }
+                return data;
+            });
+        }
+        const saveDate = function () {
+            return send('delivery-date', { expected_delivery_date: qs('#expected-delivery-date').value }).then(function (data) {
+                loadedDate = qs('#expected-delivery-date').value;
+                return data;
+            });
+        };
+        const saveStatus = function () {
+            return send('status', { status: qs('#order-status-select').value, description: qs('#order-status-description').value });
+        };
+        const dateChanged = function () { const v = qs('#expected-delivery-date').value; return !!v && v !== loadedDate; };
+
+        // One click saves everything that was changed: the delivery date and/or the new status.
+        function saveAll(btn, busyLabel) {
+            if (!currentOrderId) return;
+            const hasStatus = !!qs('#order-status-select').value;
+            const hasDate = dateChanged() || (btn.id === 'btn-update-delivery' && !!qs('#expected-delivery-date').value);
+            if (!hasStatus && !hasDate) {
+                if (window.Toast) Toast.error(btn.id === 'btn-update-delivery' ? 'Please select a delivery date.' : 'Please select a status or change the delivery date.');
+                return;
+            }
+            setBusy(btn, true, busyLabel);
+            let messages = [];
+            (hasDate ? saveDate().then(function (d) { messages.push(d.message || 'Delivery date updated.'); }) : Promise.resolve())
+                .then(function () { return hasStatus ? saveStatus().then(function (d) { messages.push(d.message || 'Order status updated.'); }) : null; })
+                .then(function () {
+                    if (window.Toast) Toast.success(messages.join(' '));
+                    if (hasStatus) { closeStatusModal(); window.location.reload(); }
+                    else setBusy(btn, false);
                 })
                 .catch(function (err) {
                     setBusy(btn, false);
-                    if (window.Toast) Toast.error(err.message || 'Failed to update delivery date.');
+                    if (window.Toast) Toast.error(err.message);
                 });
+        }
+
+        qs('#btn-update-delivery') && qs('#btn-update-delivery').addEventListener('click', function () {
+            saveAll(this, 'Saving…');
         });
 
         qs('#order-status-form') && qs('#order-status-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            if (!currentOrderId) return;
-            const status = qs('#order-status-select').value;
-            if (!status) {
-                if (window.Toast) Toast.error('Please select a status.');
-                return;
-            }
-            const saveBtn = qs('#order-status-save');
-            setBusy(saveBtn, true, 'Saving…');
-            fetch((window.ORDER_STATUS_URL || '/admin/orders') + '/' + currentOrderId + '/status', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': window.CSRF_TOKEN,
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-                body: JSON.stringify({
-                    status: status,
-                    description: qs('#order-status-description').value,
-                }),
-            })
-                .then(async function (r) {
-                    const data = await r.json().catch(() => ({}));
-                    if (!r.ok) {
-                        throw new Error(data.message || (data.errors && data.errors.status && data.errors.status[0]) || 'Failed to update status.');
-                    }
-                    return data;
-                })
-                .then(function (data) {
-                    if (window.Toast) Toast.success(data.message || 'Order status updated.');
-                    closeStatusModal();
-                    window.location.reload();
-                })
-                .catch(function (err) {
-                    setBusy(saveBtn, false);
-                    if (window.Toast) Toast.error(err.message || 'Failed to update status.');
-                });
+            saveAll(qs('#order-status-save'), 'Saving…');
         });
     }
 

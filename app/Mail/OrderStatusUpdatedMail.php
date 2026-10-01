@@ -22,9 +22,16 @@ class OrderStatusUpdatedMail extends Mailable
 
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'Order '.$this->order->order_number.' — '.$this->statusLabel,
-        );
+        $number = $this->order->order_number;
+        $subject = match (strtolower((string) $this->order->status)) {
+            'packed' => "Your order {$number} is packed",
+            'shipped' => "Your order {$number} is on its way",
+            'delivered' => "Your order {$number} has been delivered",
+            'cancelled' => "Your order {$number} has been cancelled",
+            default => "Update on your order {$number}: {$this->statusLabel}",
+        };
+
+        return new Envelope(subject: $subject);
     }
 
     public function content(): Content
@@ -32,7 +39,7 @@ class OrderStatusUpdatedMail extends Mailable
         return new Content(
             html: 'emails.orders.status-updated',
             with: [
-                'order' => $this->order,
+                'order' => $this->order->loadMissing(['items', 'statusLogs']),
                 'statusLabel' => $this->statusLabel,
                 'description' => $this->description,
             ],

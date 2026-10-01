@@ -87,4 +87,20 @@ class Order extends Model
 
         return $number;
     }
+
+    /** Paid / Unpaid / Failed for admin screens (Razorpay confirms payment as "paid"). */
+    public function getPaymentLabelAttribute(): string
+    {
+        return match (strtolower((string) $this->payment_status)) {
+            'paid' => 'Paid',
+            'failed' => 'Failed',
+            'refunded' => 'Refunded',
+            default => 'Unpaid',
+        };
+    }
+
+    public function getPaymentBadgeClassAttribute(): string
+    {
+        return 'pay-badge pay-badge--'.strtolower($this->payment_label);
+    }
 }

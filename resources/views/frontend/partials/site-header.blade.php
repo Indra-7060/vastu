@@ -51,7 +51,7 @@
         </ul>
       </nav>
 
-      <a class="vt-hdr__logo" href="{{ route('home') }}" aria-label="Vastutathastu home">
+      <a class="vt-hdr__logo notranslate" translate="no" href="{{ route('home') }}" aria-label="Vastutathastu home">
         <img src="{{ asset('vastu/images/logo.svg') }}?v=2" width="341" height="95" alt="Vastutathastu — The Trusted Brand">
       </a>
 
@@ -68,7 +68,20 @@
           @include('frontend.partials.vt-icon', ['name' => 'bag', 'size' => 22])
           <span class="vt-count" data-cart-count hidden>0</span>
         </a>
-        <a class="vt-hdr__cta" href="{{ route('checkout') }}">Shop now</a>
+        {{-- Language: English (default) / हिंदी / मराठी — see vastu/js/lang.js --}}
+        <div class="vt-lang notranslate" translate="no" data-vt-lang>
+          <button type="button" class="vt-lang__btn" aria-haspopup="true" aria-expanded="false" aria-controls="vt-lang-menu" data-vt-lang-btn>
+            <span class="vt-lang__long" data-vt-lang-long>English</span>
+            <span class="vt-lang__short" data-vt-lang-short>EN</span>
+            <svg class="vt-lang__chev" viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="M2 4.5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+            <span class="vt-sr-only">— change language</span>
+          </button>
+          <ul class="vt-lang__menu" id="vt-lang-menu" role="menu" hidden>
+            <li role="none"><button type="button" role="menuitemradio" aria-checked="true" data-lang="en" lang="en"><span>English</span></button></li>
+            <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-lang="hi" lang="hi"><span>हिंदी</span><small>Hindi</small></button></li>
+            <li role="none"><button type="button" role="menuitemradio" aria-checked="false" data-lang="mr" lang="mr"><span>मराठी</span><small>Marathi</small></button></li>
+          </ul>
+        </div>
       </div>
     </div>
   </header>
@@ -79,4 +92,7 @@
   @include('frontend.partials.mobile-menu')
   @include('frontend.partials.consultation-modal')
 </div>
-<script src="{{ asset('vastu/js/vastu.js') }}?v=18" defer></script>
+<script src="{{ asset('vastu/js/vastu.js') }}?v=21" defer></script>
+  <div id="vt-gt" class="vt-gt" aria-hidden="true"></div>
+  {{-- Not deferred: window.vtLang must exist before cart.js runs (the menu itself waits for the page). --}}
+  <script src="{{ asset('vastu/js/lang.js') }}?v=16"></script>

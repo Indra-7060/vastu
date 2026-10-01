@@ -29,11 +29,10 @@
   $phone = $S::get('contact_phone');
   $email = $S::get('contact_email');
   $whatsapp = preg_replace('/\D+/', '', $S::get('contact_whatsapp'));
-  $legalLinks = [
-      'Privacy Policy' => $info('privacy-policy'),
-      'Terms & Conditions' => $info('terms-and-conditions'),
-      'Shipping & Returns' => $info('shipping-and-returns'),
-  ];
+  // Social order in the footer: Instagram, YouTube, then Facebook (only those that are set).
+  $socialLinks = array_filter(array_replace(['Instagram' => null, 'YouTube' => null, 'Facebook' => null], $socialLinks));
+  $navGroups = ['Explore' => $shopLinks, 'Guidance' => $guidanceLinks, 'Company' => $aboutLinks];
+  $navLabels = ['Explore' => 'Category', 'Guidance' => 'Guidance', 'Company' => 'Quick links'];
 @endphp
 <footer class="vt-footer site-footer">
   @php $cta = \App\Support\SiteBanners::first('consultation_cta'); @endphp
@@ -50,89 +49,105 @@
   </section>
   @endif
 
-  <div class="vt-footer__main">
-    <div class="vt-footer__brand">
-      <a class="vt-footer__logo" href="{{ route('home') }}" aria-label="Vastutathastu home">
-        <img src="{{ asset('vastu/images/logo.svg') }}?v=2" width="244" height="68" alt="Vastutathastu — The Trusted Brand">
-      </a>
-      @if($S::get('footer_about'))<p class="vt-footer__about">{{ $S::get('footer_about') }}</p>@endif
-      @if($S::get('footer_location') || $S::get('footer_tagline'))
-      <p class="vt-footer__place">
-        {{ $S::get('footer_location') }}
-        @if($S::get('footer_tagline'))<br>{{ $S::get('footer_tagline') }}@endif
-      </p>
-      @endif
-      {{-- The phone number is used by the floating call button (bottom-left). --}}
-      @if($email)
-      <p class="vt-footer__contact"><a href="mailto:{{ $email }}">{{ $email }}</a></p>
-      @endif
+  {{-- Editorial footer: brand · navigation · newsletter (+ social). --}}
+  <div class="vt-ftr" data-vt-ftr>
+    <div class="vt-ftr__inner">
+      <div class="vt-ftr__brand vt-ftr__reveal">
+        <a class="vt-ftr__logo notranslate" translate="no" href="{{ route('home') }}" aria-label="Vastutathastu home">
+          <img src="{{ asset('vastu/images/logo.svg') }}?v=2" width="244" height="68" alt="Vastutathastu — The Trusted Brand">
+        </a>
+        @if($S::get('footer_about'))<p class="vt-ftr__about">{{ $S::get('footer_about') }}</p>@endif
+        @if($S::get('footer_location') || $phone || $email)
+        <address class="vt-ftr__address">
+          @if($S::get('footer_location'))<span>{{ $S::get('footer_location') }}</span>@endif
+          @if($phone)<a href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}">{{ $phone }}</a>@endif
+          @if($email)<a href="mailto:{{ $email }}">{{ $email }}</a>@endif
+        </address>
+        @endif
+      </div>
+
+      <nav class="vt-ftr__nav vt-ftr__reveal" aria-label="Footer">
+        @foreach($navGroups as $heading => $links)
+          @continue(empty($links))
+          <details class="vt-ftr__group vt-ftr__group--{{ \Illuminate\Support\Str::slug($heading) }}" open>
+            <summary class="vt-ftr__heading">{{ $navLabels[$heading] ?? $heading }}</summary>
+            <ul class="vt-ftr__links">
+              @foreach($links as $label => $href)
+                <li style="--i: {{ $loop->index }}"><a href="{{ $href }}">{{ $label }}</a></li>
+              @endforeach
+            </ul>
+          </details>
+        @endforeach
+      </nav>
+
+      <div class="vt-ftr__news vt-ftr__reveal">
+        <p class="vt-ftr__heading vt-ftr__heading--news">Stay Connected</p>
+        <h2 class="vt-ftr__news-title">Sacred guidance, delivered.</h2>
+        @if($S::get('newsletter_text'))<p class="vt-ftr__news-text">{{ $S::get('newsletter_text') }}</p>@endif
+        <form class="vt-ftr__signup" data-newsletter-form action="{{ route('newsletter.subscribe') }}" method="post" novalidate>
+          @csrf
+          <div class="vt-ftr__field">
+            <input type="email" name="email" placeholder="Enter your email" autocomplete="email" aria-label="Email address" maxlength="255">
+            <button type="submit">Join</button>
+          </div>
+          <div class="pp-newsletter-status" data-newsletter-status role="status" hidden></div>
+        </form>
+
+        @if($socialLinks)
+        <ul class="vt-ftr__social" aria-label="Follow Vastutathastu">
+          @foreach($socialLinks as $label => $href)
+            <li>
+              <a class="vt-ftr__soc vt-ftr__soc--{{ strtolower($label) }}" href="{{ $href }}" target="_blank" rel="noopener" aria-label="Vastutathastu on {{ $label }}" title="{{ $label }}">
+                @if($label === 'Instagram')
+                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><defs><radialGradient id="vt-ig-grad" cx="30%" cy="107%" r="150%"><stop offset="0" stop-color="#fdf497"/><stop offset=".05" stop-color="#fdf497"/><stop offset=".45" stop-color="#fd5949"/><stop offset=".6" stop-color="#d6249f"/><stop offset=".9" stop-color="#285aeb"/></radialGradient></defs><rect x="1" y="1" width="22" height="22" rx="6" fill="url(#vt-ig-grad)"/><rect x="5.5" y="5.5" width="13" height="13" rx="3.8" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="3.1" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="16.1" cy="7.9" r=".95" fill="#fff"/></svg>
+                @elseif($label === 'YouTube')
+                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><rect x="1" y="4.5" width="22" height="15" rx="4.5" fill="#ff0000"/><path d="M10 8.8v6.4l5.6-3.2z" fill="#fff"/></svg>
+                @else
+                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="6" fill="#1877f2"/><path d="M13.4 20v-6.3h2.1l.3-2.5h-2.4V9.6c0-.7.2-1.2 1.2-1.2h1.3V6.2a17 17 0 0 0-1.9-.1c-1.9 0-3.2 1.2-3.2 3.3v1.8H8.7v2.5h2.1V20" fill="#fff"/></svg>
+                @endif
+              </a>
+            </li>
+          @endforeach
+        </ul>
+        @endif
+      </div>
     </div>
 
-    <nav class="vt-footer__col vt-footer__col--shop" aria-label="Category">
-      <p class="vt-kicker">Category</p>
-      <ul>
-        @foreach($shopLinks as $label => $href)
-          <li><a href="{{ $href }}">{{ $label }}</a></li>
-        @endforeach
-      </ul>
-    </nav>
-
-    <nav class="vt-footer__col vt-footer__col--guidance" aria-label="Guidance">
-      <p class="vt-kicker">Guidance</p>
-      <ul>
-        @foreach($guidanceLinks as $label => $href)
-          <li><a href="{{ $href }}">{{ $label }}</a></li>
-        @endforeach
-      </ul>
-    </nav>
-
-    <nav class="vt-footer__col vt-footer__col--about" aria-label="Quick links">
-      <p class="vt-kicker">Quick links</p>
-      <ul>
-        @foreach($aboutLinks as $label => $href)
-          <li><a href="{{ $href }}">{{ $label }}</a></li>
-        @endforeach
-      </ul>
-    </nav>
-
-    <div class="vt-footer__news">
-      <p class="vt-kicker">Stay Connected</p>
-      <p class="vt-footer__news-title">{{ $S::get('newsletter_title') }}</p>
-      @if($S::get('newsletter_text'))<p class="vt-footer__news-text">{{ $S::get('newsletter_text') }}</p>@endif
-      <form class="vt-signup" data-newsletter-form action="{{ route('newsletter.subscribe') }}" method="post" novalidate>
-        @csrf
-        <input type="email" name="email" placeholder="Enter your email" autocomplete="email" aria-label="Email address" maxlength="255">
-        <button type="submit">JOIN</button>
-      </form>
-      <div class="pp-newsletter-status" data-newsletter-status role="status" hidden></div>
-      @if($socialLinks)
-      <p class="vt-social vt-social--icons">
-        @foreach($socialLinks as $label => $href)
-          <a href="{{ $href }}" target="_blank" rel="noopener" aria-label="{{ $label }}" title="{{ $label }}">
-            @if($label === 'YouTube')
-              <svg viewBox="0 0 28 20" width="30" height="22" aria-hidden="true"><rect width="28" height="20" rx="5" fill="#ff0000"/><path d="M11 5.8v8.4L18.4 10z" fill="#fff"/></svg>
-            @elseif($label === 'Instagram')
-              <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><defs><radialGradient id="vtIgGrad" cx="30%" cy="107%" r="150%"><stop offset="0" stop-color="#fdf497"/><stop offset=".05" stop-color="#fdf497"/><stop offset=".45" stop-color="#fd5949"/><stop offset=".6" stop-color="#d6249f"/><stop offset=".9" stop-color="#285AEB"/></radialGradient></defs><rect width="24" height="24" rx="6" fill="url(#vtIgGrad)"/><rect x="5.5" y="5.5" width="13" height="13" rx="4" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="16.4" cy="7.6" r="1.1" fill="#fff"/></svg>
-            @elseif($label === 'Facebook')
-              <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#1877f2"/><path d="M13.3 19.5v-6.2h2.1l.3-2.4h-2.4V9.4c0-.7.2-1.2 1.2-1.2h1.3V6.1a17 17 0 0 0-1.9-.1c-1.9 0-3.2 1.2-3.2 3.3v1.8H8.6v2.4h2.1v6.2z" fill="#fff"/></svg>
-            @else
-              {{ $label }}
-            @endif
-          </a>
-        @endforeach
-      </p>
-      @endif
+    <div class="vt-ftr__bar">
+      <p class="vt-ftr__copy">© {{ date('Y') }} Vastutathastu. All rights reserved.</p>
+      <nav class="vt-ftr__legal" aria-label="Legal">
+        <a href="{{ $info('privacy-policy') }}">Privacy Policy</a><span aria-hidden="true">•</span>
+        <a href="{{ $info('terms-and-conditions') }}">Terms &amp; Conditions</a><span aria-hidden="true">•</span>
+        <a href="{{ $info('shipping-and-returns') }}">Shipping &amp; Returns</a>
+      </nav>
+      <p class="vt-ftr__locale">India • English</p>
     </div>
   </div>
-
-  <div class="vt-footer__bottom">
-    <span>&copy; {{ date('Y') }} Vastutathastu. All rights reserved.</span>
-    <span class="vt-footer__legal">
-      @foreach($legalLinks as $label => $href)
-        <a href="{{ $href }}">{{ $label }}</a>@if(!$loop->last)<span aria-hidden="true">•</span>@endif
-      @endforeach
-    </span>
-    <span class="vt-footer__locale">India • English</span>
-  </div>
+  <script>
+    // Footer: gentle reveal on scroll, and nav groups become an accordion on phones.
+    (function () {
+      var root = document.querySelector('[data-vt-ftr]');
+      if (!root) return;
+      var mq = window.matchMedia('(max-width: 767px)');
+      var groups = root.querySelectorAll('.vt-ftr__group');
+      var news = root.querySelector('.vt-ftr__news');
+      function syncGroups() {
+        groups.forEach(function (g) { g.open = !mq.matches; });
+        // On phones the newsletter block has no box of its own (its parts join the column), so it can't be observed.
+        if (mq.matches && news) news.classList.add('is-in');
+      }
+      syncGroups();
+      (mq.addEventListener ? mq.addEventListener('change', syncGroups) : mq.addListener(syncGroups));
+      groups.forEach(function (g) {
+        g.querySelector('summary').addEventListener('click', function (e) { if (!mq.matches) e.preventDefault(); });
+      });
+      if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      root.classList.add('is-anim');
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      root.querySelectorAll('.vt-ftr__reveal').forEach(function (el) { io.observe(el); });
+    })();
+  </script>
 </footer>
 @include('frontend.partials.whatsapp-button')

@@ -34,6 +34,7 @@
       'calendar' => '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M8 14h3v3H8z"/>',
       'whatsapp' => '<path d="M3.5 20.5 5 16a8.5 8.5 0 1 1 3.2 3.1l-4.7 1.4Z"/><path d="M9 8.8c0 3.3 2.9 6.2 6.2 6.2l1.3-1.6-2.1-1-1 .9a4.8 4.8 0 0 1-2.8-2.8l.9-1-1-2.1L9 8.8Z"/>',
       'send' => '<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/>',
+      'truck' => '<path d="M2 6h11v10H2z"/><path d="M13 9h4.5l3.5 3.5V16h-8"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
   ];
 @endphp
 <svg class="ico {{ $class ?? '' }}" width="{{ $size ?? 18 }}" height="{{ $size ?? 18 }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{!! $paths[$name] ?? '' !!}</svg>

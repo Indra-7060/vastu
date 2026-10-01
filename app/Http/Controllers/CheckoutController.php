@@ -189,6 +189,10 @@ class CheckoutController extends Controller
                 );
             }
 
+            // Lets the order page know this visit comes straight from checkout (it then offers to
+            // take the customer back to the home page after a short countdown).
+            session()->flash('vt_order_placed', $order->order_number);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Payment successful. Order placed.',

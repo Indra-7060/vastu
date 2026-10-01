@@ -19,11 +19,13 @@
     if (!el) {
       el = document.createElement('div');
       el.id = 'pp-cart-toast';
+      el.className = 'notranslate';        // text comes from the site's phrase list (vtLang.t)
+      el.setAttribute('translate', 'no');
       el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;background:#0b251f;color:#fff;padding:12px 18px;font-size:14px;border-radius:4px;box-shadow:0 8px 24px rgba(0,0,0,.2);';
       document.body.appendChild(el);
     }
-    el.textContent = message;
     el.hidden = false;
+    el.textContent = window.vtLang ? window.vtLang.t(message) : message;
     clearTimeout(el._t);
     el._t = setTimeout(function () { el.hidden = true; }, 2500);
   }
@@ -51,7 +53,7 @@
       el.hidden = count < 1;
     });
     document.querySelectorAll('[data-cart-items-label]').forEach(function (el) {
-      el.textContent = 'Items (' + count + ')';
+      el.textContent = (window.vtLang && window.vtLang.say('items', String(count))) || ('Items (' + count + ')');
     });
   }
 
@@ -235,8 +237,43 @@
       .filter(function (row) { return sameVariant(row, color, size, packageKey); });
   }
 
+  // Free-shipping progress in the bag drawer: fills as the subtotal approaches the threshold
+  // (Admin → Shipping settings) and shrinks again when items are removed.
+  function rupees(n) {
+    return '₹' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 });
+  }
+  function updateShipBar(cart) {
+    if (!cart) return;
+    var ship = cart.shipping || {};
+    var threshold = Number(ship.free_shipping_threshold || 0);
+    var subtotal = Number(cart.subtotal || 0);
+    document.querySelectorAll('[data-minicart-shipbar]').forEach(function (box) {
+      if (!(threshold > 0)) { box.hidden = true; return; }
+      box.hidden = false;
+      var unlocked = cart.count > 0 && (ship.is_free || subtotal >= threshold);
+      var pct = unlocked ? 100 : Math.max(0, Math.min(100, (subtotal / threshold) * 100));
+      var msg = box.querySelector('[data-minicart-ship]');
+      var bar = box.querySelector('[data-minicart-ship-bar]');
+      var track = box.querySelector('[role="progressbar"]');
+      box.classList.toggle('is-unlocked', unlocked);
+      var L = window.vtLang;
+      var tick = '<span class="pp-ship__tick" aria-hidden="true">✓</span> ';
+      if (!cart.count) {
+        msg.innerHTML = (L && L.say('shipOver', rupees(threshold))) || 'Free shipping on orders over <strong>' + rupees(threshold) + '</strong>';
+      } else if (unlocked) {
+        msg.innerHTML = tick + ((L && L.say('shipUnlocked')) || 'You’ve unlocked <strong>free shipping</strong>');
+      } else {
+        var gap = rupees(Math.ceil(threshold - subtotal));
+        msg.innerHTML = (L && L.say('shipAway', gap)) || 'You’re <strong>' + gap + '</strong> away from free shipping';
+      }
+      if (bar) bar.style.width = pct.toFixed(1) + '%';
+      if (track) track.setAttribute('aria-valuenow', String(Math.round(pct)));
+    });
+  }
+
   function updateCartTotals(cart) {
     if (!cart) return;
+    updateShipBar(cart);
     document.querySelectorAll('[data-cart-subtotal]').forEach(function (el) {
       el.textContent = cart.subtotal_formatted;
     });
@@ -503,27 +540,30 @@
 
       var overlay = document.createElement('div');
       overlay.id = 'pp-cart-confirm';
-      overlay.className = 'pp-confirm';
+      overlay.className = 'pp-confirm notranslate';   // translated below from the site's phrase list
+      overlay.setAttribute('translate', 'no');
+      var T = (window.vtLang && window.vtLang.t) || function (s) { return s; };
       overlay.setAttribute('role', 'dialog');
       overlay.setAttribute('aria-modal', 'true');
       overlay.setAttribute('aria-labelledby', 'pp-cart-confirm-title');
       overlay.innerHTML =
         '<div class="pp-confirm__dialog">' +
           '<button type="button" class="pp-confirm__close" data-pp-confirm="cancel" aria-label="Close">&times;</button>' +
-          '<p class="pp-confirm__eyebrow">Shopping bag</p>' +
-          '<h3 id="pp-cart-confirm-title" class="pp-confirm__title">Remove this item?</h3>' +
+          '<p class="pp-confirm__eyebrow">' + T('Shopping bag') + '</p>' +
+          '<h3 id="pp-cart-confirm-title" class="pp-confirm__title">' + T('Remove this item?') + '</h3>' +
           '<p class="pp-confirm__text"></p>' +
           '<div class="pp-confirm__actions">' +
-            '<button type="button" class="pp-confirm__btn pp-confirm__btn--ghost" data-pp-confirm="cancel">Keep item</button>' +
-            '<button type="button" class="pp-confirm__btn pp-confirm__btn--solid" data-pp-confirm="ok">Remove</button>' +
+            '<button type="button" class="pp-confirm__btn pp-confirm__btn--ghost" data-pp-confirm="cancel">' + T('Keep item') + '</button>' +
+            '<button type="button" class="pp-confirm__btn pp-confirm__btn--solid" data-pp-confirm="ok">' + T('Remove') + '</button>' +
           '</div>' +
         '</div>';
 
       var textEl = overlay.querySelector('.pp-confirm__text');
       if (textEl) {
+        var L = window.vtLang;
         textEl.textContent = title
-          ? ('“' + title + '” will be removed from your bag.')
-          : 'This item will be removed from your bag.';
+          ? ((L && L.say('removeText', L.name(title))) || ('“' + title + '” will be removed from your bag.'))
+          : T('This item will be removed from your bag.');
       }
 
       function finish(ok) {
@@ -583,7 +623,8 @@
     var items = cartItemsList(cart);
 
     if (!items.length) {
-      list.innerHTML = '<li class="list-content pp-minicart-empty">Your bag is empty.</li>';
+      list.innerHTML = '<li class="list-content pp-minicart-empty">Your bag is empty.' +
+        '<a class="pp-minicart-empty__link" href="' + escapeHtml(site().shop || '/shop') + '">Explore the shop →</a></li>';
     } else {
       list.innerHTML = items.map(function (item) {
         var meta = '';
@@ -597,7 +638,7 @@
             '</span>';
         }
         if (item.package_label) {
-          meta += '<span class="product-size d-block">' + escapeHtml('Pack: ' + item.package_label) + '</span>';
+          meta += '<span class="product-size d-block">' + escapeHtml((window.vtLang && window.vtLang.say('pack', item.package_label)) || ('Pack: ' + item.package_label)) + '</span>';
         }
         return '<li class="list-content" data-cart-row data-product-id="' + escapeHtml(item.product_id) + '" data-color="' + escapeHtml(item.color || '') + '" data-size="' + escapeHtml(item.size || '') + '" data-package-key="' + escapeHtml(item.package_key || '') + '">' +
           '<div class="prd-item">' +
@@ -619,6 +660,8 @@
     document.querySelectorAll('[data-cart-subtotal]').forEach(function (sub) {
       if (cart) sub.textContent = cart.subtotal_formatted || '₹ 0.00';
     });
+
+    updateShipBar(cart);
 
     var countLabel = document.querySelector('[data-minicart-count-label]');
     if (countLabel && cart) {

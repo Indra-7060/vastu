@@ -257,7 +257,7 @@ class AccountController extends Controller
             ->values();
 
         $orders = $user->orders()
-            ->with('items')
+            ->with(['items', 'statusLogs'])
             ->where(function ($q) {
                 $q->where('payment_status', 'paid')
                     ->orWhereIn('status', [
@@ -343,6 +343,9 @@ class AccountController extends Controller
             'payment_mode' => strtoupper((string) ($order->payment_mode ?: 'razorpay')),
             'payment_id' => $order->payment_id,
             'items_count' => (int) $order->items->sum('quantity'),
+            'payment_status' => $order->payment_label,
+            'expected_delivery' => $order->expected_delivery_date ? $order->expected_delivery_date->format('D, j M Y') : null,
+            'tracking' => $this->trackingPayload($order, $status),
             'shipping_name' => $order->shipping_name,
             'shipping_phone' => $order->shipping_phone,
             'shipping_email' => $order->shipping_email ?: $order->user_email,
@@ -360,6 +363,54 @@ class AccountController extends Controller
                 'total_formatted' => Money::format($item->total_price),
                 'status' => OrderStatuses::label($item->status ?: $status),
             ])->values()->all(),
+        ];
+    }
+
+    /**
+     * Flipkart-style progress for the customer: Ordered → Packed → Shipped → Delivered, each with the
+     * date the admin set it (from the order's status history). A later step also marks earlier ones done.
+     */
+    private function trackingPayload(Order $order, string $status): array
+    {
+        $logs = $order->relationLoaded('statusLogs') ? $order->statusLogs : $order->statusLogs()->get();
+        $dateOf = function (string $key) use ($logs) {
+            $log = $logs->where('status', $key)->last();
+            $at = $log ? ($log->logged_at ?: $log->created_at) : null;
+            return $at ? $at->format('D, j M') : null;
+        };
+        $steps = [
+            ['key' => OrderStatuses::PLACED, 'label' => 'Ordered', 'date' => $dateOf(OrderStatuses::PLACED) ?: optional($order->ordered_at ?: $order->created_at)->format('D, j M')],
+            ['key' => OrderStatuses::PACKED, 'label' => 'Packed', 'date' => $dateOf(OrderStatuses::PACKED)],
+            ['key' => OrderStatuses::SHIPPED, 'label' => 'Shipped', 'date' => $dateOf(OrderStatuses::SHIPPED)],
+            ['key' => OrderStatuses::DELIVERED, 'label' => 'Delivered', 'date' => $dateOf(OrderStatuses::DELIVERED)],
+        ];
+        $order_ = array_column($steps, 'key');
+        $reached = array_search($status, $order_, true);
+        $cancelled = $status === OrderStatuses::CANCELLED;
+        if ($cancelled) {
+            // Show how far it got before cancellation.
+            $reached = 0;
+            foreach ($order_ as $i => $key) { if ($dateOf($key)) { $reached = $i; } }
+        }
+        foreach ($steps as $i => &$step) {
+            $step['done'] = $reached !== false && $i <= $reached;
+            $step['current'] = ! $cancelled && $i === $reached;
+        }
+        unset($step);
+        // A step the admin skipped (e.g. Placed → Shipped) is still done; show the date the order
+        // moved past it, i.e. the date of the next step that was recorded.
+        for ($i = count($steps) - 1, $next = null; $i >= 0; $i--) {
+            if (! $steps[$i]['done']) { continue; }
+            if ($steps[$i]['date']) { $next = $steps[$i]['date']; } elseif ($next) { $steps[$i]['date'] = $next; }
+        }
+        $latest = $logs->last();
+
+        return [
+            'steps' => $steps,
+            'cancelled' => $cancelled,
+            'cancelled_on' => $cancelled ? $dateOf(OrderStatuses::CANCELLED) : null,
+            'delivered' => $status === OrderStatuses::DELIVERED,
+            'latest_note' => $latest && ! in_array($latest->status, ['pending'], true) ? $latest->description : null,
         ];
     }
 

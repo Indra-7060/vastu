@@ -56,7 +56,18 @@ class FrontendController extends Controller
             ->take(3)
             ->get();
 
-        return view('frontend.pages.home', compact('homeCategories', 'featuredProducts', 'journalPosts'));
+        // Photo strip above the consultation banner: every active photo from Admin → Gallery.
+        $galleryStrip = collect(\App\Support\GalleryCategories::all())
+            ->flatMap(fn ($meta, $slug) => \App\Support\SiteBanners::all($meta['section'])
+                ->map(fn ($banner) => [
+                    'image' => ($m = \App\Support\SiteBanners::media($banner)) ? \App\Support\SiteBanners::url($m->image) : null,
+                    'alt' => $banner->title ?: $meta['label'],
+                    'url' => route('gallery', $slug),
+                ]))
+            ->filter(fn ($photo) => $photo['image'])
+            ->values();
+
+        return view('frontend.pages.home', compact('homeCategories', 'featuredProducts', 'journalPosts', 'galleryStrip'));
     }
 
     /** Price bands offered in the listing filter: key => [label, min, max]. */
@@ -524,18 +535,26 @@ class FrontendController extends Controller
         return view('frontend.pages.founder', ['page' => $this->publishedPage('founder')]);
     }
 
-    public function gallery(): View
+    public function gallery(?string $category = null): View
     {
-        // Admin → Home Content → Sections & Images → Gallery Photos (one banner per photo).
-        $photos = \App\Support\SiteBanners::all('gallery')
+        // Gallery categories (Our Product Users, Awards, Celebrity, Others); /gallery opens the first.
+        // Photos: Admin → Gallery → one section per category (one banner per photo).
+        $categories = \App\Support\GalleryCategories::all();
+        $activeSlug = $category ?: array_key_first($categories);
+        $active = $categories[$activeSlug];
+
+        $photos = \App\Support\SiteBanners::all($active['section'])
             ->map(fn ($banner) => [
                 'image' => ($m = \App\Support\SiteBanners::media($banner)) ? \App\Support\SiteBanners::url($m->image) : null,
                 'caption' => $banner->title,
+                'detail' => $banner->description,
             ])
             ->filter(fn ($photo) => $photo['image'])
             ->values();
 
-        return view('frontend.pages.gallery', compact('photos'));
+        $galleryLinks = \App\Support\GalleryCategories::links();
+
+        return view('frontend.pages.gallery', compact('photos', 'galleryLinks', 'activeSlug', 'active'));
     }
 
     public function stores(): View
@@ -607,13 +626,41 @@ class FrontendController extends Controller
         ])->header('Cache-Control', 'private, max-age=60');
     }
 
-    public function info(string $slug): View
+    /**
+     * Services page: the Services menu groups (Astrology, Numerology, Vastushastra) with each service
+     * product as a card. Services and prices are managed in Admin → Products.
+     */
+    public function services(): View
+    {
+        $groups = \App\Support\MegaMenu::data()['services'];
+        $products = Product::query()->active()
+            ->whereIn('id', $groups->pluck('products')->flatten()->pluck('id')->all())
+            ->get()->keyBy('id');
+
+        $groups = $groups->map(fn ($g) => $g + [
+            'anchor' => $g['page'],
+            'cards' => $g['products']->map(fn ($p) => $products->get($p->id))->filter()->values(),
+        ])->filter(fn ($g) => $g['cards']->isNotEmpty())->values();
+
+        return view('frontend.pages.services', compact('groups'));
+    }
+
+    public function info(string $slug): View|RedirectResponse
     {
         $title = InfoPages::title($slug);
         abort_if($title === null, 404);
 
         // Content written in Admin → Settings → Web Settings (empty → "No information available").
         $page = $this->publishedPage($slug);
+
+        // Astrology / Numerology / Vastu consultation without their own text yet: show that group on the Services page.
+        if (! $page && in_array($slug, ['astrology', 'numerology', 'vastu-consultation'], true)) {
+            return redirect()->to(route('services').'#'.$slug);
+        }
+        // "Book a consultation" opens a pop-up form on the site; a direct visit without page text goes to the enquiry form.
+        if (! $page && $slug === 'book-a-consultation') {
+            return redirect()->to(route('contact').'#vt-contact-form-title');
+        }
         if ($page && filled($page->title)) {
             $title = $page->title;
         }

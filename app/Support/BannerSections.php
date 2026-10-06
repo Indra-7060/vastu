@@ -80,11 +80,35 @@ class BannerSections
                 'media' => 'none',
                 'multi' => false,
             ],
-            'gallery' => [
-                'label' => 'Gallery Photos',
-                'page' => 'Gallery (/gallery)',
-                'hint' => 'One photo per banner (events, celebrity visits, consultations …). Title is shown as the caption; Display order sets the order. The Gallery page shows "Photos coming soon" until a photo is added.',
-                'fields' => ['Title' => 'Caption under the photo (optional)', 'Media' => 'Photo (any shape, 1200px+ recommended)'],
+            'gallery_product_users' => [
+                'label' => 'Gallery — Our Product Users',
+                'page' => 'Gallery (/gallery/our-product-users)',
+                'hint' => 'Photos of customers with their Vastutathastu products. One photo per entry; Display order sets the order. The tab shows "Photos coming soon" until a photo is added.',
+                'fields' => ['Title' => 'Photo title, e.g. the product shown', 'Description' => 'Short line under the title (optional)', 'Media' => 'Photo (any shape, 1200px+ recommended)'],
+                'media' => 'image',
+                'multi' => true,
+            ],
+            'gallery_awards' => [
+                'label' => 'Gallery — Awards',
+                'page' => 'Gallery (/gallery/awards)',
+                'hint' => 'Awards and recognitions. One photo per entry; Display order sets the order. The tab shows "Photos coming soon" until a photo is added.',
+                'fields' => ['Title' => 'Award name', 'Description' => 'What the award was given for / who gave it', 'Media' => 'Photo (any shape, 1200px+ recommended)'],
+                'media' => 'image',
+                'multi' => true,
+            ],
+            'gallery_celebrity' => [
+                'label' => 'Gallery — Celebrity',
+                'page' => 'Gallery (/gallery/celebrity)',
+                'hint' => 'Makrannd Sardeshmukh with celebrities (photos from the old website\'s Gallery). Title = the celebrity\'s name. One photo per entry; Display order sets the order. The tab shows "Photos coming soon" until a photo is added.',
+                'fields' => ['Title' => 'Celebrity name', 'Description' => 'Visit, event or consultation details', 'Media' => 'Photo (any shape, 1200px+ recommended)'],
+                'media' => 'image',
+                'multi' => true,
+            ],
+            'gallery_others' => [
+                'label' => 'Gallery — Others',
+                'page' => 'Gallery (/gallery/others)',
+                'hint' => 'Events, visits, seminars and other moments. Title is optional; leave it empty to show the photo without a caption. One photo per entry; Display order sets the order. The tab shows "Photos coming soon" until a photo is added.',
+                'fields' => ['Title' => 'Photo title', 'Description' => 'Short line under the title (optional)', 'Media' => 'Photo (any shape, 1200px+ recommended)'],
                 'media' => 'image',
                 'multi' => true,
             ],
@@ -130,6 +154,20 @@ class BannerSections
     public static function media(string $section): string
     {
         return self::all()[$section]['media'] ?? 'image';
+    }
+
+    /** Gallery sections have their own admin page (Admin → Gallery). */
+    public static function isGallery(?string $section): bool
+    {
+        return str_starts_with((string) $section, 'gallery_');
+    }
+
+    /** Admin list a banner of this section belongs to (Gallery page or Sections & Images). */
+    public static function listUrl(?string $section): string
+    {
+        return self::isGallery($section)
+            ? route('admin.banners.index', ['group' => 'gallery']).'#section-'.$section
+            : route('admin.banners.index');
     }
 
     public static function keys(): array

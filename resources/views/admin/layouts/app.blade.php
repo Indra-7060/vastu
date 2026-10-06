@@ -8,8 +8,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v=vastu-pro-25">
-    <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v=vastu-pro-29">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
+    <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vastu/images/favicon-32.png') }}?v=vt2">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('vastu/images/favicon-16.png') }}?v=vt2">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('vastu/images/apple-touch-icon.png') }}?v=vt2">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}?v=vt2">
+    <meta name="theme-color" content="#1c75bc">
 </head>
 <body class="sidebar-collapsed">
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
@@ -32,24 +38,46 @@
                 </button>
                 <div class="nav-sub">
                     <a href="{{ route('admin.categories.index') }}" class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">Categories</a>
-                    <a href="{{ route('admin.sub-categories.index') }}" class="{{ request()->routeIs('admin.sub-categories.*') ? 'active' : '' }}">Sub-Categories</a>
+                    {{-- Unused sections hidden to keep the panel simple (not removed). Set $showUnused = true to show them again. --}}
+                    @php $showUnused = false; @endphp
+                    @if($showUnused)
+                        <a href="{{ route('admin.sub-categories.index') }}" class="{{ request()->routeIs('admin.sub-categories.*') ? 'active' : '' }}">Sub-Categories</a>
+                    @endif
                     {{-- Brands section hidden (not removed). Set $showBrands = true to show again. --}}
-                    @php($showBrands = false)
+                    @php $showBrands = false; @endphp
                     @if($showBrands)
                         <a href="{{ route('admin.brands.index') }}" class="{{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">Brands</a>
                     @endif
-                    <a href="{{ route('admin.offers.index') }}" class="{{ request()->routeIs('admin.offers.*') ? 'active' : '' }}">Offers</a>
+                    @if($showUnused)
+                        <a href="{{ route('admin.offers.index') }}" class="{{ request()->routeIs('admin.offers.*') ? 'active' : '' }}">Offers</a>
+                    @endif
                     <a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">Products</a>
                 </div>
             </div>
 
-            <div class="nav-group {{ request()->routeIs('admin.banners.*') ? 'open has-active' : '' }}">
+            @php
+                $navBanner = request()->route('banner');
+                $navGallery = request()->routeIs('admin.banners.*') && (request('group') === 'gallery'
+                    || \App\Support\BannerSections::isGallery(request('section'))
+                    || ($navBanner instanceof \App\Models\Banner && \App\Support\BannerSections::isGallery($navBanner->section)));
+            @endphp
+            <div class="nav-group {{ request()->routeIs('admin.banners.*') && ! $navGallery ? 'open has-active' : '' }}">
                 <button type="button" class="nav-toggle" onclick="this.parentElement.classList.toggle('open')">
                     <span><span class="nav-ico">@include('admin.partials.icon', ['name' => 'home'])</span> Home Content</span>
                     <span class="chevron">@include('admin.partials.icon', ['name' => 'chevron', 'size' => 16])</span>
                 </button>
                 <div class="nav-sub">
-                    <a href="{{ route('admin.banners.index') }}" class="{{ request()->routeIs('admin.banners.*') ? 'active' : '' }}">Sections & Images</a>
+                    <a href="{{ route('admin.banners.index') }}" class="{{ request()->routeIs('admin.banners.*') && ! $navGallery ? 'active' : '' }}">Sections & Images</a>
+                </div>
+            </div>
+
+            <div class="nav-group {{ $navGallery ? 'open has-active' : '' }}">
+                <button type="button" class="nav-toggle" onclick="this.parentElement.classList.toggle('open')">
+                    <span><span class="nav-ico">@include('admin.partials.icon', ['name' => 'image'])</span> Gallery</span>
+                    <span class="chevron">@include('admin.partials.icon', ['name' => 'chevron', 'size' => 16])</span>
+                </button>
+                <div class="nav-sub">
+                    <a href="{{ route('admin.banners.index', ['group' => 'gallery']) }}" class="{{ $navGallery ? 'active' : '' }}">Gallery Photos</a>
                 </div>
             </div>
 

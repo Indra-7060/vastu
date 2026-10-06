@@ -74,9 +74,16 @@ Route::get('/blog/{slug}', [FrontendController::class, 'blogSingle'])->name('blo
 Route::get('/about', [FrontendController::class, 'about'])->name('about');
 Route::get('/founder', [FrontendController::class, 'founder'])->name('founder');
 Route::get('/stores', [FrontendController::class, 'stores'])->name('stores');
-Route::get('/gallery', [FrontendController::class, 'gallery'])->name('gallery');
+Route::get('/services', [FrontendController::class, 'services'])->name('services');
+Route::get('/gallery/{category?}', [FrontendController::class, 'gallery'])
+    ->whereIn('category', \App\Support\GalleryCategories::slugs())
+    ->name('gallery');
 Route::post('/consultation', [\App\Http\Controllers\ConsultationController::class, 'store'])->middleware('throttle:6,1')->name('consultation.store');
 Route::get('/info/stores', fn () => redirect()->route('stores', [], 301));
+// Contact Us page + enquiry form (messages appear in Admin → Contact List)
+Route::get('/contact-us', [\App\Http\Controllers\ContactPageController::class, 'show'])->name('contact');
+Route::post('/contact-us', [\App\Http\Controllers\ContactPageController::class, 'submit'])->middleware('throttle:6,1')->name('contact.submit');
+Route::get('/info/contact-us', fn () => redirect()->route('contact', [], 301));
 Route::get('/info/{slug}', [FrontendController::class, 'info'])->name('info');
 
 // Legacy static customer-care URLs now use the shared Laravel support UI.
@@ -191,6 +198,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('banners', BannerController::class)->except(['update']);
         Route::post('banners/{banner}', [BannerController::class, 'update'])->name('banners.update');
         Route::patch('banners/{banner}/toggle', [BannerController::class, 'toggleStatus'])->name('banners.toggle');
+        Route::patch('banners/{banner}/gallery', [BannerController::class, 'quickGallery'])->name('banners.gallery');
 
         Route::get('news-types', [\App\Http\Controllers\Admin\NewsTypeController::class, 'index'])->name('news-types.index');
         Route::post('news-types', [\App\Http\Controllers\Admin\NewsTypeController::class, 'store'])->name('news-types.store');
@@ -250,5 +258,5 @@ if (app()->environment('local')) {
 
 // Clean category URLs: /accessories, /shirts, etc. (keep after all fixed routes)
 Route::get('/{categorySlug}', [FrontendController::class, 'collection'])
-    ->where('categorySlug', '^(?!shop|collection|founder|stores|gallery|consultation|info|product|cart|checkout|order|search|blog|about|support|login|signup|admin|account|newsletter|forgot-password|reset-password|check-email|logout|cart-api|account-api|storage|frontend|css|js|images|vendor|build).*$')
+    ->where('categorySlug', '^(?!shop|collection|founder|stores|gallery|services|consultation|contact-us|info|product|cart|checkout|order|search|blog|about|support|login|signup|admin|account|newsletter|forgot-password|reset-password|check-email|logout|cart-api|account-api|storage|frontend|css|js|images|vendor|build).*$')
     ->name('category');

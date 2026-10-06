@@ -5,7 +5,7 @@
 @section('content')
 <div class="page-head">
     <div>
-        <a href="{{ route('admin.banners.index') }}" class="back-link">← Back</a>
+        <a href="{{ \App\Support\BannerSections::listUrl($banner->section) }}" class="back-link">← Back</a>
         <h2>Edit Banner</h2>
     </div>
 </div>

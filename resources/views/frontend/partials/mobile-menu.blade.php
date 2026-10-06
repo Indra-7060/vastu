@@ -15,6 +15,7 @@
     <li>
       <span>SERVICES</span>
       <ul>
+        <li><a href="{{ route('services') }}">ALL SERVICES</a></li>
         @foreach($megaMenu['services'] as $group)
           <li>
             <span>{{ strtoupper($group['title']) }}</span>
@@ -30,6 +31,6 @@
       </ul>
     </li>
     <li><a href="{{ route('gallery') }}">GALLERY</a></li>
-    <li><a href="{{ route('info', 'contact-us') }}">CONTACT US</a></li>
+    <li><a href="{{ route('contact') }}">CONTACT US</a></li>
   </ul>
 </nav>

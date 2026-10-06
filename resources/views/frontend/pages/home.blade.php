@@ -9,7 +9,6 @@
   $heroSlides = $B::all('home_hero');
   $hero = $heroSlides->first();
   $heroMedia = $B::media($hero);
-  $intro = $B::first('home_intro');
   $spotlightBanner = $B::first('home_spotlight');
   $founderBanner = $B::first('home_founder');
   $instaIntro = $B::first('instagram_intro');
@@ -22,6 +21,13 @@
       'caption' => ($p->title && ! preg_match('/^instagram (post|reel)$/i', trim($p->title))) ? $p->title : ($instaCaptions[$i % 3]),
       'image' => ($m = $B::media($p)) ? $B::url($m->image) : null,
   ])->filter(fn ($p) => $p['url'])->values();
+  // Live feed: the newest posts straight from Instagram (when INSTAGRAM_ACCESS_TOKEN is set);
+  // otherwise the posts chosen in Admin → Sections & Images are shown.
+  if ($livePosts = \App\Support\InstagramFeed::latest(3)) {
+      $instaPosts = collect($livePosts)->values()->map(fn ($p, $i) => array_merge($p, [
+          'caption' => $p['caption'] !== '' ? $p['caption'] : $instaCaptions[$i % 3],
+      ]));
+  }
   $priceOf = fn ($p) => (float) $p->selling_price > 0 ? (float) $p->selling_price : (float) $p->mrp;
   $carouselItems = $featuredProducts->map(fn ($p) => [
       'name' => $p->title,
@@ -45,10 +51,15 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=120">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=198">
   <title>{{ $pageTitle }}</title>
-  <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
-  <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
+  <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vastu/images/favicon-32.png') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('vastu/images/favicon-16.png') }}?v=vt2">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('vastu/images/apple-touch-icon.png') }}?v=vt2">
+  <link rel="manifest" href="{{ asset('site.webmanifest') }}?v=vt2">
+  <meta name="theme-color" content="#1c75bc">
   @if($heroMedia && ($heroMedia->is_video ? $heroMedia->mobile_image : $heroMedia->image))
   <link rel="preload" as="image" href="{{ $B::url($heroMedia->is_video ? $heroMedia->mobile_image : $heroMedia->image) }}">
   @endif
@@ -79,8 +90,8 @@
               @endphp
               <div class="vt-hero__slide{{ $loop->first ? ' is-selected' : '' }}{{ $framed ? ' vt-hero__slide--framed' : '' }}{{ $textRight ? ' vt-hero__slide--text-right' : '' }}" role="group" aria-roledescription="slide" aria-label="{{ $loop->iteration }} of {{ $loop->count }}" data-vt-hero-slide>
                 @if($media && $media->is_video)
-                  <video class="vt-hero__media" autoplay muted loop playsinline preload="{{ $loop->first ? 'metadata' : 'none' }}" @if($media->mobile_image) poster="{{ $B::url($media->mobile_image) }}" @endif aria-hidden="true">
-                    <source src="{{ $B::url($media->image) }}" type="{{ $media->video_mime_type }}">
+                  <video class="vt-hero__media" autoplay muted loop playsinline preload="{{ $loop->first ? 'metadata' : 'none' }}" @if($media->mobile_image) poster="{{ $B::url($media->mobile_image) }}?v={{ @filemtime(public_path('storage/'.$media->mobile_image)) }}" @endif aria-hidden="true">
+                    <source src="{{ $B::url($media->image) }}?v={{ @filemtime(public_path('storage/'.$media->image)) }}" type="{{ $media->video_mime_type }}">
                   </video>
                 @elseif($media && $framed)
                   <div class="vt-hero__ambient" style="background-image:url('{{ $B::url($media->image) }}')" aria-hidden="true"></div>
@@ -120,16 +131,6 @@
       </section>
       @endif
 
-      {{-- Introduction (Sections & Images → Home — Introduction) --}}
-      @if($intro)
-      <section class="vt-intro">
-        <div class="vt-intro__inner">
-          <h2 class="vt-h2">{{ $intro->title }}</h2>
-          @if($intro->description)<p class="vt-body">{{ $intro->description }}</p>@endif
-        </div>
-      </section>
-      @endif
-
       {{-- Shop by Category --}}
       @if($homeCategories->isNotEmpty())
       <section class="vt-categories" aria-labelledby="vt-cat-title">
@@ -146,6 +147,25 @@
         </div>
       </section>
       @endif
+
+      <script>
+        // Homepage refresh: open directly on "Shop by Category" before the first paint (no flash of the hero, no visible scroll).
+        (function () {
+          if (!window.vtHomeReload) return;
+          var cats = document.querySelector('.vt-categories'), bar = document.querySelector('[data-vt-header]'), root = document.documentElement;
+          if (!cats) return;
+          root.style.scrollBehavior = 'auto';
+          var hb = bar ? bar.offsetHeight : 0, y = window.pageYOffset, grid = cats.querySelector('.vt-cat-grid');
+          var top = cats.getBoundingClientRect().top + y - hb;
+          if (grid) {
+            var gr = grid.getBoundingClientRect(), room = window.innerHeight - hb;
+            // Whole section fits → show it all; otherwise make sure both tile rows are fully on screen.
+            if (gr.bottom + y - (top + hb) > room) top = gr.top + y - hb - Math.max(12, (room - gr.height) / 2);
+          }
+          window.scrollTo(0, Math.max(0, Math.round(top)));
+          root.style.scrollBehavior = '';
+        })();
+      </script>
 
       {{-- Shree Yantra spotlight + customer reviews (Figma 576:2361).
            Text/link: Sections & Images → Home — Spotlight. Reviews: App\Support\Reviews (sample until Google is connected). --}}
@@ -271,7 +291,7 @@
       <section class="vt-insta vt-journal" aria-labelledby="vt-insta-title">
         <div class="vt-journal__inner">
           <p class="vt-journal__eyebrow">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><rect x="1.33" y="1.33" width="13.33" height="13.33" rx="3.33"/><circle cx="8" cy="8" r="2.67"/><path d="M11.67 4.33h.01" stroke-linecap="round" stroke-width="1.6"/></svg>
+            @include('frontend.partials.brand-icon', ['name' => 'instagram', 'size' => 16])
             <span>{{ $instaIntro?->subtitle && strcasecmp(trim($instaIntro->subtitle), 'On Instagram') !== 0 ? $instaIntro->subtitle : 'Our Instagram Journal' }}</span>
             <span class="vt-journal__line" aria-hidden="true"></span>
           </p>
@@ -279,7 +299,7 @@
             <h2 class="vt-journal__title" id="vt-insta-title">{{ $instaIntro?->title ?: 'Moments of mindful living' }}</h2>
             <div class="vt-journal__follow">
               <a class="vt-journal__btn" href="{{ $instaUrl }}" target="_blank" rel="noopener">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><rect x="1.33" y="1.33" width="13.33" height="13.33" rx="3.33"/><circle cx="8" cy="8" r="2.67"/><path d="M11.67 4.33h.01" stroke-linecap="round" stroke-width="1.6"/></svg>
+                @include('frontend.partials.brand-icon', ['name' => 'instagram', 'size' => 18])
                 <span>{{ $instaIntro?->button_text ?: 'Follow on Instagram' }}</span>
               </a>
               <span class="vt-journal__handle notranslate" translate="no">{{ $instaHandle }}</span>
@@ -288,7 +308,7 @@
           @if($instaPosts->isNotEmpty())
           <div class="vt-journal__grid">
             @foreach($instaPosts as $post)
-              @php $kind = \App\Support\Instagram::kind($post['url']); @endphp
+              @php $kind = $post['kind'] ?? \App\Support\Instagram::kind($post['url']); @endphp
               <a class="vt-journal__card" href="{{ $post['url'] }}" target="_blank" rel="noopener" aria-label="{{ $post['caption'] }} — view this {{ strtolower($kind) }} on Instagram (opens in a new tab)">
                 <span class="vt-journal__media">
                   @if($post['image'])
@@ -308,6 +328,25 @@
           @endif
         </div>
       </section>
+      @endif
+      {{-- "Our Clients" photo strip: glides endlessly like "Sacred Energy" (photos from Admin → Gallery) --}}
+      @if($galleryStrip->count() > 1)
+        <section class="vt-products vt-photostrip" aria-labelledby="vt-photostrip-title">
+          <div class="vt-container">
+            <h2 class="vt-h3" id="vt-photostrip-title">Our Clients</h2>
+          </div>
+          <div class="vt-carousel" data-vt-carousel data-vt-marquee>
+            <div class="vt-carousel__track" data-vt-track>
+              @foreach($galleryStrip as $photo)
+                <div class="vt-carousel__slide">
+                  <a class="vt-card vt-card--photo" href="{{ $photo['url'] }}" aria-label="{{ $photo['alt'] }} — open gallery">
+                    <span class="vt-card__img"><img src="{{ $photo['image'] }}" alt="{{ $photo['alt'] }}" loading="lazy" decoding="async" width="400" height="400"></span>
+                  </a>
+                </div>
+              @endforeach
+            </div>
+          </div>
+        </section>
       @endif
     </main>
 

@@ -35,7 +35,7 @@ class SiteSettings
                 'fields' => [
                     'social_instagram' => ['label' => 'Instagram', 'type' => 'url', 'default' => Instagram::PROFILE_URL],
                     'social_youtube' => ['label' => 'YouTube', 'type' => 'url', 'default' => ''],
-                    'social_facebook' => ['label' => 'Facebook', 'type' => 'url', 'default' => ''],
+                    'social_facebook' => ['label' => 'Facebook', 'type' => 'url', 'default' => 'https://www.facebook.com/VastutathastuMakranndofficial/'],
                 ],
             ],
             'footer' => [

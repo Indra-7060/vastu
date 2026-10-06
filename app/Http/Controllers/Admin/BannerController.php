@@ -23,9 +23,15 @@ class BannerController extends Controller
             ->get()
             ->groupBy('section');
 
-        $sections = BannerSections::all();
+        // Gallery categories have their own page (Admin → Gallery); Sections & Images lists the rest.
+        $group = $request->query('group') === 'gallery' ? 'gallery' : null;
+        $sections = array_filter(
+            BannerSections::all(),
+            fn ($key) => BannerSections::isGallery($key) === ($group === 'gallery'),
+            ARRAY_FILTER_USE_KEY
+        );
 
-        return view('admin.banners.index', compact('bannersBySection', 'sections'));
+        return view('admin.banners.index', compact('bannersBySection', 'sections', 'group'));
     }
 
     public function create(Request $request)
@@ -49,7 +55,7 @@ class BannerController extends Controller
             $this->syncInstagramImage(Banner::where('section', 'instagram_post')->latest('id')->first(), true);
         }
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner created successfully.');
+        return redirect(BannerSections::listUrl($data['section'] ?? null))->with('success', BannerSections::isGallery($data['section'] ?? null) ? 'Photo added successfully.' : 'Banner created successfully.');
     }
 
     public function edit(Banner $banner)
@@ -92,7 +98,7 @@ class BannerController extends Controller
             $this->syncInstagramImage($banner->fresh('images'), $previousLink !== $banner->button_link);
         }
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner updated successfully.');
+        return redirect(BannerSections::listUrl($banner->section))->with('success', BannerSections::isGallery($banner->section) ? 'Photo updated successfully.' : 'Banner updated successfully.');
     }
 
     public function destroy(Banner $banner)
@@ -100,9 +106,30 @@ class BannerController extends Controller
         foreach ($banner->images as $image) {
             $this->deleteImageFiles($image);
         }
+        $section = $banner->section;
         $banner->delete();
 
-        return redirect()->route('admin.banners.index')->with('success', 'Banner deleted successfully.');
+        return redirect(BannerSections::listUrl($section))->with('success', BannerSections::isGallery($section) ? 'Photo deleted successfully.' : 'Banner deleted successfully.');
+    }
+
+    /** Admin → Gallery: rename a photo and/or move it to another gallery category, right from the list. */
+    public function quickGallery(Request $request, Banner $banner)
+    {
+        abort_unless(BannerSections::isGallery($banner->section), 404);
+
+        $data = $request->validate([
+            'title' => ['nullable', 'string', 'max:255'],
+            'section' => ['required', Rule::in(array_filter(BannerSections::keys(), [BannerSections::class, 'isGallery']))],
+        ]);
+
+        $moved = $data['section'] !== $banner->section;
+        $banner->update([
+            'title' => trim((string) ($data['title'] ?? '')),
+            'section' => $data['section'],
+        ]);
+
+        return redirect(BannerSections::listUrl($banner->section))
+            ->with('success', $moved ? 'Photo saved and moved to '.BannerSections::label($banner->section).'.' : 'Photo saved.');
     }
 
     public function toggleStatus(Banner $banner)
@@ -134,7 +161,7 @@ class BannerController extends Controller
         }
 
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => [BannerSections::isGallery($request->input('section')) ? 'nullable' : 'required', 'string', 'max:255'],
             'section' => ['required', Rule::in(BannerSections::keys())],
             'subtitle' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
@@ -177,6 +204,8 @@ class BannerController extends Controller
 
         $data['is_active'] = $request->boolean('is_active');
         $data['sort_order'] = (int) ($data['sort_order'] ?? 0);
+        // Gallery photos may have no caption.
+        $data['title'] = (string) ($data['title'] ?? '');
         if ($instagramPermalink) {
             $data['button_link'] = $instagramPermalink;
         }

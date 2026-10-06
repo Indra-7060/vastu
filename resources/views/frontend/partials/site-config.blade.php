@@ -68,9 +68,9 @@
     logoDark: @json(asset('vastu/images/logo.svg').'?v=2'),
     categories: @json($ppCategories),
     social: {
-      facebook: "https://www.facebook.com/",
-      instagram: "https://www.instagram.com/",
-      youtube: "https://www.youtube.com/",
+      facebook: @json(\App\Support\SiteSettings::get('social_facebook') ?: 'https://www.facebook.com/'),
+      instagram: @json(\App\Support\SiteSettings::get('social_instagram') ?: 'https://www.instagram.com/'),
+      youtube: @json(\App\Support\SiteSettings::get('social_youtube') ?: 'https://www.youtube.com/'),
       pinterest: "https://www.pinterest.com/",
       tiktok: "https://www.tiktok.com/"
     }

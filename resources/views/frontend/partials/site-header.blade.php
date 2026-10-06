@@ -8,9 +8,9 @@
   // dropdowns on hover. Blogs is in the footer.
   $vtNav = [
       ['label' => 'Products', 'url' => route('shop'), 'mega' => 'new'],
-      ['label' => 'Services', 'url' => route('info', 'vastu-consultation'), 'mega' => 'services'],
+      ['label' => 'Services', 'url' => route('services'), 'mega' => 'services'],
       ['label' => 'Gallery', 'url' => route('gallery'), 'mega' => null],
-      ['label' => 'Contact us', 'url' => route('info', 'contact-us'), 'mega' => null],
+      ['label' => 'Contact us', 'url' => route('contact'), 'mega' => null],
   ];
 @endphp
 <div id="page">
@@ -20,9 +20,21 @@
     // Homepage refresh opens on "Shop by Category" (vastu.js); stop the browser restoring the old position first.
     (function () {
       var nav = window.performance && performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
-      if (nav && nav.type === 'reload' && document.body.classList.contains('vt-page--home') && !location.hash && 'scrollRestoration' in history) {
+      var isHome = document.body.classList.contains('vt-page--home');
+      // Refreshing a browsing page (category, shop, product, blog…) starts again from the homepage's
+      // "Shop by Category" animation. Pages where the visitor is mid-task keep a normal refresh.
+      var keep = /\/(cart|checkout|account|account-api|order|orders|login|signup|register|forgot-password|reset-password|password|dev)(\/|$)/i;
+      if (nav && nav.type === 'reload' && !isHome && !keep.test(location.pathname)) {
+        try { sessionStorage.setItem('vtReloadHome', '1'); } catch (e) {}
+        location.replace(@json(route('home')));
+        return;
+      }
+      var cameFromRefresh = false;
+      try { cameFromRefresh = sessionStorage.getItem('vtReloadHome') === '1'; sessionStorage.removeItem('vtReloadHome'); } catch (e) {}
+      if (nav && (nav.type === 'reload' || cameFromRefresh) && isHome && !location.hash && 'scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
         window.vtHomeReload = true;
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('vt-fab-hold');
         window.addEventListener('pagehide', function () { history.scrollRestoration = 'auto'; });
       }
     })();
@@ -92,7 +104,7 @@
   @include('frontend.partials.mobile-menu')
   @include('frontend.partials.consultation-modal')
 </div>
-<script src="{{ asset('vastu/js/vastu.js') }}?v=21" defer></script>
+<script src="{{ asset('vastu/js/vastu.js') }}?v=39" defer></script>
   <div id="vt-gt" class="vt-gt" aria-hidden="true"></div>
   {{-- Not deferred: window.vtLang must exist before cart.js runs (the menu itself waits for the page). --}}
   <script src="{{ asset('vastu/js/lang.js') }}?v=16"></script>

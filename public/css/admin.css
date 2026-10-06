@@ -2957,3 +2957,22 @@ body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-
 .bulk-bar__clear:hover { border-color: #bbb; }
 .orders-table tr.is-selected td { background: #fff8f7; }
 #order-bulk-form { flex-wrap: wrap; }
+
+/* Full-width field inside the 2-column form grid (e.g. category page heading/description) */
+.form-grid .form-group--full { grid-column: 1 / -1; }
+.form-group textarea { font-family: inherit; font-size: 14px; line-height: 1.5; }
+.form-group input, .form-group select, .form-group textarea, .form-group button { font-family: inherit; }
+
+/* Admin → Gallery: inline name + category editor on each photo */
+.cms-quick { flex: 1 1 auto; min-width: 0; display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+.cms-quick__field { flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 4px; margin: 0; }
+.cms-quick__field--sm { flex: 0 1 190px; }
+.cms-quick__field span { font-size: 12px; font-weight: 600; color: var(--muted); }
+.cms-quick__field input, .cms-quick__field select { width: 100%; height: 38px; padding: 0 10px; border: 1px solid #dfe3e8; border-radius: 8px; background: #fff; font: inherit; font-size: 14px; color: var(--ink); }
+.cms-quick__field input:focus, .cms-quick__field select:focus { outline: 0; border-color: var(--brand, #1c75bc); box-shadow: 0 0 0 3px rgba(28, 117, 188, .15); }
+.cms-quick .dash-btn { height: 38px; }
+.cms-banner .cms-banner__thumb { flex: none; }
+@media (max-width: 767px) {
+  .cms-banner:has(.cms-quick) { flex-wrap: wrap; }
+  .cms-quick { order: 3; flex-basis: 100%; }
+}

@@ -11,9 +11,14 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
   @include('frontend.partials.site-config')
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=120">
-  <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
-  <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=198">
+  <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vastu/images/favicon-32.png') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('vastu/images/favicon-16.png') }}?v=vt2">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('vastu/images/apple-touch-icon.png') }}?v=vt2">
+  <link rel="manifest" href="{{ asset('site.webmanifest') }}?v=vt2">
+  <meta name="theme-color" content="#1c75bc">
 </head>
 <body class="pp-auth-page">
   <div class="wrapper ovh">

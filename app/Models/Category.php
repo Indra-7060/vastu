@@ -15,6 +15,8 @@ class Category extends Model
         'slug',
         'image',
         'short_description',
+        'page_heading',
+        'page_description',
         'product_sections',
         'has_color',
         'has_size',

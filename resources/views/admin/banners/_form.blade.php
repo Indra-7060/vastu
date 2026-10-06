@@ -142,5 +142,5 @@
 
 <div class="offer-form-actions">
     <button type="submit" class="btn btn-primary">Save</button>
-    <a href="{{ route('admin.banners.index') }}" class="btn btn-light">Cancel</a>
+    <a href="{{ \App\Support\BannerSections::listUrl($selectedSection) }}" class="btn btn-light">Cancel</a>
 </div>

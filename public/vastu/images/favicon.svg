@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>Vastutathastu</title>
+  <defs>
+    <linearGradient id="vtB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a87d1"/><stop offset="1" stop-color="#1665a6"/></linearGradient>
+    <linearGradient id="vtG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9ad34c"/><stop offset="1" stop-color="#7ab531"/></linearGradient>
+    <clipPath id="vtR"><rect width="64" height="64" rx="14"/></clipPath>
+  </defs>
+  <g clip-path="url(#vtR)">
+    <rect width="32" height="64" fill="url(#vtB)"/>
+    <rect x="32" width="32" height="64" fill="url(#vtG)"/>
+    <rect x="31" width="2" height="64" fill="#fff"/>
+  </g>
+  <path fill="#fff" d="M5.5 15h6.8L16 34.2 19.7 15h6.8l-7 34h-7Z"/>
+  <path fill="#fff" d="M37 15h22v7h-7.5v27h-7V22H37Z"/>
+</svg>

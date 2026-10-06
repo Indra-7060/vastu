@@ -42,6 +42,7 @@
                 <th>@include('admin.partials.sort-link', ['column' => 'name', 'label' => 'Name'])</th>
                 <th>@include('admin.partials.sort-link', ['column' => 'email', 'label' => 'Email'])</th>
                 <th>Phone</th>
+                <th>City</th>
                 <th>@include('admin.partials.sort-link', ['column' => 'subject', 'label' => 'Subject'])</th>
                 <th>@include('admin.partials.sort-link', ['column' => 'message', 'label' => 'Message'])</th>
                 <th>@include('admin.partials.sort-link', ['column' => 'created_at', 'label' => 'Date'])</th>
@@ -57,6 +58,7 @@
                     <td>{{ $message->name }}</td>
                     <td>{{ $message->email }}</td>
                     <td class="nowrap">{{ $message->phone ?: '—' }}</td>
+                    <td>{{ $message->city ?: '—' }}</td>
                     <td>{{ $message->subject ?: '—' }}</td>
                     <td class="contact-message-cell" title="{{ $message->message }}">{{ \Illuminate\Support\Str::limit($message->message, 80) }}</td>
                     <td>{{ $message->created_at?->format('d-m-Y') }}</td>
@@ -70,7 +72,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="8" class="empty-state" style="border:none;">No contact messages found</td>
+                    <td colspan="9" class="empty-state" style="border:none;">No contact messages found</td>
                 </tr>
             @endforelse
         </tbody>

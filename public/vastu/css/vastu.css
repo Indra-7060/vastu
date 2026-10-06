@@ -3576,3 +3576,643 @@ html[data-lang="hi"] .vt-header.vt-hdr .vt-hdr__icon .site-account-avatar, html[
   .vt-ftr__news { grid-column: 5; padding-left: 0; }
   .vt-ftr__signup { max-width: none; }
 }
+
+/* ---------- Bigger, more prominent header logo ---------- */
+.vt-hdr .vt-hdr__logo img { height: 62px; }
+@media (max-width: 1299px) { .vt-hdr .vt-hdr__logo img { height: 56px; } }
+@media (min-width: 992px) and (max-width: 1119px) { .vt-hdr .vt-hdr__logo img { height: 42px; } .vt-hdr .vt-hdr__link { font-size: 14px; padding-left: 8px; padding-right: 8px; } }
+@media (max-width: 991px) { .vt-hdr .vt-hdr__logo img { height: 50px; } }
+@media (max-width: 767px) { .vt-hdr .vt-hdr__logo img { height: 44px; } }
+@media (max-width: 575px) { .vt-hdr .vt-hdr__logo img { height: 40px; } }
+@media (max-width: 420px) { .vt-hdr .vt-hdr__logo img { height: 30px; } }
+@media (min-width: 1120px) and (max-width: 1239px) { .vt-hdr .vt-hdr__logo img { height: 50px; } }
+@media (max-width: 499px) { .vt-hdr .vt-hdr__logo img { height: 31px; } }
+@media (max-width: 420px) { .vt-hdr .vt-hdr__logo img { height: 30px; } }
+
+/* ---------- Header: bold 18px menu links, 30px icons ---------- */
+.vt-hdr .vt-hdr__link { font-size: 18px; font-weight: 700; }
+.vt-hdr .vt-hdr__link svg { width: 11px; height: 11px; }
+.vt-hdr .vt-hdr__icon { width: 46px; }
+.vt-hdr .vt-hdr__icon svg { width: 30px; height: 30px; }
+.vt-header.vt-hdr .vt-hdr__icon .site-account-avatar { width: 30px; height: 30px; min-width: 30px; font-size: 12px !important; font-weight: 700 !important; letter-spacing: .3px; }
+html[data-lang="hi"] .vt-header.vt-hdr .vt-hdr__icon .site-account-avatar, html[data-lang="mr"] .vt-header.vt-hdr .vt-hdr__icon .site-account-avatar { font-size: 10.5px !important; }
+html[data-lang="hi"] .vt-header.vt-hdr .vt-hdr__icon .site-account-avatar.is-long, html[data-lang="mr"] .vt-header.vt-hdr .vt-hdr__icon .site-account-avatar.is-long { font-size: 8.5px !important; }
+/* Keep 18px bold links + 30px icons clear of the logo on narrower screens */
+@media (max-width: 1439px) { .vt-hdr .vt-hdr__link { padding-left: 7px; padding-right: 7px; letter-spacing: .6px; } }
+@media (min-width: 1120px) and (max-width: 1239px) { .vt-hdr .vt-hdr__link { font-size: 16px; padding-left: 6px; padding-right: 6px; } }
+@media (min-width: 992px) and (max-width: 1119px) {
+  .vt-hdr .vt-hdr__link { font-size: 14px; padding-left: 5px; padding-right: 5px; letter-spacing: .4px; }
+  .vt-hdr .vt-hdr__logo img { height: 38px; }
+  .vt-hdr .vt-hdr__icon { width: 40px; }
+}
+@media (max-width: 991px) { .vt-hdr .vt-hdr__icon { width: 42px; } }
+@media (max-width: 479px) {
+  .vt-hdr .vt-hdr__icon { width: 36px; }
+  .vt-hdr .vt-hdr__icon svg { width: 26px; height: 26px; }
+  .vt-header.vt-hdr .vt-hdr__icon .site-account-avatar { width: 26px; height: 26px; min-width: 26px; font-size: 10.5px !important; }
+}
+
+/* ---------- Header: logo sits exactly midway between the menu and the icons ---------- */
+/* (logo stays centred on the page — absolute centre, see .vt-hdr .vt-hdr__logo) */
+@media (min-width: 992px) {
+  /* Same distance from the screen edge on both sides: menu text on the left, language button on the right */
+  .vt-hdr .vt-hdr__bar { padding-left: var(--vt-gutter); }
+  .vt-hdr .vt-lang { padding-right: var(--vt-gutter); }
+  .vt-hdr .vt-hdr__links { margin-left: 0; }
+  .vt-hdr .vt-hdr__links > li:first-child > .vt-hdr__link { padding-left: 0; }
+}
+
+/* ---------- Home section headings: 48px, bold, uppercase ---------- */
+.vt-home #vt-cat-title,
+.vt-home .vt-yantra__title,
+.vt-home .vt-products .vt-h3,
+.vt-home .vt-split--founder .vt-h3,
+.vt-home .vt-journal__title,
+.vt-home .vt-wisdom .vt-h2, .vt-home #vt-wisdom-title,
+.vt-footer .vt-cta__title {
+  font-size: clamp(28px, 2.4vw + 13.44px, 48px);
+  line-height: 1.12;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+/* ---------- Shop by Category labels: 18px bold ---------- */
+.vt-home .vt-cat__label { font-size: 18px; font-weight: 700; line-height: 24px; }
+
+/* ---------- Crisp icons site-wide ----------
+   Outline icons keep an exact on-screen line width whatever size they're drawn at
+   (scaled strokes like 2.19px smear across pixels and look blurry). */
+svg[stroke] :is(path, circle, rect, line, polyline, polygon, ellipse),
+svg [stroke]:is(path, circle, rect, line, polyline, polygon, ellipse) { vector-effect: non-scaling-stroke; }
+svg.vt-icon, .vt-ftr svg[stroke], .vt-journal svg[stroke], .vt-yantra svg[stroke], .vt-wa svg[stroke] { shape-rendering: geometricPrecision; }
+svg.vt-icon { stroke-width: 1.5px; }
+
+/* Header: 30px icons drawn with clean 2px lines, on whole pixels */
+.vt-hdr .vt-icon { stroke-width: 2px; }
+.vt-hdr .vt-hdr__icon { transition: color .25s ease, opacity .25s ease; }
+.vt-hdr .vt-hdr__icon:hover, .vt-hdr .vt-hdr__icon:focus-visible { opacity: .8; }
+.vt-header.vt-hdr .vt-hdr__icon .site-account-avatar { border-width: 2px !important; -webkit-font-smoothing: antialiased; }
+@media (min-width: 576px) { .vt-hdr .vt-lang__btn { width: 124px; justify-content: center; } }
+/* Cart count sits on the bag's top-right corner instead of covering it */
+.vt-hdr .site-cart-link { position: relative; }
+.vt-hdr .site-cart-link [data-cart-count], .vt-hdr .site-cart-link .vt-count {
+  left: auto; right: 0; top: calc(50% - 21px); min-width: 18px; height: 18px; padding: 0 5px;
+  border-radius: 9px; font-size: 11px; line-height: 18px; font-weight: 700; text-align: center;
+}
+@media (max-width: 479px) { .vt-hdr .site-cart-link [data-cart-count], .vt-hdr .site-cart-link .vt-count { right: 1px; top: calc(50% - 19px); } }
+/* Tablet: centred logo clear of the icons */
+@media (min-width: 576px) and (max-width: 991px) {
+  .vt-hdr .vt-hdr__logo img { height: 44px; }
+  .vt-hdr .vt-hdr__icon { width: 38px; }
+}
+/* Narrow tablets: short language label ("EN") so the centred logo stays clear */
+@media (min-width: 576px) and (max-width: 699px) {
+  .vt-hdr .vt-lang__long { display: none; }
+  .vt-hdr .vt-lang__short { display: inline; }
+  .vt-hdr .vt-lang__btn { width: auto; padding: 0 10px; }
+}
+
+/* ==========================================================================
+   One type system for the whole storefront
+   Headings (h1/h2, page + section titles): Cormorant Garamond, bold, uppercase
+   Sub-headings (h3–h6, card titles, labels, kickers): Manrope
+   ========================================================================== */
+body :is(h1, h2, .vt-h1, .vt-h2, .vt-h3, .vt-plp__title, .vt-recs__title, .vt-empty-state__title, .vt-yantra__title, .vt-journal__title, .vt-cta__title):not(:is(.vt-hdr *, .vt-mega *, .vt-ftr *, .pdp-acc__head, .vt-rich-text *, .vt-review *)) {
+  font-family: var(--vt-serif) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+/* Page titles match the home section headings (48px on desktop) */
+body :is(h1, .vt-plp__title, #vt-cat-title, .vt-products .vt-h3, .vt-split--founder .vt-h3, .vt-recs__title):not(:is(.vt-hdr *, .vt-hero__title, .pdp-title)) {
+  font-size: clamp(28px, 2.4vw + 13.44px, 48px) !important;
+  line-height: 1.12 !important;
+}
+.pdp-title { letter-spacing: .3px !important; }
+/* Article body headings stay readable (bold serif, normal case) */
+.vt-rich-text :is(h1, h2, h3) { font-family: var(--vt-serif) !important; font-weight: 700 !important; text-transform: none; }
+/* Sub-headings → Manrope */
+body :is(h3, h4, h5, h6, .sub-title, .vt-kicker, .pdp-acc__head, .vt-tile__name, .vt-article__title):not(:is(.vt-hdr *, .vt-mega *, .vt-rich-text *, .vt-h3, .vt-products .vt-h3)) {
+  font-family: var(--vt-sans) !important;
+}
+.pdp-acc__head { font-weight: 700 !important; }
+
+/* ---------- Body text: 16px everywhere (headings, 18px menu links and 18px category names keep their sizes) ---------- */
+html body { font-size: 16px; }
+body :is(p, li, dd, dt, td, th, label, blockquote, input, select, textarea, small, address, figcaption, .vt-body, .vt-body--sm, .vt-tile__name, .vt-card__meta, .vt-card__meta .d-block, .pp-ship, .vt-review__text, .vt-review__name, .vt-review__date, .vt-yantra__text, .vt-yantra__count, .vt-journal__name, .vt-journal__more, .vt-journal__handle, .vt-journal__eyebrow, .vt-kicker, .sub-title, .vt-link, .vt-ftr__links a, .vt-ftr__about, .vt-ftr__address, .vt-ftr__address a, .vt-ftr__news-text, .vt-ftr__bar p, .vt-ftr__legal a, .vt-insta__cta, .vt-yantra__all, .vt-yantra__btn, .vt-hero__kicker, .pdp-acc__head, .vt-review__stars, .vt-yantra__stars, .vt-ftr__copy, .vt-ftr__locale, .vt-ftr__legal span, .vt-ftr__field button, .vt-cta__text, .site-btn, .cart-btn, .checkout-btn, .site-forgot, .list-content, .vt-journal__btn span):not(:is(.vt-hdr *, .vt-mega *, .vt-cat__label, [data-cart-count], .vt-count, .vt-card__badge, .site-account-avatar, .pay-badge)) {
+  font-size: 16px !important;
+}
+body :is(p, li, td, .vt-body, .vt-review__text, .vt-yantra__text, .vt-ftr__about, .vt-ftr__news-text):not(:is(.vt-hdr *, .vt-mega *)) { line-height: 1.6; }
+body :is(.js-search-suggestion, .pp-minicart-empty__link, .site-show-password, .total_price, .vt-yantra__score strong, .vt-ftr__heading) { font-size: 16px !important; }
+.vt-home .vt-journal__name { font-size: 18px !important; font-weight: 700; line-height: 1.35; letter-spacing: 0; }
+.vt-home .vt-review__text { line-height: 1.5 !important; }
+.vt-yantra__badge { flex: 0 0 210px; }
+.vt-home .vt-yantra__all, .vt-home .vt-yantra__count { white-space: nowrap; }
+@media (max-width: 767px) { .vt-yantra__badge { flex: none; } }
+
+/* ---------- Shop by Category — same animation as swarovski.com category grid ----------
+   Heading: fade + rise 15%, 0.8s ease-in-out. Tiles: all together, fade + slide from -8%, 0.8s ease-in-out.
+   Hover: photo zooms to 1.1 in 0.4s cubic-bezier(.165,.84,.44,1). */
+.vt-motion .vt-categories .vt-section-head { opacity: 0; transform: translateY(15%); transition: none; animation: none; }
+.vt-motion .vt-categories .vt-section-head.is-in { opacity: 1; transform: translateY(0); transition: opacity .8s ease-in-out, transform .8s ease-in-out; }
+.vt-motion .vt-categories .vt-cat { opacity: 0; animation: none; }
+.vt-motion .vt-categories .vt-cat.is-in { animation: vtFadeInImages .8s ease-in-out var(--vt-col-delay, 0ms) 1 normal both; }
+.vt-categories .vt-cat__img { overflow: hidden; }
+.vt-categories .vt-cat .vt-cat__img img { transition: transform .4s cubic-bezier(.165, .84, .44, 1) !important; transform: none; }
+.vt-categories .vt-cat:hover .vt-cat__img img, .vt-categories .vt-cat:focus-visible .vt-cat__img img { transform: scale(1.1) !important; }
+@media (hover: none) { .vt-categories .vt-cat:hover .vt-cat__img img { transform: none !important; } }
+@media (prefers-reduced-motion: reduce) {
+  .vt-motion .vt-categories .vt-section-head, .vt-motion .vt-categories .vt-cat { opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important; }
+}
+
+/* ---------- Shree Yantra: aligned two-column layout, 10px rectangular image ---------- */
+.vt-yantra__media { border-radius: 10px !important; }
+.vt-yantra__media img { border-radius: 10px; }
+@media (min-width: 1200px) {
+  .vt-yantra__inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: stretch; gap: clamp(40px, 3.9vw, 64px); }
+  /* photo spans the full height of the text column, top aligned with the heading */
+  .vt-yantra__media { aspect-ratio: auto; height: 100%; min-height: 460px; align-self: stretch; }
+  .vt-yantra__media img { object-position: center 60%; }
+  .vt-yantra__copy { padding: 0; display: flex; flex-direction: column; }
+  .vt-yantra__head { padding-top: 0; }
+  .vt-yantra__actions { margin-top: auto; padding-bottom: 0; }
+}
+.vt-yantra__intro { align-items: flex-start; }
+.vt-yantra__badge { flex: 0 0 auto; min-width: 0; }
+.vt-yantra__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.vt-review { min-width: 0; overflow-wrap: anywhere; }
+.vt-yantra__btns { flex-wrap: wrap; }
+@media (min-width: 768px) and (max-width: 1199px) { .vt-yantra__media { aspect-ratio: 3 / 2; } }
+@media (max-width: 767px) { .vt-yantra__media { aspect-ratio: 4 / 3; } }
+@media (max-width: 767px) {
+  .vt-yantra__cards { display: grid; grid-template-columns: 1fr; gap: 12px; overflow: visible; margin: 0; padding: 0; }
+  .vt-review { flex: none; }
+}
+@media (min-width: 576px) and (max-width: 767px) { .vt-yantra__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- Remove decorative lines/underlines (client request) ---------- */
+.vt-header, .vt-header.is-stuck, .vt-header.vt-hdr, .vt-header--overlay, html.vt-header-stuck .vt-header { box-shadow: none !important; }
+.vt-yantra__rule { display: none !important; }
+.vt-yantra__head { gap: 0; }
+.vt-journal__line { display: none !important; }
+.vt-home .vt-split .vt-link, .vt-home .vt-split .vt-link:hover, .vt-home .vt-split .vt-link:focus-visible { background-image: none !important; text-decoration: none !important; border-bottom: 0 !important; }
+.vt-home .vt-split .vt-link { transition: color .3s ease; }
+.vt-home .vt-split .vt-link:hover { color: var(--vt-bronze) !important; }
+
+/* ---------- Brand icons (Instagram / YouTube / Facebook in their own colours) ---------- */
+.vt-bicon { display: block; flex: none; }
+.vt-bicon * { vector-effect: none !important; }
+/* Footer: 28px brand icons, slow smooth hover lift */
+.vt-ftr__social { display: flex; align-items: center; gap: 14px; }
+.vt-footer .vt-ftr__soc {
+  display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px;
+  transform: translateY(0) scale(1); filter: none;
+  transition: transform .6s cubic-bezier(.22, .61, .36, 1), filter .6s cubic-bezier(.22, .61, .36, 1), opacity .6s ease;
+}
+.vt-footer .vt-ftr__soc svg, .vt-ftr__social a:hover svg { width: 28px; height: 28px; transform: none !important; transition: none; }
+.vt-footer .vt-ftr__soc:hover, .vt-footer .vt-ftr__soc:focus-visible {
+  transform: translateY(-3px); filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .28));
+}
+.vt-footer .vt-ftr__soc.is-static { cursor: default; }
+@media (prefers-reduced-motion: reduce) { .vt-footer .vt-ftr__soc { transition: none; } .vt-footer .vt-ftr__soc:hover { transform: none; } }
+/* Instagram section: original icon in the eyebrow and the Follow button (same hover animation as before) */
+.vt-journal__eyebrow .vt-bicon { width: 18px; height: 18px; }
+.vt-journal__btn .vt-bicon { width: 20px; height: 20px; transition: transform .35s ease; }
+.vt-journal__btn:hover .vt-bicon { transform: rotate(-8deg); }
+
+/* Crisp brand icons: drawn at whole-pixel sizes, never pre-rasterised */
+.vt-bicon { shape-rendering: geometricPrecision; image-rendering: auto; backface-visibility: visible; }
+/* Brand icons always render square at their exact size (older footer svg rules stretched them) */
+.vt-footer .vt-ftr .vt-ftr__social .vt-ftr__soc .vt-bicon { width: 28px !important; height: 28px !important; max-width: none; }
+.vt-home .vt-journal__eyebrow .vt-bicon { width: 18px !important; height: 18px !important; }
+.vt-home .vt-journal__btn .vt-bicon { width: 20px !important; height: 20px !important; }
+/* Slow, smooth hover wins over the older footer link transition */
+.vt-footer .vt-ftr .vt-ftr__social .vt-ftr__soc {
+  transition: transform .6s cubic-bezier(.22, .61, .36, 1), filter .6s cubic-bezier(.22, .61, .36, 1) !important;
+}
+.vt-footer .vt-ftr .vt-ftr__social .vt-ftr__soc:hover, .vt-footer .vt-ftr .vt-ftr__social .vt-ftr__soc:focus-visible {
+  transform: translateY(-3px); filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .28));
+}
+
+/* ---------- Floating "Call us" button — bottom-left, same look and hover as the WhatsApp button ---------- */
+.vt-call {
+  position: fixed; left: 24px; bottom: 24px; z-index: 90;
+  display: flex; align-items: center; height: 52px; padding: 0; overflow: hidden; text-decoration: none;
+  border-radius: 999px; background: #1c75bc; color: #fff;
+  box-shadow: 0 1px 2px rgba(15, 40, 70, .18), 0 8px 22px rgba(15, 40, 70, .20);
+  transition: transform .3s ease, box-shadow .3s ease, background-color .3s ease;
+}
+.vt-call__icon { flex: none; display: grid; place-items: center; width: 52px; height: 52px; }
+.vt-call__icon svg { width: 24px; height: 24px; }
+.vt-call__label {
+  max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0;
+  font-family: var(--vt-sans); font-size: 14px !important; font-weight: 600; letter-spacing: .2px;
+  transition: max-width .35s ease, opacity .25s ease, padding .35s ease;
+}
+.vt-call:hover, .vt-call:focus-visible { color: #fff; background: #1765a3; transform: translateY(-2px); box-shadow: 0 2px 4px rgba(15, 40, 70, .18), 0 12px 28px rgba(15, 40, 70, .24); }
+@media (hover: hover) and (min-width: 768px) {
+  .vt-call:hover .vt-call__label, .vt-call:focus-visible .vt-call__label { max-width: 120px; opacity: 1; padding-right: 20px; }
+}
+.vt-call:focus-visible { outline: 3px solid rgba(28, 117, 188, .35); outline-offset: 3px; }
+@media (max-width: 767px) { .vt-call { left: 16px; bottom: 16px; height: 50px; } .vt-call__icon { width: 50px; height: 50px; } }
+body:has(.pdp-sticky.is-visible) .vt-call { bottom: 104px; }
+body.pdp-viewer-open .vt-call, body.pp-minicart-open .vt-call { display: none; }
+@media (max-width: 767px) { body:has(.pdp-sticky.is-visible) .vt-call { bottom: 92px; } }
+@media (prefers-reduced-motion: reduce) { .vt-call, .vt-call__label { transition: none; } }
+.vt-call { width: auto; }
+@media (max-width: 767px) { .vt-call { width: auto; height: 50px; } }
+
+/* ---------- Footer colour (client reference): #0c3f33 ---------- */
+.vt-footer .vt-ftr, .vt-footer .vt-ftr .vt-ftr__bar { background: #0c3f33; }
+.vt-footer .vt-ftr__field button { background: #0c3f33; }
+.vt-footer .vt-ftr__field button:hover, .vt-footer .vt-ftr__field button:focus-visible { background: #145f4d; }
+
+/* Footer bottom bar: keep its text clear of the floating Call (left) and WhatsApp (right) buttons */
+@media (min-width: 768px) {
+  .vt-footer .vt-ftr .vt-ftr__bar { padding-left: calc(24px + 52px + 20px); padding-right: calc(24px + 52px + 20px); }
+}
+
+/* Footer contact lines with location / phone / email icons */
+.vt-footer .vt-ftr__address { gap: 10px; }
+.vt-footer .vt-ftr__contact { display: flex; align-items: flex-start; gap: 10px; }
+.vt-ftr__cicon { flex: none; width: 18px; height: 18px; margin-top: 2px; color: var(--ftr-accent, #8dc63f); }
+.vt-footer a.vt-ftr__contact:hover .vt-ftr__cicon { color: #fff; }
+/* Bottom bar text sits on the same centre line as the floating Call / WhatsApp buttons
+   (buttons: 52px tall, 24px from the screen bottom → centre 50px up; bar is the last 100px of the page) */
+@media (min-width: 768px) {
+  .vt-footer .vt-ftr .vt-ftr__bar { min-height: 100px; padding-top: 0; padding-bottom: 0; align-items: center; }
+}
+/* Footer contact icons: 20px */
+.vt-footer .vt-ftr__contact .vt-ftr__cicon { width: 20px !important; height: 20px !important; margin-top: 1px; }
+
+/* ==========================================================================
+   One icon size across the website: 30px
+   ========================================================================== */
+/* Header (account, wishlist, search, cart) */
+.vt-hdr .vt-hdr__icon svg, .vt-header.vt-hdr .vt-hdr__icon .site-account-avatar { width: 30px !important; height: 30px !important; min-width: 30px; }
+/* Footer: contact icons + social icons */
+.vt-footer .vt-ftr__contact .vt-ftr__cicon { width: 30px !important; height: 30px !important; margin-top: -4px; }
+.vt-footer .vt-ftr__contact { gap: 12px; align-items: flex-start; }
+.vt-footer .vt-ftr .vt-ftr__social .vt-ftr__soc { width: 34px; height: 34px; }
+.vt-footer .vt-ftr .vt-ftr__social .vt-ftr__soc .vt-bicon { width: 30px !important; height: 30px !important; }
+/* Instagram section */
+.vt-home .vt-journal__eyebrow .vt-bicon, .vt-home .vt-journal__btn .vt-bicon { width: 30px !important; height: 30px !important; }
+.vt-home .vt-journal__eyebrow { gap: 12px; }
+.vt-journal__more svg { width: 30px; height: 30px; }
+.vt-insta__play svg { width: 30px; height: 30px; }
+/* Shree Yantra: button arrows + Google icons */
+.vt-yantra__btn svg { width: 30px; height: 30px; }
+.vt-yantra__score img { width: 30px !important; height: 30px !important; }
+.vt-review__g { width: 30px !important; height: 30px !important; }
+/* Floating Call / WhatsApp */
+.vt-call__icon svg, .vt-wa__icon svg { width: 30px !important; height: 30px !important; }
+/* Wishlist hearts on product tiles and product page */
+.vt-tile__wish .vt-icon, .product-design__wish .vt-icon { width: 30px !important; height: 30px !important; }
+/* Drawer / search close buttons and the search field icon */
+.site-drawer-close svg { width: 30px !important; height: 30px !important; }
+.search-close-icon i, .search-close-icon .fa-sharp { font-size: 30px !important; line-height: 1; }
+.s-icon .js-search-icon, .js-search-icon { width: 30px !important; height: 30px !important; }
+
+/* ---------- Shop by Category: both rows always fit the screen on desktop ----------
+   Tile photos keep the full column width; their height is capped so 2 rows + names + gap fit below
+   the header (short laptop windows crop the photos slightly; large screens stay square). */
+@media (min-width: 992px) {
+  .vt-categories .vt-cat__img {
+    aspect-ratio: auto;
+    height: max(150px, min(calc((100vw - 2 * var(--vt-gutter) - 48px) / 4), calc((100svh - var(--vt-hdr-h, 76px) - 24px - 2 * 55px - 16px) / 2)));
+  }
+  .vt-categories .vt-cat__img img { height: 100%; object-fit: cover; }
+}
+
+/* ---------- Floating Call / WhatsApp: held back on a homepage refresh until the category tiles finish,
+   then each one assembles from scattered shards (see vastu.js) ---------- */
+html.vt-fab-hold .vt-call:not(.vt-shards *), html.vt-fab-hold .vt-wa:not(.vt-shards *) { opacity: 0 !important; pointer-events: none; transition: none !important; }
+.vt-shards { position: fixed; z-index: 91; pointer-events: none; }
+.vt-shards > * { position: absolute !important; inset: 0 !important; left: 0 !important; right: auto !important; bottom: auto !important; top: 0 !important; margin: 0 !important; transform-origin: 50% 50%; box-shadow: none !important; }
+/* Smooth hand-over from the assembled shards to the real Call / WhatsApp buttons */
+html.vt-fab-reveal .vt-call:not(.vt-shards *), html.vt-fab-reveal .vt-wa:not(.vt-shards *) { animation: vtFabIn .7s ease both; }
+@keyframes vtFabIn { from { opacity: 0; box-shadow: none; } to { opacity: 1; } }
+.vt-shards > * { backface-visibility: hidden; }
+@media (max-width: 359px) { .vt-hdr .vt-hdr__logo img { height: 25px; } .vt-hdr .vt-hdr__icon { width: 32px; } .vt-hdr .vt-hdr__icon svg { width: 24px !important; height: 24px !important; } }
+/* Small phones: keep the centred logo clear of the search / cart buttons */
+@media (max-width: 420px) { .vt-hdr .vt-hdr__icon { width: 30px; } .vt-hdr .vt-hdr__logo img { height: 28px; } }
+@media (max-width: 359px) { .vt-hdr .vt-hdr__logo img { height: 24px; } .vt-hdr .vt-lang__btn { padding: 0 5px; gap: 3px; } }
+
+/* ---------- Category pages: "You may also like" category slider — same look as "Sacred Energy, Refined" ---------- */
+.vt-plp__related .vt-products { background: #f0ede4; padding-bottom: 56px; }
+.vt-plp__related .vt-products .vt-h3 { text-align: center; }
+.vt-plp__related .vt-carousel .vt-card { background: #fff; transition: box-shadow .45s ease, transform .45s cubic-bezier(.22, .61, .36, 1); }
+.vt-plp__related .vt-carousel .vt-card:hover { transform: translateY(-4px); box-shadow: 0 16px 30px -18px rgba(49, 27, 11, .35); }
+.vt-plp__related .vt-carousel .vt-card__meta { font-family: var(--vt-sans); font-size: 16px; line-height: 18px; letter-spacing: .4px; color: #000; text-align: center; }
+.vt-plp__related .vt-carousel .vt-card__meta > .d-block:last-child { font-weight: 600; letter-spacing: 0; margin-top: 8px; }
+.vt-plp__related .vt-card__sub:empty { display: none; }
+@media (min-width: 1200px) {
+  .vt-plp__related .vt-products .vt-carousel__slide { flex: 0 0 302px; padding: 0 32px 0 0; }
+  .vt-plp__related .vt-products .vt-card { height: 344px; }
+  .vt-plp__related .vt-products .vt-card__img { padding: 36px 0 28px; }
+}
+/* "You may also like" cards: category name stands out, "Explore" quieter */
+.vt-plp__related .vt-carousel .vt-card__meta > [data-vt-orig] { font-size: 18px !important; font-weight: 700; line-height: 24px; color: #311b0b; }
+.vt-plp__related .vt-carousel .vt-card__meta > .d-block:last-child { font-size: 16px !important; font-weight: 500; color: #6d5a4c; }
+
+/* ==========================================================================
+   Contact Us page
+   ========================================================================== */
+.vt-contact { background: #fff; color: #2b2420; }
+/* 1. Heading */
+.vt-contact__hero { text-align: center; padding: clamp(40px, 5vw, 72px) var(--vt-gutter) clamp(32px, 4vw, 52px); background: #f0eee4; }
+.vt-contact__crumbs { display: flex; justify-content: center; gap: 10px; margin-bottom: 18px; font-size: 16px; color: #7a6f66; }
+.vt-contact__crumbs a { color: #7a6f66; text-decoration: none; transition: color .3s ease; }
+.vt-contact__crumbs a:hover { color: #311b0b; }
+.vt-home .vt-contact__kicker { margin: 0 0 10px; font: 600 16px/1.3 var(--vt-sans); letter-spacing: 2px; text-transform: uppercase; color: #806559; }
+.vt-home .vt-contact__title { margin: 0; color: #1f2a24; }
+.vt-home .vt-contact__intro { max-width: 640px; margin: 14px auto 0; color: #4a524c; }
+
+/* 2. Contact cards */
+.vt-contact__cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding: 0 var(--vt-gutter) clamp(40px, 5vw, 64px); background: linear-gradient(#f0eee4 0 50%, #fff 50% 100%); }
+.vt-contact__card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 32px 28px; border-radius: 10px;
+  background: #fff; border: 1px solid #eadbcc; box-shadow: 0 10px 30px -18px rgba(49, 27, 11, .25);
+  transition: transform .45s cubic-bezier(.22, .61, .36, 1), box-shadow .45s ease, border-color .45s ease;
+}
+.vt-contact__card:hover { transform: translateY(-4px); border-color: #d5c2a5; box-shadow: 0 22px 40px -22px rgba(49, 27, 11, .4); }
+.vt-contact__icon { display: inline-grid; place-items: center; width: 60px; height: 60px; margin-bottom: 6px; border-radius: 50%; background: #0c3f33; color: #fff; transition: transform .45s ease, background-color .45s ease; }
+.vt-contact__icon svg { width: 30px; height: 30px; }
+.vt-contact__card:hover .vt-contact__icon { background: #145f4d; transform: rotate(-6deg); }
+body .vt-contact__label { margin: 0; font-family: var(--vt-sans) !important; font-weight: 700 !important; font-size: 18px; line-height: 1.3; letter-spacing: .2px; text-transform: none; color: #311b0b; }
+.vt-home .vt-contact__text { margin: 0; font-style: normal; color: #4a524c; line-height: 1.6; }
+.vt-contact__text a { color: #311b0b; text-decoration: none; font-weight: 600; transition: color .3s ease; }
+.vt-contact__text a:hover { color: #145f4d; }
+.vt-contact__actions { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: auto; }
+.vt-contact__card > .vt-contact__action { margin-top: auto; }
+.vt-home .vt-contact__action { display: inline-flex; align-items: center; gap: 6px; padding-top: 6px; font: 600 16px/1.3 var(--vt-sans); color: #0c3f33; text-decoration: none; }
+.vt-contact__action span { transition: transform .3s ease; }
+.vt-contact__action:hover span { transform: translateX(4px); }
+.vt-home .vt-contact__action--wa { color: #1ebe5b; }
+
+/* 3. Form + map */
+.vt-contact__main { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 32px; align-items: stretch; padding: 0 var(--vt-gutter) clamp(48px, 6vw, 88px); }
+.vt-contact__formcard { padding: clamp(24px, 3vw, 40px); border-radius: 10px; background: #fffdf9; border: 1px solid #eadbcc; }
+.vt-home .vt-contact__formtitle { margin: 0; font-size: clamp(28px, 1.4vw + 18px, 36px) !important; line-height: 1.15 !important; color: #1f2a24; }
+.vt-home .vt-contact__formintro { margin: 10px 0 0; color: #4a524c; }
+.vt-contact__points { list-style: none; margin: 16px 0 24px; padding: 0; display: grid; gap: 8px; }
+.vt-home .vt-contact__points li { position: relative; padding-left: 28px; color: #4a524c; }
+.vt-contact__points li::before { content: ""; position: absolute; left: 0; top: .2em; width: 18px; height: 18px; border-radius: 50%; background: #8dc63f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / 12px no-repeat; }
+.vt-contact__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 18px; }
+.vt-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.vt-field--full { grid-column: 1 / -1; }
+.vt-home .vt-field label { font: 600 16px/1.3 var(--vt-sans); color: #311b0b; }
+.vt-field label span { color: #b3261e; }
+.vt-field input, .vt-field select, .vt-field textarea {
+  width: 100%; min-height: 50px; padding: 12px 14px; border: 1px solid #d9cfc0; border-radius: 8px; background: #fff;
+  font: 400 16px/1.4 var(--vt-sans); color: #2b2420; outline: 0; transition: border-color .25s ease, box-shadow .25s ease;
+}
+.vt-field textarea { min-height: 140px; resize: vertical; }
+.vt-field select { appearance: none; padding-right: 40px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23311b0b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") right 14px center / 18px no-repeat; }
+.vt-field input::placeholder, .vt-field textarea::placeholder { color: #9a8f84; }
+.vt-field input:focus, .vt-field select:focus, .vt-field textarea:focus { border-color: #0c3f33; box-shadow: 0 0 0 3px rgba(12, 63, 51, .15); }
+.vt-field .is-invalid { border-color: #b3261e; }
+.vt-home .vt-field__err { margin: 0; min-height: 0; font-size: 14px !important; line-height: 1.3; color: #b3261e; }
+.vt-field__err:empty { display: none; }
+.vt-home .vt-contact__formerr { margin: 14px 0 0; padding: 10px 14px; border-radius: 8px; background: #fbeceb; color: #8c1d18; }
+.vt-contact__submit {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; min-height: 54px; padding: 0 30px; border: 0; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(103.94deg, #0c3f33 32%, #2b8b73 100%) 0 0 / 150% 100%; color: #fff; font: 600 16px/1 var(--vt-sans); letter-spacing: .6px; text-transform: uppercase;
+  transition: background-position .6s ease, transform .35s ease, box-shadow .35s ease, opacity .3s ease;
+}
+.vt-contact__submit svg { width: 30px; height: 30px; transition: transform .35s ease; }
+.vt-contact__submit:hover { background-position: 100% 0; transform: translateY(-2px); box-shadow: 0 14px 26px -12px rgba(12, 63, 51, .6); }
+.vt-contact__submit:hover svg { transform: translateX(4px); }
+.vt-contact__submit:disabled { opacity: .7; cursor: wait; transform: none; }
+.vt-contact__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.vt-contact__done { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 24px; border-radius: 10px; background: #eef6e6; border: 1px solid #cfe6b5; }
+.vt-contact__done[hidden] { display: none; }
+.vt-contact__doneicon { display: inline-grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: #8dc63f; color: #fff; }
+.vt-home .vt-contact__done p { margin: 0; color: #1f2a24; font-weight: 600; }
+.vt-contact__again { padding: 0; border: 0; background: none; font: 600 16px var(--vt-sans); color: #0c3f33; text-decoration: underline; cursor: pointer; }
+.vt-contact__map { position: relative; min-height: 520px; border-radius: 10px; overflow: hidden; border: 1px solid #eadbcc; background: #e9e4da; }
+.vt-contact__map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.vt-home .vt-contact__mapbtn {
+  position: absolute; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px 10px 12px; border-radius: 999px;
+  background: #fff; color: #0c3f33; font: 600 16px/1 var(--vt-sans); text-decoration: none; box-shadow: 0 8px 22px -10px rgba(0, 0, 0, .35);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.vt-contact__mapbtn svg { width: 30px; height: 30px; }
+.vt-contact__mapbtn:hover { transform: translateY(-2px); box-shadow: 0 14px 26px -12px rgba(0, 0, 0, .45); }
+
+@media (max-width: 1199px) {
+  .vt-contact__main { grid-template-columns: 1fr; }
+  .vt-contact__map { min-height: 420px; }
+}
+@media (max-width: 991px) {
+  .vt-contact__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vt-contact__card:last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 767px) {
+  .vt-contact__cards { grid-template-columns: 1fr; gap: 16px; background: linear-gradient(#f0eee4 0 120px, #fff 120px 100%); }
+  .vt-contact__card { padding: 24px 20px; }
+  .vt-contact__card:last-child { grid-column: auto; }
+  .vt-contact__grid { grid-template-columns: 1fr; }
+  .vt-contact__submit { width: 100%; }
+  .vt-contact__map { min-height: 340px; }
+}
+@media (prefers-reduced-motion: reduce) { .vt-contact__card, .vt-contact__submit, .vt-contact__mapbtn { transition: none; } }
+body .vt-contact .vt-contact__card .vt-contact__label { font-family: var(--vt-sans) !important; font-weight: 700 !important; text-transform: none !important; letter-spacing: .2px; }
+
+/* ---------- Header dropdowns (Products / Services): 16px text ---------- */
+.vt-header .vt-mega li a, .vt-header .vt-mega__col a { font-size: 16px; line-height: 22px; }
+.vt-header .vt-mega__title { font-size: 16px; line-height: 22px; }
+.vt-header .vt-mega__name { font-size: 16px; line-height: 22px; }
+.vt-header .vt-mega__price { font-size: 16px; line-height: 22px; }
+.vt-header .vt-mega__teaser p, .vt-header .vt-mega__teaser span, .vt-header .vt-mega__teaser a { font-size: 16px; }
+
+/* ---------- Contact Us: compact, balanced layout ---------- */
+.vt-contact__hero { padding: clamp(32px, 3.5vw, 48px) var(--vt-gutter) clamp(28px, 3vw, 40px); }
+.vt-contact__crumbs { margin-bottom: 12px; }
+.vt-home .vt-contact__kicker { margin-bottom: 6px; font-size: 14px; }
+.vt-home .vt-contact__intro { margin-top: 10px; }
+.vt-contact__cards, .vt-contact__main { padding-left: max(var(--vt-gutter), calc((100% - 1200px) / 2)); padding-right: max(var(--vt-gutter), calc((100% - 1200px) / 2)); }
+.vt-contact__cards { gap: 20px; padding-bottom: clamp(32px, 3.5vw, 48px); }
+.vt-contact__card { display: grid; grid-template-columns: 44px minmax(0, 1fr); grid-auto-rows: auto; align-content: start; column-gap: 16px; row-gap: 6px; padding: 22px; }
+.vt-contact__card > * { grid-column: 2; }
+.vt-contact__card > .vt-contact__icon { grid-column: 1; grid-row: 1 / span 4; align-self: start; }
+.vt-contact__card > .vt-contact__label { grid-row: 1; align-self: center; min-height: 44px; display: flex; align-items: center; }
+.vt-contact__card > .vt-contact__action, .vt-contact__card > .vt-contact__actions { margin-top: 4px; justify-self: start; }
+.vt-contact__icon { width: 44px; height: 44px; margin: 0; }
+.vt-contact__icon svg { width: 22px; height: 22px; }
+.vt-contact__main { gap: 24px; padding-bottom: clamp(40px, 4.5vw, 64px); }
+.vt-contact__formcard { padding: clamp(22px, 2.2vw, 30px); }
+.vt-home .vt-contact__formtitle { font-size: clamp(24px, 1vw + 16px, 30px) !important; }
+.vt-home .vt-contact__formintro { margin-top: 6px; }
+.vt-contact__points { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 12px 0 18px; }
+.vt-home .vt-contact__points li { padding-left: 24px; font-size: 14px; }
+.vt-contact__points li::before { width: 16px; height: 16px; top: .15em; background-size: 10px; }
+.vt-contact__grid { gap: 12px 14px; }
+.vt-field { gap: 5px; }
+body .vt-contact .vt-field label { font: 600 14px/1.3 var(--vt-sans) !important; text-transform: none !important; letter-spacing: .2px !important; }
+.vt-field input, .vt-field select, .vt-field textarea { min-height: 44px; padding: 10px 12px; }
+.vt-field textarea { min-height: 96px; height: 96px; }
+.vt-contact__submit { margin-top: 16px; min-height: 48px; padding: 0 26px; }
+.vt-contact__submit svg { width: 22px; height: 22px; }
+.vt-contact__map { min-height: 420px; }
+.vt-home .vt-contact__mapbtn { padding: 8px 16px 8px 10px; font-size: 15px; }
+.vt-contact__mapbtn svg { width: 22px; height: 22px; }
+@media (min-width: 1200px) { .vt-contact__main { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+@media (max-width: 1199px) { .vt-contact__map { min-height: 380px; } }
+@media (max-width: 767px) {
+  .vt-contact__card { padding: 18px 16px; }
+  .vt-contact__map { min-height: 300px; }
+  .vt-contact__points { display: grid; }
+}
+/* Contact form heading: 48px like the other section headings (scales down on small screens) */
+body .vt-contact .vt-contact__formtitle { font-size: clamp(30px, 2.2vw + 17px, 48px) !important; line-height: 1.1 !important; }
+/* Contact cards: 30px icons in a 56px circle */
+.vt-contact__card { grid-template-columns: 56px minmax(0, 1fr); }
+.vt-contact__icon { width: 56px; height: 56px; }
+.vt-contact__icon svg { width: 30px; height: 30px; }
+.vt-contact__card > .vt-contact__label { min-height: 56px; }
+/* Footer contact lines: icons sit in one 30px column, centred on the first line of text */
+.vt-footer .vt-ftr__contact { display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: 10px; align-items: start; line-height: 26px; }
+.vt-footer .vt-ftr__contact .vt-ftr__cicon { margin-top: -2px !important; }
+.vt-footer .vt-ftr__contact + .vt-ftr__contact { margin-top: 14px; }
+/* Contact cards: centred layout, links aligned along the bottom of every card */
+.vt-contact__card { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; padding: 28px 26px 26px; }
+.vt-contact__card > * { grid-column: auto; }
+.vt-contact__card > .vt-contact__icon { margin: 0 0 14px; }
+.vt-contact__card > .vt-contact__label { min-height: 0; display: block; margin: 0 0 8px; }
+.vt-home .vt-contact__card .vt-contact__text { max-width: 320px; margin: 0 auto; }
+.vt-contact__card > .vt-contact__action, .vt-contact__card > .vt-contact__actions { margin-top: auto; padding-top: 16px; justify-self: auto; justify-content: center; }
+.vt-contact__card > .vt-contact__actions .vt-contact__action { padding-top: 0; }
+@media (max-width: 767px) { .vt-contact__card { padding: 24px 18px 22px; } }
+.vt-contact__card > .vt-contact__icon { align-self: center; }
+/* Contact form: tighter label/field spacing; map always matches the form height */
+body .vt-contact .vt-field { gap: 6px; margin: 0; }
+body .vt-contact .vt-field label { margin: 0 !important; }
+body .vt-contact .vt-contact__grid { row-gap: 14px; }
+.vt-home .vt-contact__formintro { margin: 8px 0 22px; }
+.vt-contact__main { align-items: stretch; }
+@media (min-width: 1200px) { .vt-contact__map { min-height: 0; height: auto; } }
+
+/* ---------- Gallery: header dropdown (one row of categories) + page tabs ---------- */
+.vt-header .vt-mega__row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 44px; margin: 0; padding: 22px var(--vt-gutter) 24px; list-style: none; }
+.vt-header .vt-mega--row .vt-mega__row li a {
+  position: relative; display: inline-block; padding: 6px 0; color: var(--vt-ink);
+  font: 600 16px/22px var(--vt-sans); letter-spacing: 1px; text-transform: uppercase; text-decoration: none; white-space: nowrap;
+}
+.vt-header .vt-mega--row .vt-mega__row li a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor;
+  transform: scaleX(0); transform-origin: left; transition: transform .35s ease;
+}
+.vt-header .vt-mega--row .vt-mega__row li a:hover, .vt-header .vt-mega--row .vt-mega__row li a[aria-current] { color: #0c3f33; text-decoration: none; }
+.vt-header .vt-mega--row .vt-mega__row li a:hover::after, .vt-header .vt-mega--row .vt-mega__row li a[aria-current]::after { transform: scaleX(1); }
+
+.vt-gallery__head { padding-bottom: clamp(20px, 2.5vw, 32px); }
+.vt-gallery__tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 22px; }
+.vt-home a.vt-gallery__tab {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; border: 1px solid #d9cfc0; border-radius: 999px;
+  background: #fff; color: #311b0b; font: 600 16px/1 var(--vt-sans); text-decoration: none;
+  transition: background-color .35s ease, color .35s ease, border-color .35s ease;
+}
+.vt-home a.vt-gallery__tab:hover { border-color: #0c3f33; color: #0c3f33; }
+.vt-home a.vt-gallery__tab.is-active { background: #0c3f33; border-color: #0c3f33; color: #fff; }
+@media (max-width: 575px) {
+  .vt-gallery__tabs { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; margin: 18px calc(var(--vt-gutter) * -1) 0; padding: 0 var(--vt-gutter) 4px; scrollbar-width: none; }
+  .vt-gallery__tabs::-webkit-scrollbar { display: none; }
+  .vt-home a.vt-gallery__tab { flex: none; min-height: 40px; padding: 0 16px; }
+}
+/* Gallery cards: title + detail line */
+.vt-gallery__grid { row-gap: 32px; }
+.vt-gallery__open { border-radius: 10px; }
+.vt-gallery__text { margin-top: 12px; }
+.vt-home .vt-gallery__caption { margin: 0; font: 700 18px/1.35 var(--vt-sans); color: #311b0b; }
+.vt-home .vt-gallery__detail { margin: 4px 0 0; font: 500 16px/1.45 var(--vt-sans); color: #6d5a4c; }
+/* Footer credit: "| Develop by Nivtech" */
+.vt-footer .vt-ftr__sep { margin: 0 6px; opacity: .5; }
+.vt-footer a.vt-ftr__credit { color: inherit; text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: color .4s ease, background-size .4s ease; }
+.vt-footer a.vt-ftr__credit:hover { color: var(--ftr-accent, #8dc63f); background-size: 100% 1px; }
+/* Footer bottom bar: copyright + credit on the left, legal links on the right (wraps on smaller screens) */
+@media (min-width: 768px) {
+  .vt-footer .vt-ftr .vt-ftr__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 32px; }
+  .vt-footer .vt-ftr .vt-ftr__bar .vt-ftr__copy { white-space: nowrap; }
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .vt-footer .vt-ftr .vt-ftr__bar { justify-content: center; text-align: center; padding-top: 18px; padding-bottom: 18px; }
+}
+/* Copyright + "Develop by Nivtech" always on one line (text scales down a little on phones) */
+.vt-footer .vt-ftr .vt-ftr__bar .vt-ftr__copy { white-space: nowrap; }
+@media (max-width: 767px) {
+  .vt-footer .vt-ftr .vt-ftr__bar p.vt-ftr__copy { font-size: min(16px, 3.15vw) !important; letter-spacing: 0; }
+  .vt-footer .vt-ftr__sep { margin: 0 4px; }
+}
+/* Footer bottom bar never sits under the Call / WhatsApp buttons, even when they open into "Call us" / "Chat with us" pills */
+@media (min-width: 1200px) {
+  .vt-footer .vt-ftr .vt-ftr__bar { padding-left: 220px; padding-right: 220px; justify-content: center; text-align: center; gap: 8px 32px; }
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .vt-footer .vt-ftr .vt-ftr__bar { min-height: 0; padding: 20px var(--vt-gutter) 100px; justify-content: center; text-align: center; }
+}
+
+/* ---------- Home: gallery photo strip above the consultation banner (photos only, endless glide) ---------- */
+.vt-home .vt-photostrip { padding: clamp(40px, 5vw, 72px) 0; background: #f0eee4; }
+.vt-home .vt-photostrip .vt-carousel { padding: 0 var(--vt-gutter); }
+.vt-home .vt-photostrip .vt-carousel__track { padding: 6px 0 22px; }
+.vt-home .vt-photostrip .vt-carousel__slide { flex: 0 0 20%; padding: 0 10px 0 2px; }
+.vt-home .vt-photostrip .vt-card--photo { height: auto; padding: 12px; border-radius: 10px; background: #fff; justify-content: flex-start; }
+.vt-home .vt-photostrip .vt-card--photo .vt-card__img { margin: 0; padding: 0; align-self: stretch; aspect-ratio: 1 / 1; border-radius: 6px; overflow: hidden; background: #f6f3ee; }
+.vt-home .vt-photostrip .vt-card--photo .vt-card__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 1199px) { .vt-home .vt-photostrip .vt-carousel__slide { flex-basis: 25%; } }
+@media (max-width: 991px) { .vt-home .vt-photostrip .vt-carousel__slide { flex-basis: 33.333%; } }
+@media (max-width: 767px) { .vt-home .vt-photostrip .vt-carousel__slide { flex-basis: 50%; } .vt-home .vt-photostrip .vt-card--photo { padding: 8px; } }
+.vt-home .vt-photostrip { border-bottom: 1px solid rgba(49, 27, 11, .1); }
+/* Gallery: "See more" button + photos always fill their square frame */
+.vt-gallery__item[hidden] { display: none !important; }
+.vt-gallery__open img { object-position: center 30%; }
+.vt-gallery__more { display: flex; justify-content: center; padding: 0 var(--vt-gutter) var(--vt-s6); margin-top: -12px; }
+.vt-gallery__morebtn {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 30px; border: 1px solid #0c3f33; border-radius: 999px;
+  background: #fff; color: #0c3f33; font: 600 16px/1 var(--vt-sans); cursor: pointer; transition: background-color .35s ease, color .35s ease;
+}
+.vt-gallery__morebtn:hover, .vt-gallery__morebtn:focus-visible { background: #0c3f33; color: #fff; }
+.vt-gallery__morebtn span { font-weight: 500; opacity: .75; }
+/* Footer bar: clear gap between the copyright/credit and the legal links (two separate groups) */
+@media (min-width: 1200px) { .vt-footer .vt-ftr .vt-ftr__bar { column-gap: 64px; } }
+@media (min-width: 768px) and (max-width: 1199px) { .vt-footer .vt-ftr .vt-ftr__bar { row-gap: 12px; } }
+
+/* ---------- Services page ---------- */
+.vt-services { background: #fff; }
+.vt-services__jump { margin-top: 24px; }
+.vt-services__group { padding: clamp(40px, 5vw, 64px) var(--vt-gutter) 0; scroll-margin-top: 90px; }
+.vt-services__group:last-child { padding-bottom: clamp(48px, 6vw, 88px); }
+.vt-services__head { max-width: 1200px; margin: 0 auto 24px; }
+.vt-home .vt-services__title { margin: 0; color: #1f2a24; }
+.vt-home .vt-services__intro { margin: 8px 0 0; color: #4a524c; }
+.vt-services__grid { list-style: none; margin: 0 auto; padding: 0; max-width: 1200px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+.vt-home a.vt-service {
+  display: flex; flex-direction: column; height: 100%; border: 1px solid #eadbcc; border-radius: 10px; background: #fff; color: inherit; text-decoration: none; overflow: hidden;
+  transition: transform .45s cubic-bezier(.22, .61, .36, 1), box-shadow .45s ease, border-color .45s ease;
+}
+.vt-home a.vt-service:hover { transform: translateY(-4px); border-color: #d5c2a5; box-shadow: 0 16px 30px -18px rgba(49, 27, 11, .35); }
+.vt-service__img { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; background: #f6f3ee; }
+.vt-service__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .9s cubic-bezier(.22, .61, .36, 1); }
+.vt-service:hover .vt-service__img img { transform: scale(1.05); }
+.vt-service__body { flex: 1; display: flex; flex-direction: column; gap: 8px; padding: 18px 18px 20px; }
+.vt-home .vt-service__name { font: 700 18px/1.3 var(--vt-sans); color: #311b0b; }
+.vt-home .vt-service__text { font: 400 16px/1.5 var(--vt-sans); color: #6d5a4c; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.vt-service__foot { margin-top: auto; padding-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.vt-home .vt-service__price { font: 700 16px/1.3 var(--vt-sans); color: #0c3f33; }
+.vt-home .vt-service__cta { font: 600 16px/1.3 var(--vt-sans); color: #0c3f33; }
+.vt-service__cta span { display: inline-block; transition: transform .3s ease; }
+.vt-service:hover .vt-service__cta span { transform: translateX(4px); }
+@media (max-width: 1199px) { .vt-services__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 991px) { .vt-services__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; } }
+@media (max-width: 575px) { .vt-services__grid { grid-template-columns: 1fr; } }
+.vt-service__foot { flex-wrap: nowrap; gap: 8px; }
+.vt-home .vt-service__price, .vt-home .vt-service__cta { white-space: nowrap; }
+@media (min-width: 992px) and (max-width: 1280px) { .vt-home .vt-service__price, .vt-home .vt-service__cta { font-size: 15px; } }
+@media (min-width: 1200px) and (max-width: 1299px) { .vt-services__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* "Our Clients" heading on the home photo strip */
+.vt-home .vt-photostrip { padding-top: clamp(40px, 4vw, 56px); }
+.vt-home .vt-photostrip .vt-h3 { margin: 0 0 28px; text-align: center; }
+/* Services page: group headings 48px like the other section headings (scale down on small screens) */
+body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48px) !important; line-height: 1.1 !important; }

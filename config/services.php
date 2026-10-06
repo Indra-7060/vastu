@@ -46,4 +46,13 @@ return [
         'default_brand' => env('META_CATALOG_DEFAULT_BRAND', env('APP_NAME')),
     ],
 
+    // Live Instagram feed for the homepage (Instagram API with Instagram Login).
+    // INSTAGRAM_ACCESS_TOKEN = long-lived token of the client's Instagram Business/Creator account.
+    // The token is refreshed automatically (stored in storage/app/instagram-token.json).
+    'instagram' => [
+        'access_token' => env('INSTAGRAM_ACCESS_TOKEN'),
+        'limit' => (int) env('INSTAGRAM_FEED_LIMIT', 3),
+        'cache_minutes' => (int) env('INSTAGRAM_CACHE_MINUTES', 30),
+    ],
+
 ];

@@ -41,12 +41,15 @@
                 @endforeach
             </select>
             @endif
+            {{-- Offers filter hidden (offers are not used). --}}
+            @if($showBrands)
             <select name="offer_id" onchange="this.form.submit()">
                 <option value="">---All Offers---</option>
                 @foreach($offers as $offer)
                     <option value="{{ $offer->id }}" @selected(request('offer_id') == $offer->id)>{{ $offer->title }}</option>
                 @endforeach
             </select>
+            @endif
         </form>
 
         <form method="POST" action="{{ route('admin.products.bulk') }}" id="product-bulk-form" class="product-bulk">

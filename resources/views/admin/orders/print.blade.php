@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Print {{ $order->order_number }} - Vastutathastu</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
+    <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vastu/images/favicon-32.png') }}?v=vt2">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('vastu/images/favicon-16.png') }}?v=vt2">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('vastu/images/apple-touch-icon.png') }}?v=vt2">
     <style>
         body { font-family: Arial, sans-serif; color: #333; margin: 24px; }
         h1 { font-size: 22px; margin: 0 0 16px; }

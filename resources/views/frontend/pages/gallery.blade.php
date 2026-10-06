@@ -1,5 +1,5 @@
-{{-- Gallery (Admin → Home Content → Sections & Images → Gallery Photos). --}}
-@php $pageTitle = 'Gallery - Vastutathastu'; @endphp
+{{-- Gallery with category tabs (Admin → Gallery: one section per category). --}}
+@php $pageTitle = $active['label'].' - Gallery - Vastutathastu'; @endphp
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 
@@ -13,10 +13,15 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=120">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=198">
   <title>{{ $pageTitle }}</title>
-  <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
-  <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
+  <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vastu/images/favicon-32.png') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('vastu/images/favicon-16.png') }}?v=vt2">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('vastu/images/apple-touch-icon.png') }}?v=vt2">
+  <link rel="manifest" href="{{ asset('site.webmanifest') }}?v=vt2">
+  <meta name="theme-color" content="#1c75bc">
 </head>
 
 <body class="vt-page">
@@ -26,12 +31,17 @@
     <main class="vt-home vt-gallery">
       <section class="vt-gallery__head">
         <h1 class="vt-h2">Gallery</h1>
+        <nav class="vt-gallery__tabs" aria-label="Gallery categories">
+          @foreach($galleryLinks as $link)
+            <a class="vt-gallery__tab{{ $link['slug'] === $activeSlug ? ' is-active' : '' }}" href="{{ $link['url'] }}"@if($link['slug'] === $activeSlug) aria-current="page"@endif>{{ $link['label'] }}</a>
+          @endforeach
+        </nav>
       </section>
 
       @if($photos->isEmpty())
         <div class="vt-content-page__inner">
           @include('frontend.partials.vastu-empty-state', [
-              'title' => 'Photos coming soon',
+              'title' => $active['label'].' photos coming soon',
               'text' => 'Moments from our consultations and events will be shared here soon. Please check back later.',
               'icon' => 'info',
           ])
@@ -39,14 +49,24 @@
       @else
         <ul class="vt-gallery__grid" data-vt-gallery>
           @foreach($photos as $photo)
-            <li class="vt-gallery__item">
+            <li class="vt-gallery__item"@if($loop->index >= 12) hidden data-vt-more @endif>
               <button type="button" class="vt-gallery__open" data-vt-gallery-open="{{ $loop->index }}" aria-label="View photo {{ $loop->iteration }}@if($photo['caption']): {{ $photo['caption'] }}@endif">
-                <img src="{{ $photo['image'] }}" alt="{{ $photo['caption'] }}" loading="lazy">
+                <img src="{{ $photo['image'] }}" alt="{{ $photo['caption'] }}" data-detail="{{ $photo['detail'] }}" loading="lazy">
               </button>
-              @if($photo['caption'])<p class="vt-gallery__caption">{{ $photo['caption'] }}</p>@endif
+              @if($photo['caption'] || $photo['detail'])
+                <div class="vt-gallery__text">
+                  @if($photo['caption'])<p class="vt-gallery__caption">{{ $photo['caption'] }}</p>@endif
+                  @if($photo['detail'])<p class="vt-gallery__detail">{{ $photo['detail'] }}</p>@endif
+                </div>
+              @endif
             </li>
           @endforeach
         </ul>
+        @if($photos->count() > 12)
+          <div class="vt-gallery__more">
+            <button type="button" class="vt-gallery__morebtn" data-vt-gallery-more>See more <span aria-hidden="true">({{ $photos->count() - 12 }})</span></button>
+          </div>
+        @endif
 
         <div class="vt-gallery__viewer" data-vt-gallery-viewer role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
           <button type="button" class="vt-gallery__close" data-vt-gallery-close aria-label="Close">&times;</button>
@@ -72,6 +92,18 @@
   @include('frontend.partials.cart-script')
   @if($photos->isNotEmpty())
   <script>
+    // "See more": shows the next 12 photos each time.
+    (function () {
+      var btn = document.querySelector('[data-vt-gallery-more]');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        var hidden = Array.prototype.slice.call(document.querySelectorAll('[data-vt-more][hidden]'));
+        hidden.slice(0, 12).forEach(function (li) { li.hidden = false; });
+        var left = hidden.length - 12;
+        if (left > 0) btn.querySelector('span').textContent = '(' + left + ')';
+        else btn.parentNode.remove();
+      });
+    })();
     // Full-screen photo viewer: click a photo, arrows / keys to move, Esc or × to close.
     (function () {
       var viewer = document.querySelector('[data-vt-gallery-viewer]');
@@ -84,7 +116,7 @@
         var src = items[index].querySelector('img');
         img.src = src.src;
         img.alt = src.alt;
-        cap.textContent = src.alt;
+        cap.textContent = [src.alt, src.getAttribute('data-detail')].filter(Boolean).join(' — ');
       }
       function close() { viewer.hidden = true; document.body.style.overflow = ''; if (last) last.focus(); }
       items.forEach(function (btn, i) {

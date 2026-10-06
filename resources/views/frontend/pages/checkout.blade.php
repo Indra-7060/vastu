@@ -17,12 +17,17 @@
 
   <!-- Title -->
   <title>{{ $pageTitle ?? 'Checkout - Vastutathastu' }}</title>
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=120">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=198">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="{{ asset('vastu/css/checkout.css') }}?v=3">
-  <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
-  <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
+  <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vastu/images/favicon-32.png') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('vastu/images/favicon-16.png') }}?v=vt2">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('vastu/images/apple-touch-icon.png') }}?v=vt2">
+  <link rel="manifest" href="{{ asset('site.webmanifest') }}?v=vt2">
+  <meta name="theme-color" content="#1c75bc">
 </head>
 
 <body class="vt-co-body">

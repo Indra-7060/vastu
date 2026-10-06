@@ -72,6 +72,9 @@
                     @endforeach
                 </select>
             </div>
+            {{-- Sub-category, Brand and Offer are hidden (never used). Set $showUnusedFields = true to show them again. --}}
+            @php $showUnusedFields = false; @endphp
+            @if($showUnusedFields)
             <div class="form-group">
                 <select name="sub_category_id" id="product-subcategory">
                     <option value="">--Select Sub-Category--</option>
@@ -80,6 +83,7 @@
                     @endforeach
                 </select>
             </div>
+            @endif
             {{-- Brands section is currently hidden. Flip showBrands to true above to display it. --}}
             @if($showBrands)
             <div class="form-group">
@@ -141,6 +145,7 @@
             <label>Selling Price <span>:-</span></label>
             <input type="number" name="selling_price" step="0.01" min="0" value="{{ old('selling_price', $hasProduct && (float) $product->selling_price > 0 ? $product->selling_price : '') }}">
         </div>
+        @if($showUnusedFields)
         <div class="form-group">
             <label>Select Offer <span>:-</span></label>
             <select name="offer_id">
@@ -152,6 +157,7 @@
                 @endforeach
             </select>
         </div>
+        @endif
     </div>
     <div class="product-pricing-row" style="margin-top:12px;">
         <div class="form-group">

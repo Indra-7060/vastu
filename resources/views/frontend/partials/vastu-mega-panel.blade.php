@@ -6,6 +6,7 @@
   $teaser = null;
 
   $cardsTitle = null;
+  $navRow = [];
   if ($item['mega'] === 'new') {
       // Categories in two columns, working shortcuts, then the "Top picks" product cards.
       $catLinks = $megaMenu['categories']->map(fn ($c) => ['label' => $c->title, 'url' => $c->frontendUrl()])->values();
@@ -51,6 +52,9 @@
           $columns[] = ['title' => $group['title'], 'url' => $same ? route('shop.single', $same->slug) : route('info', $group['page']), 'links' => $links];
       }
       $teaser = ['image' => asset('vastu/images/founder-services.jpg'), 'title' => 'Consult Makrannd Sardeshmukh', 'url' => route('info', 'book-a-consultation')];
+  } elseif ($item['mega'] === 'gallery') {
+      // Gallery categories as one row of links, like the main menu.
+      $navRow = \App\Support\GalleryCategories::links();
   } elseif ($item['mega'] === 'world') {
       $columns[] = ['title' => 'World of Vastutathastu', 'links' => [
           ['label' => 'Our world', 'url' => route('about')],
@@ -111,5 +115,13 @@
         </a>
       @endif
     </div>
+  </div>
+@elseif($navRow)
+  <div class="vt-mega vt-mega--row" data-vt-mega-panel role="region" aria-label="{{ $item['label'] }}">
+    <ul class="vt-mega__row">
+      @foreach($navRow as $link)
+        <li style="--i: {{ $loop->index }}"><a href="{{ $link['url'] }}"@if(request()->routeIs('gallery') && (request()->route('category') ?: 'our-product-users') === $link['slug']) aria-current="page"@endif>{{ $link['label'] }}</a></li>
+      @endforeach
+    </ul>
   </div>
 @endif

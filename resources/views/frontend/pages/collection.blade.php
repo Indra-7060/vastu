@@ -1,9 +1,9 @@
 @php
   $isShop = $activeCategory === null;
-  $heading = $search !== '' ? 'Results for “'.$search.'”' : ($isShop ? 'New Arrivals' : $activeCategory->title);
+  $heading = $search !== '' ? 'Results for “'.$search.'”' : ($isShop ? 'New Arrivals' : ($activeCategory->page_heading ?: $activeCategory->title));
   $intro = $isShop
       ? 'Discover the latest sacred products from Vastutathastu — authentic Rudraksha, energised Yantras, crystal malas and Vastu essentials, chosen to bring harmony to your home and workplace.'
-      : ($activeCategory->short_description ?: 'Authentic '.$activeCategory->title.' from Vastutathastu, chosen with care and energised before dispatch.');
+      : ($activeCategory->page_description ?: ($activeCategory->short_description ?: 'Authentic '.$activeCategory->title.' from Vastutathastu, chosen with care and energised before dispatch.'));
   $shopBanner = \App\Support\SiteBanners::media(\App\Support\SiteBanners::first('shop_banner'));
   $bannerImage = (! $isShop && $activeCategory->image)
       ? $activeCategory->image_url
@@ -58,10 +58,15 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=120">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=198">
   <title>{{ $pageTitle }}</title>
-  <link rel="icon" type="image/png" href="{{ asset('vastu/images/favicon.png') }}">
-  <link rel="apple-touch-icon" href="{{ asset('vastu/images/favicon.png') }}">
+  <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vastu/images/favicon-32.png') }}?v=vt2">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('vastu/images/favicon-16.png') }}?v=vt2">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('vastu/images/apple-touch-icon.png') }}?v=vt2">
+  <link rel="manifest" href="{{ asset('site.webmanifest') }}?v=vt2">
+  <meta name="theme-color" content="#1c75bc">
 </head>
 
 <body class="vt-page vt-page--plp">
@@ -161,13 +166,19 @@
       <section class="vt-plp__seo">
         <h2>{{ $isShop ? 'New arrivals at Vastutathastu' : $activeCategory->title.' at Vastutathastu' }}</h2>
         <p>Every Vastutathastu product is selected under the guidance of Makrannd Sardeshmukh, with more than 22 years of experience in Vedic Vastushastra, astrology and numerology. Explore Rudraksha, Yantras, malas, crystal trees and puja essentials — and book a personal consultation if you would like help choosing the right piece for your space.</p>
-        <p class="vt-plp__also">You may also like</p>
-        <div class="vt-plp__links">
-          @foreach($categories->where('slug', '!=', $activeCategory?->slug)->take(8) as $category)
-            <a class="vt-chip" href="{{ $category->frontendUrl() }}">{{ $category->title }}</a>
-          @endforeach
-        </div>
       </section>
+
+      {{-- "You may also like": the other categories in the same endless slider as "Sacred Energy, Refined" --}}
+      @php
+        $moreCategories = $categories->where('slug', '!=', $activeCategory?->slug)->filter(fn ($c) => $c->image)->values()
+            ->map(fn ($c) => ['name' => $c->title, 'sub' => '', 'price' => 'Explore', 'image_url' => $c->image_url, 'url' => $c->frontendUrl(), 'badge' => false])
+            ->all();
+      @endphp
+      @if(count($moreCategories) > 1)
+        <div class="vt-plp__related">
+          @include('frontend.partials.vastu-product-carousel', ['title' => 'You may also like', 'items' => $moreCategories, 'id' => 'vt-plp-more'])
+        </div>
+      @endif
     </main>
 
     @include('frontend.partials.site-footer')

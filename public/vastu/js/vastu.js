@@ -404,8 +404,19 @@
     var target = 0;
     function jump() {
       var bar = document.querySelector('[data-vt-header]');
-      target = Math.max(0, Math.round(cats.getBoundingClientRect().top + window.pageYOffset - (bar ? bar.offsetHeight : 0)));
+      var root = document.documentElement;
+      var hb = bar ? bar.offsetHeight : 0, y = window.pageYOffset, grid = cats.querySelector('.vt-cat-grid');
+      var top = cats.getBoundingClientRect().top + y - hb;
+      if (grid) {
+        var gr = grid.getBoundingClientRect(), room = window.innerHeight - hb;
+        if (gr.bottom + y - (top + hb) > room) top = gr.top + y - hb - Math.max(12, (room - gr.height) / 2);
+      }
+      target = Math.max(0, Math.round(top));
+      // Jump instantly (the site uses smooth scrolling, which made the refresh visibly glide down the page).
+      var prev = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';
       window.scrollTo(0, target);
+      root.style.scrollBehavior = prev;
     }
     jump();
     // Fonts and images can shift the layout; re-align once on load unless the visitor has scrolled.
@@ -414,13 +425,181 @@
     });
   })();
 
+  /* ---------- Floating Call / WhatsApp: assemble from broken shards (homepage refresh) ----------
+     The buttons stay hidden (html.vt-fab-hold) until the category tiles finish; then each button is
+     rebuilt from uniquely cracked, irregular pieces that drift in slowly from close by and join at the
+     same moment, then cross-fade into the real button (shadow fades in too) — no pops or hard swaps. */
+  (function () {
+    var root = document.documentElement;
+    if (!root.classList.contains('vt-fab-hold')) return;
+    var done = false;
+    var EASE = 'cubic-bezier(.22, 1, .36, 1)'; // smooth ease-out, slows gently to a stop
+    // Random fracture like real cracks: start with the whole button and keep cutting the biggest
+    // piece along a random line (random point, random angle). The result is a unique set of
+    // irregular shards — slivers, triangles, 4/5/6-sided pieces — different on every refresh.
+    function area(poly) { var s = 0; for (var i = 0; i < poly.length; i++) { var p = poly[i], q = poly[(i + 1) % poly.length]; s += p[0] * q[1] - q[0] * p[1]; } return Math.abs(s / 2); }
+    function centroid(poly) { var x = 0, y = 0; poly.forEach(function (p) { x += p[0]; y += p[1]; }); return [x / poly.length, y / poly.length]; }
+    function cut(poly, pt, ang) {
+      var nx = Math.cos(ang), ny = Math.sin(ang), side = function (p) { return (p[0] - pt[0]) * nx + (p[1] - pt[1]) * ny; };
+      var A = [], B = [];
+      for (var i = 0; i < poly.length; i++) {
+        var p = poly[i], q = poly[(i + 1) % poly.length], sp = side(p), sq = side(q);
+        (sp >= 0 ? A : B).push(p);
+        if ((sp >= 0) !== (sq >= 0)) { var t = sp / (sp - sq), m = [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t]; A.push(m); B.push(m); }
+      }
+      return A.length > 2 && B.length > 2 ? [A, B] : null;
+    }
+    function fracture() {
+      var pieces = [[[-6, -6], [106, -6], [106, 106], [-6, 106]]];
+      var target = 11 + Math.floor(Math.random() * 6); // 11–16 pieces
+      for (var guard = 0; pieces.length < target && guard < 80; guard++) {
+        pieces.sort(function (a, b) { return area(b) - area(a); });
+        var big = pieces[0], c = centroid(big);
+        var pt = [c[0] + (Math.random() - 0.5) * 22, c[1] + (Math.random() - 0.5) * 22];
+        var halves = cut(big, pt, Math.random() * Math.PI);
+        if (halves && Math.min(area(halves[0]), area(halves[1])) > 120) pieces.splice(0, 1, halves[0], halves[1]);
+      }
+      return pieces;
+    }
+    function shatterIn(btn, delay) {
+      return new Promise(function (resolve) {
+        var r = btn.getBoundingClientRect();
+        if (!r.width || !btn.animate) { resolve(null); return; }
+        var box = document.createElement('div');
+        box.className = 'vt-shards';
+        box.style.cssText = 'left:' + r.left + 'px;top:' + r.top + 'px;width:' + r.width + 'px;height:' + r.height + 'px';
+        document.body.appendChild(box);
+        var TOTAL = 3600, anims = [];
+        fracture().forEach(function (poly) {
+          var piece = btn.cloneNode(true);
+          piece.removeAttribute('href'); piece.setAttribute('aria-hidden', 'true'); piece.removeAttribute('id');
+          piece.style.clipPath = 'polygon(' + poly.map(function (p) { return p[0].toFixed(1) + '% ' + p[1].toFixed(1) + '%'; }).join(',') + ')';
+          // centroid → each piece turns around its own middle and drifts in from its own direction
+          var cx = 0, cy = 0; poly.forEach(function (p) { cx += p[0]; cy += p[1]; }); cx /= poly.length; cy /= poly.length;
+          piece.style.transformOrigin = cx.toFixed(1) + '% ' + cy.toFixed(1) + '%';
+          piece.style.willChange = 'transform, opacity';
+          box.appendChild(piece);
+          var dx = cx - 50, dy = cy - 50, len = Math.hypot(dx, dy) || 1;
+          var dist = 25 + Math.random() * 30;                       // start 25–55px away
+          var ang = Math.atan2(dy / len, dx / len) + (Math.random() - 0.5) * 1.6; // roughly outward, randomly skewed
+          var tx = Math.cos(ang) * dist, ty = Math.sin(ang) * dist;
+          // keep every piece's starting point on screen (the buttons sit in the bottom corners)
+          if (r.left + tx < 8) tx = Math.abs(tx); else if (r.right + tx > window.innerWidth - 8) tx = -Math.abs(tx);
+          if (r.top + ty < 8) ty = Math.abs(ty); else if (r.bottom + ty > window.innerHeight - 8) ty = -Math.abs(ty);
+          var rot = (Math.random() < 0.5 ? -1 : 1) * (15 + Math.random() * 45);
+          var wait = Math.random() * 700;                            // different start times…
+          anims.push(piece.animate([
+            { transform: 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg) scale(.85)', opacity: 0 },
+            { opacity: 1, offset: 0.25 },
+            { transform: 'translate(0,0) rotate(0deg) scale(1)', opacity: 1 }
+          ], { duration: TOTAL - wait, delay: delay + wait, easing: 'cubic-bezier(.45, .05, .25, 1)', fill: 'both' }).finished); // …all join together
+        });
+        Promise.all(anims).then(function () { resolve(box); }, function () { resolve(box); });
+      });
+    }
+    window.vtAssembleFabs = function () {
+      if (done) return;
+      done = true;
+      var btns = [document.querySelector('.vt-call:not(.vt-shards *)'), document.querySelector('.vt-wa:not(.vt-shards *)')].filter(Boolean);
+      Promise.all(btns.map(function (b, i) { return shatterIn(b, i * 160); })).then(function (boxes) {
+        // Cross-fade: real buttons (with their shadow) fade in while the joined shards fade out.
+        root.classList.add('vt-fab-reveal');
+        root.classList.remove('vt-fab-hold');
+        boxes.forEach(function (box) {
+          if (!box) return;
+          var fade = box.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 700, easing: 'ease', fill: 'forwards' });
+          fade.finished.then(function () { box.remove(); }, function () { box.remove(); });
+        });
+        setTimeout(function () { root.classList.remove('vt-fab-reveal'); }, 1000);
+      });
+    };
+    // Safety net: never leave the buttons hidden.
+    setTimeout(function () { if (!done) window.vtAssembleFabs(); }, 7000);
+  })();
+
+  /* ---------- Shop by Category: Swarovski-style reveal ----------
+     Like swarovski.com: tiles sweep in column by column, left to right, 0.3s apart (the two
+     tiles of a column arrive together); each tile fades/slides in over 0.8s. Both rows start as
+     soon as the grid comes into view, including straight after a page refresh. */
+  (function () {
+    var section = document.querySelector('.vt-categories');
+    if (!section) return;
+    var grid = section.querySelector('.vt-cat-grid');
+    var head = section.querySelector('.vt-section-head');
+    var tiles = [].slice.call(section.querySelectorAll('.vt-cat'));
+    var STEP = 300; // ms between columns
+
+    function columns() {
+      var cols = grid ? getComputedStyle(grid).gridTemplateColumns.split(' ').filter(Boolean).length : 1;
+      return Math.max(1, cols || 1);
+    }
+    function setDelays() {
+      var cols = columns();
+      tiles.forEach(function (t, i) { t.style.setProperty('--vt-col-delay', ((i % cols) * STEP) + 'ms'); });
+    }
+    setDelays();
+
+    if (!('IntersectionObserver' in window) || !document.documentElement.classList.contains('vt-motion')) {
+      if (head) head.classList.add('is-in');
+      tiles.forEach(function (el) { el.classList.add('is-in'); });
+      if (window.vtAssembleFabs) setTimeout(window.vtAssembleFabs, 300);
+      return;
+    }
+    // As soon as the grid comes into view (also right after a page refresh), BOTH rows sweep in
+    // together column by column, like swarovski.com; the heading rises as it appears.
+    var revealed = false;
+    function revealGrid() {
+      tiles.forEach(function (t) { t.classList.add('is-in'); });
+      if (revealed) return;
+      revealed = true;
+      // When the last column has finished its sweep, bring in the floating Call / WhatsApp buttons.
+      if (!window.vtAssembleFabs) return;
+      var lastTile = tiles[Math.min(tiles.length, columns()) - 1];
+      var go = function () { setTimeout(window.vtAssembleFabs, 150); };
+      if (lastTile) lastTile.addEventListener('animationend', go, { once: true });
+      setTimeout(window.vtAssembleFabs, (Math.min(tiles.length, columns()) - 1) * STEP + 800 + 600); // backup
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!(entry.isIntersecting || entry.boundingClientRect.bottom < 0)) return;
+        if (entry.target === head) { head.classList.add('is-in'); }
+        else { revealGrid(); }
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.12 });
+    if (head) io.observe(head);
+    if (grid) io.observe(grid); else revealGrid();
+    var rt;
+    window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(setDelays, 150); });
+  })();
+
+  /* ---------- Keep small icon rows on whole screen pixels (fractional positions blur SVG edges) ---------- */
+  (function () {
+    var targets = document.querySelectorAll('.vt-ftr__social, .vt-journal__btn, .vt-journal__eyebrow');
+    if (!targets.length) return;
+    function snap() {
+      var dpr = window.devicePixelRatio || 1;
+      targets.forEach(function (el) {
+        el.style.translate = '';
+        var r = el.getBoundingClientRect();
+        var dx = (Math.round(r.left * dpr) - r.left * dpr) / dpr;
+        var dy = (Math.round(r.top * dpr) - r.top * dpr) / dpr;
+        if (Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01) el.style.translate = dx.toFixed(3) + 'px ' + dy.toFixed(3) + 'px';
+      });
+    }
+    var t;
+    function later() { clearTimeout(t); t = setTimeout(snap, 120); }
+    window.addEventListener('load', snap);
+    window.addEventListener('resize', later);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(snap);
+  })();
+
   /* ---------- Section motion: reveal headings, tiles, cards and split sections as they enter ---------- */
   (function () {
     window.vtMotionReady = true;
     if (!document.documentElement.classList.contains('vt-motion')) return;
     // [selector, stagger step (ms), items per row]
     var groups = [
-      ['.vt-cat', 100, 4],
       ['.vt-carousel__slide', 100, 4],
       ['.vt-article', 120, 3],
       ['.vt-footer__main > *', 80, 5],
@@ -428,7 +607,7 @@
       ['.vt-insta__head, .vt-journal__head', 0, 1],
       ['.vt-yantra__media, .vt-yantra__copy', 140, 2],
       ['.vt-review', 110, 3],
-      ['.vt-section-head, .vt-intro__inner, .vt-wisdom__head, .vt-products .vt-h3, .vt-split, .vt-cta', 0, 1]
+      ['.vt-section-head:not(.vt-categories .vt-section-head), .vt-intro__inner, .vt-wisdom__head, .vt-products .vt-h3, .vt-split, .vt-cta', 0, 1]
     ];
     var pending = [];
     function reveal(el) {

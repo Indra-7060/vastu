@@ -4261,3 +4261,15 @@ body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48p
 /* Hero: no dark overlay or gradient over pictures / videos (white text keeps a soft shadow to stay readable) */
 .vt-hero .vt-hero__shade, .vt-hero .vt-hero__shade::before { display: none !important; }
 .vt-hero__slide--text .vt-hero__kicker, .vt-hero__slide--text .vt-hero__title { text-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 2px 18px rgba(0, 0, 0, .35); }
+/* Mobile header: tighter right-hand icons so the centred logo can match the logo size in the banners */
+@media (max-width: 575px) {
+  .vt-hdr .vt-hdr__icon { width: 26px; padding-left: 3px; padding-right: 3px; }
+  .vt-hdr .vt-lang { padding-right: 2px; }
+  .vt-hdr .vt-lang__btn { padding-left: 4px; padding-right: 4px; }
+}
+@media (min-width: 421px) and (max-width: 575px) { .vt-hdr .vt-hdr__logo img { height: 46px; } }
+@media (min-width: 390px) and (max-width: 420px) { .vt-hdr .vt-hdr__logo img { height: 48px; } }
+@media (min-width: 375px) and (max-width: 389px) { .vt-hdr .vt-hdr__logo img { height: 44px; } }
+@media (min-width: 360px) and (max-width: 374px) { .vt-hdr .vt-hdr__logo img { height: 40px; } }
+@media (min-width: 340px) and (max-width: 359px) { .vt-hdr .vt-hdr__logo img { height: 34px; } }
+@media (min-width: 405px) and (max-width: 575px) { .vt-hdr .vt-hdr__logo img { height: 50px; } }

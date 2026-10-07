@@ -47,32 +47,24 @@
 <div class="card product-form-card">
     <h3 class="section-title">Content</h3>
 
-    <div class="toggle-row banner-textimg" data-show-for="home_hero" hidden>
-        <span>
-            <strong>Image already includes the headline &amp; button</strong>
-            <small>Turn on for designed banners (text and button are part of the picture). The website then shows the picture only, without its own title and buttons on top, and the whole slide opens <em>Button 1 link</em>. The Title is still needed — it is used as the picture's description for Google and screen readers.</small>
-        </span>
-        <label class="switch">
-            <input type="checkbox" name="text_in_image" value="1" @checked(old('text_in_image', $isEdit ? $banner->text_in_image : false))>
-            <span class="slider"></span>
-        </label>
-    </div>
 
-    <div class="offer-form-row">
+    <p class="hint banner-hero-note" data-show-for="home_hero" hidden>Hero slides are pictures only: upload the desktop and mobile images below (with your text and “Shop now” button already designed into them) and enter the page to open when someone clicks the picture.</p>
+
+    <div class="offer-form-row" data-hide-for="home_hero">
         <label class="offer-label">Title <span>:-</span></label>
         <div class="offer-field form-group">
             <input type="text" name="title" value="{{ old('title', $isEdit ? $banner->title : '') }}" placeholder="e.g. Sacred Living by Vastutathastu" maxlength="255">
         </div>
     </div>
 
-    <div class="offer-form-row" data-hide-for="instagram_post">
+    <div class="offer-form-row" data-hide-for="instagram_post home_hero">
         <label class="offer-label">Subtitle <span>:-</span></label>
         <div class="offer-field form-group">
             <input type="text" name="subtitle" value="{{ old('subtitle', $isEdit ? $banner->subtitle : '') }}" placeholder="Optional small label, e.g. Personal Vedic Guidance" maxlength="255">
         </div>
     </div>
 
-    <div class="offer-form-row offer-form-row-top" data-hide-for="instagram_post">
+    <div class="offer-form-row offer-form-row-top" data-hide-for="instagram_post home_hero">
         <label class="offer-label">Description <span>:-</span></label>
         <div class="offer-field form-group">
             <textarea name="description" rows="4" maxlength="2000" placeholder="Optional paragraph shown with the heading">{{ old('description', $isEdit ? $banner->description : '') }}</textarea>
@@ -80,22 +72,22 @@
     </div>
 
     <div class="product-pricing-row" data-hide-for="instagram_post">
-        <div class="form-group">
+        <div class="form-group" data-hide-for="home_hero">
             <label>Button 1 text</label>
             <input type="text" name="button_text" value="{{ old('button_text', $isEdit ? $banner->button_text : '') }}" placeholder="e.g. Shop now" maxlength="100">
         </div>
         <div class="form-group">
-            <label>Button 1 link</label>
+            <label><span data-hide-for="home_hero">Button 1 link</span><span data-show-for="home_hero" hidden>Link when the picture is clicked</span></label>
             <input type="text" name="button_link" value="{{ old('button_link', $isEdit ? $banner->button_link : '') }}" placeholder="e.g. /shop or /rudraksha" maxlength="500">
         </div>
     </div>
 
     <div class="product-pricing-row" style="margin-top:12px;">
-        <div class="form-group" data-hide-for="instagram_post">
+        <div class="form-group" data-hide-for="instagram_post home_hero">
             <label>Button 2 text</label>
             <input type="text" name="button_text_2" value="{{ old('button_text_2', $isEdit ? $banner->button_text_2 : '') }}" placeholder="Optional, e.g. Book a consultation" maxlength="100">
         </div>
-        <div class="form-group" data-hide-for="instagram_post">
+        <div class="form-group" data-hide-for="instagram_post home_hero">
             <label>Button 2 link</label>
             <input type="text" name="button_link_2" value="{{ old('button_link_2', $isEdit ? $banner->button_link_2 : '') }}" placeholder="Optional link" maxlength="500">
         </div>
@@ -153,12 +145,12 @@
                         @endif
                     </div>
                     <div class="banner-variant banner-variant--meta">
-                        <div class="form-group">
+                        <div class="form-group" data-hide-for="home_hero">
                             <label>Order</label>
                             <input type="number" name="existing_sort[{{ $image->id }}]" min="0" value="{{ old('existing_sort.'.$image->id, $image->sort_order) }}">
                         </div>
                         <label class="remove-check">
-                            <input type="checkbox" name="remove_images[]" value="{{ $image->id }}"> Delete this image (desktop &amp; mobile)
+                            <input type="checkbox" name="remove_images[]" value="{{ $image->id }}"> Delete this picture (desktop &amp; mobile)
                         </label>
                     </div>
                 </div>
@@ -166,7 +158,7 @@
         </div>
     @endif
 
-    <div class="banner-variants banner-variants--new" style="margin-top:14px;" @if($isEdit && $banner->images->count()) data-optional-new @endif>
+    <div class="banner-variants banner-variants--new" style="margin-top:14px;" @if($isEdit && $banner->images->count()) data-optional-new data-hide-for="home_hero" @endif>
         <div class="banner-variant">
             <p class="banner-variant__label">{{ ($isEdit && $banner->images->count()) ? 'Add another desktop image' : 'Desktop image' }} <span class="banner-variant__req">{{ ($isEdit && $banner->images->count()) ? '(optional)' : '' }}</span></p>
             <input type="file" name="images[]" id="banner-images" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp">

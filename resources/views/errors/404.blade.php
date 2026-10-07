@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=199">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=200">
   <title>404 - Page Not Found | Vastutathastu</title>
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">

@@ -3003,3 +3003,5 @@ body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-
   .banner-variants, .banner-variants--new { grid-template-columns: 1fr; }
   .banner-variant__preview--tall { max-height: 320px; max-width: 200px; }
 }
+/* Banner form: parts hidden for the chosen section really disappear (rows use display:flex/grid) */
+#banner-form [hidden] { display: none !important; }

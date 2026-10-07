@@ -4230,3 +4230,6 @@ body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48p
 @media (max-width: 767px) {
   .vt-hero__slide--designed .vt-hero__ambient { background-image: var(--amb-m, var(--amb-d)); }
 }
+/* Hero video slides: video fills the slide; the optional link covers it */
+.vt-hero__slide--video { background: #0e0a09; }
+.vt-hero__slide--video .vt-hero__designed { z-index: 2; }

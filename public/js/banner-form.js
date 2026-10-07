@@ -38,8 +38,13 @@
                 fields.hidden = !fields.innerHTML;
             }
             const key = opt ? opt.value : '';
-            form.querySelectorAll('[data-show-for]').forEach(function (el) { el.hidden = el.getAttribute('data-show-for') !== key; });
-            form.querySelectorAll('[data-hide-for]').forEach(function (el) { el.hidden = el.getAttribute('data-hide-for') === key; });
+            // data-show-for / data-hide-for take one or more section keys separated by spaces
+            const listed = function (el, attr) { return (el.getAttribute(attr) || '').split(/\s+/).indexOf(key) > -1; };
+            form.querySelectorAll('[data-show-for]').forEach(function (el) { el.hidden = !listed(el, 'data-show-for'); });
+            form.querySelectorAll('[data-hide-for]').forEach(function (el) { el.hidden = listed(el, 'data-hide-for'); });
+            // Hero slides are pictures only; the title is just an internal name
+            const title = form.querySelector('input[name="title"]');
+            if (key === 'home_hero' && title && !title.value.trim()) title.value = 'Hero slide';
             const media = currentMedia();
             if (mediaCard) mediaCard.hidden = media === 'none';
             if (input) {

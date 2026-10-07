@@ -161,7 +161,7 @@ class BannerController extends Controller
         }
 
         $data = $request->validate([
-            'title' => [BannerSections::isGallery($request->input('section')) ? 'nullable' : 'required', 'string', 'max:255'],
+            'title' => [(BannerSections::isGallery($request->input('section')) || $request->input('section') === 'home_hero') ? 'nullable' : 'required', 'string', 'max:255'],
             'section' => ['required', Rule::in(BannerSections::keys())],
             'subtitle' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:2000'],
@@ -217,7 +217,10 @@ class BannerController extends Controller
         ]);
 
         $data['is_active'] = $request->boolean('is_active');
-        $data['text_in_image'] = $request->input('section') === 'home_hero' && $request->boolean('text_in_image');
+        // Hero slides are pictures only (text and button are designed into the image); the title is an internal name.
+        if (($data['section'] ?? null) === 'home_hero' && trim((string) ($data['title'] ?? '')) === '') {
+            $data['title'] = 'Hero slide';
+        }
         $data['sort_order'] = (int) ($data['sort_order'] ?? 0);
         // Gallery photos may have no caption.
         $data['title'] = (string) ($data['title'] ?? '');

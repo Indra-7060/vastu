@@ -4253,3 +4253,11 @@ body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48p
   .vt-hero--below-header .vt-hero__slide--fit-m .vt-hero__ambient { display: block; }
   .vt-hero--below-header .vt-hero__slide--fit-m .vt-hero__designed img { object-fit: contain; }
 }
+/* Mobile header logo: as large as the space between the menu and the right-hand icons allows */
+@media (min-width: 421px) and (max-width: 575px) { .vt-hdr .vt-hdr__logo img { height: 38px; } }
+@media (min-width: 390px) and (max-width: 420px) { .vt-hdr .vt-hdr__logo img { height: 40px; } }
+@media (min-width: 375px) and (max-width: 389px) { .vt-hdr .vt-hdr__logo img { height: 36px; } }
+@media (min-width: 360px) and (max-width: 374px) { .vt-hdr .vt-hdr__logo img { height: 32px; } }
+/* Hero: no dark overlay or gradient over pictures / videos (white text keeps a soft shadow to stay readable) */
+.vt-hero .vt-hero__shade, .vt-hero .vt-hero__shade::before { display: none !important; }
+.vt-hero__slide--text .vt-hero__kicker, .vt-hero__slide--text .vt-hero__title { text-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 2px 18px rgba(0, 0, 0, .35); }

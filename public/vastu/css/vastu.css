@@ -4233,3 +4233,10 @@ body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48p
 /* Hero video slides: video fills the slide; the optional link covers it */
 .vt-hero__slide--video { background: #0e0a09; }
 .vt-hero__slide--video .vt-hero__designed { z-index: 2; }
+
+/* Hero = the picture's own shape: desktop image ratio on desktop, mobile image ratio on phones.
+   Pictures fill edge to edge (no blurred bands); a slide of a different shape is covered, not boxed. */
+.vt-hero.vt-hero--below-header { height: auto; min-height: 0; max-height: none; aspect-ratio: var(--hero-ar-d, 16 / 9); }
+@media (max-width: 767px) { .vt-hero.vt-hero--below-header { aspect-ratio: var(--hero-ar-m, var(--hero-ar-d, 16 / 9)); } }
+.vt-hero--below-header .vt-hero__designed img { object-fit: cover; }
+.vt-hero--below-header .vt-hero__slide--designed .vt-hero__ambient { display: none; }

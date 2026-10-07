@@ -4283,3 +4283,21 @@ body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48p
   .vt-hdr .vt-lang__btn { padding-left: 6px; padding-right: 6px; }
 }
 @media (max-width: 359px) { .vt-hdr .vt-hdr__logo img { height: 34px; } }
+/* Mobile header, right side: even 12px gaps between search, cart and language, and the same 20px
+   edge margin as the menu icon on the left */
+@media (max-width: 767px) {
+  .vt-hdr .vt-hdr__actions { gap: 12px; }
+  .vt-hdr .vt-hdr__icon { width: 30px; padding: 0; }
+  .vt-hdr .vt-lang { padding-right: 20px; }
+  .vt-hdr .vt-lang__btn { padding-left: 6px; padding-right: 6px; }
+}
+@media (min-width: 405px) and (max-width: 575px) { .vt-hdr .vt-hdr__logo img { height: 48px; } }
+@media (min-width: 390px) and (max-width: 404px) { .vt-hdr .vt-hdr__logo img { height: 44px; } }
+@media (min-width: 375px) and (max-width: 389px) { .vt-hdr .vt-hdr__logo img { height: 39px; } }
+@media (min-width: 360px) and (max-width: 374px) { .vt-hdr .vt-hdr__logo img { height: 35px; } }
+@media (max-width: 359px) {
+  .vt-hdr .vt-hdr__actions { gap: 8px; }
+  .vt-hdr .vt-lang { padding-right: 14px; }
+  .vt-hdr .vt-hdr__logo img { height: 28px; }
+}
+@media (max-width: 767px) { .vt-hdr .vt-lang { margin-left: 0; } }

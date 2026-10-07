@@ -4273,3 +4273,13 @@ body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48p
 @media (min-width: 360px) and (max-width: 374px) { .vt-hdr .vt-hdr__logo img { height: 40px; } }
 @media (min-width: 340px) and (max-width: 359px) { .vt-hdr .vt-hdr__logo img { height: 34px; } }
 @media (min-width: 405px) and (max-width: 575px) { .vt-hdr .vt-hdr__logo img { height: 50px; } }
+/* Mobile header: logo on the left beside the menu icon; right-hand icons keep their normal spacing */
+@media (max-width: 991px) {
+  .vt-hdr .vt-hdr__logo { left: 64px; right: auto; margin: auto 0; }
+}
+@media (max-width: 575px) {
+  .vt-hdr .vt-hdr__icon { width: 30px; padding-left: 5px; padding-right: 5px; }
+  .vt-hdr .vt-lang { padding-right: 6px; }
+  .vt-hdr .vt-lang__btn { padding-left: 6px; padding-right: 6px; }
+}
+@media (max-width: 359px) { .vt-hdr .vt-hdr__logo img { height: 34px; } }

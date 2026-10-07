@@ -11,16 +11,31 @@
   // the header sits solid above them instead of over them.
   $heroDesigned = $heroSlides->isNotEmpty();
   if ($heroDesigned) { $vtHeaderOverlay = false; }
-  // The hero takes the exact shape of the first slide's picture (desktop image on desktop, mobile image on
-  // phones), so pictures fill the full width with no empty or blurred bands and nothing cut off.
-  $heroShape = function (?string $path, string $fallback) {
-      if (! $path || str_starts_with($path, 'http')) return $fallback;
+  // Hero shape = the most common shape of the slide PICTURES (desktop images on desktop, mobile images on
+  // phones). Videos are ignored (they are trimmed to fit). A picture of another shape is shown whole (no crop).
+  $sizeOf = function (?string $path) {
+      if (! $path || str_starts_with($path, 'http')) return null;
       $size = @getimagesize(public_path('storage/'.ltrim($path, '/')));
-      return $size && $size[0] > 0 && $size[1] > 0 ? $size[0].' / '.$size[1] : $fallback;
+      return $size && $size[0] > 0 && $size[1] > 0 ? [$size[0], $size[1]] : null;
   };
-  $firstHeroMedia = $B::media($heroSlides->first());
-  $heroAspectD = $firstHeroMedia ? ($firstHeroMedia->is_video ? '16 / 9' : $heroShape($firstHeroMedia->image, '16 / 9')) : '16 / 9';
-  $heroAspectM = $firstHeroMedia && $firstHeroMedia->mobile_image ? $heroShape($firstHeroMedia->mobile_image, $heroAspectD) : $heroAspectD;
+  $heroSizes = $heroSlides->map(function ($slide) use ($B, $sizeOf) {
+      $m = $B::media($slide);
+      if (! $m || $m->is_video) return ['d' => null, 'm' => null, 'mobileOnly' => null];
+      $d = $sizeOf($m->image);
+      $mob = $sizeOf($m->mobile_image);
+      return ['d' => $d, 'm' => $mob ?: $d, 'mobileOnly' => $mob];
+  })->values();
+  $commonShape = function (string $key, ?array $fallback) use ($heroSizes) {
+      $shapes = $heroSizes->pluck($key)->filter();
+      if ($shapes->isEmpty()) return $fallback;
+      return $shapes->groupBy(fn ($s) => round($s[0] / $s[1], 2))->sortByDesc(fn ($g) => $g->count())->first()->first();
+  };
+  $shapeD = $commonShape('d', [16, 9]);
+  // phones: the shape of the real mobile images when there are any
+  $shapeM = $commonShape('mobileOnly', null) ?? $commonShape('m', $shapeD);
+  $heroAspectD = $shapeD[0].' / '.$shapeD[1];
+  $heroAspectM = $shapeM[0].' / '.$shapeM[1];
+  $offShape = fn (?array $s, array $hero) => $s && abs(($s[0] / $s[1]) / ($hero[0] / $hero[1]) - 1) > 0.08;
   $hero = $heroSlides->first();
   $heroMedia = $B::media($hero);
   $spotlightBanner = $B::first('home_spotlight');
@@ -65,7 +80,7 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=201">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=203">
   <title>{{ $pageTitle }}</title>
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
@@ -97,8 +112,39 @@
                 $mobileUrl = $media && $media->mobile_image ? $B::url($media->mobile_image) : null;
                 $slideLink = trim((string) $slide->button_link) !== '' ? $B::link($slide->button_link) : null;
                 $slideName = ($slide->title && $slide->title !== 'Hero slide') ? $slide->title : 'Vastutathastu';
+                // "Show text & buttons" on: the website draws label, heading and buttons over the picture / video
+                $withText = $slide->show_text;
+                $heading = ($slide->title && $slide->title !== 'Hero slide') ? $slide->title : null;
               @endphp
-              <div class="vt-hero__slide vt-hero__slide--designed{{ $loop->first ? ' is-selected' : '' }}{{ $media && $media->is_video ? ' vt-hero__slide--video' : '' }}" role="group" aria-roledescription="slide" aria-label="{{ $loop->iteration }} of {{ $loop->count }}" data-vt-hero-slide>
+              @if($withText)
+              <div class="vt-hero__slide vt-hero__slide--text{{ $loop->first ? ' is-selected' : '' }}" role="group" aria-roledescription="slide" aria-label="{{ $loop->iteration }} of {{ $loop->count }}" data-vt-hero-slide>
+                @if($media && $media->is_video)
+                  <video class="vt-hero__media" autoplay muted loop playsinline preload="{{ $loop->first ? 'metadata' : 'none' }}" @if($media->mobile_image) poster="{{ $mobileUrl }}?v={{ @filemtime(public_path('storage/'.$media->mobile_image)) }}" @endif aria-hidden="true">
+                    <source src="{{ $B::url($media->image) }}?v={{ @filemtime(public_path('storage/'.$media->image)) }}" type="{{ $media->video_mime_type }}">
+                  </video>
+                @elseif($media)
+                  <picture>
+                    @if($mobileUrl)<source media="(max-width: 767px)" srcset="{{ $mobileUrl }}">@endif
+                    <img class="vt-hero__media" src="{{ $B::url($media->image) }}" alt="" draggable="false" @unless($loop->first) loading="lazy" @endunless>
+                  </picture>
+                @endif
+                @if($slide->subtitle || $heading || $slide->button_text || $slide->button_text_2)
+                <div class="vt-hero__shade"></div>
+                <div class="vt-hero__content">
+                  @if($slide->subtitle)<p class="vt-hero__kicker">{{ $slide->subtitle }}</p>@endif
+                  @if($heading)<h2 class="vt-hero__title">{{ $heading }}</h2>@endif
+                  @if($slide->button_text || $slide->button_text_2)
+                  <div class="vt-hero__actions">
+                    @if($slide->button_text)<a class="vt-btn vt-btn--solid" href="{{ $B::link($slide->button_link, route('shop')) }}">{{ $slide->button_text }}</a>@endif
+                    @if($slide->button_text_2)<a class="vt-btn vt-btn--ghost" href="{{ $B::link($slide->button_link_2) }}">{{ $slide->button_text_2 }}</a>@endif
+                  </div>
+                  @endif
+                </div>
+                @endif
+              </div>
+              @else
+              @php $sz = $heroSizes[$loop->index] ?? ['d' => null, 'm' => null]; @endphp
+              <div class="vt-hero__slide vt-hero__slide--designed{{ $loop->first ? ' is-selected' : '' }}{{ $media && $media->is_video ? ' vt-hero__slide--video' : '' }}{{ $offShape($sz['d'], $shapeD) ? ' vt-hero__slide--fit-d' : '' }}{{ $offShape($sz['m'], $shapeM) ? ' vt-hero__slide--fit-m' : '' }}" role="group" aria-roledescription="slide" aria-label="{{ $loop->iteration }} of {{ $loop->count }}" data-vt-hero-slide>
                 @if($media && $media->is_video)
                   <video class="vt-hero__media" autoplay muted loop playsinline preload="{{ $loop->first ? 'metadata' : 'none' }}" @if($media->mobile_image) poster="{{ $mobileUrl }}?v={{ @filemtime(public_path('storage/'.$media->mobile_image)) }}" @endif aria-hidden="true">
                     <source src="{{ $B::url($media->image) }}?v={{ @filemtime(public_path('storage/'.$media->image)) }}" type="{{ $media->video_mime_type }}">
@@ -115,6 +161,7 @@
                   @if($slideLink)</a>@else</div>@endif
                 @endif
               </div>
+              @endif
             @endforeach
           </div>
         </div>

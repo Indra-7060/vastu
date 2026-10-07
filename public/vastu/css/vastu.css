@@ -4240,3 +4240,16 @@ body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48p
 @media (max-width: 767px) { .vt-hero.vt-hero--below-header { aspect-ratio: var(--hero-ar-m, var(--hero-ar-d, 16 / 9)); } }
 .vt-hero--below-header .vt-hero__designed img { object-fit: cover; }
 .vt-hero--below-header .vt-hero__slide--designed .vt-hero__ambient { display: none; }
+/* Hero slides with website text & buttons: picture / video fills the slide, text on the shade */
+.vt-hero__slide--text { background: #0e0a09; }
+.vt-hero__slide--text img.vt-hero__media, .vt-hero__slide--text video.vt-hero__media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Picture slides whose shape differs from the hero: shown whole (never cut) over a soft fill of themselves */
+.vt-hero--below-header .vt-hero__slide--designed .vt-hero__ambient { display: none; }
+@media (min-width: 768px) {
+  .vt-hero--below-header .vt-hero__slide--fit-d .vt-hero__ambient { display: block; }
+  .vt-hero--below-header .vt-hero__slide--fit-d .vt-hero__designed img { object-fit: contain; }
+}
+@media (max-width: 767px) {
+  .vt-hero--below-header .vt-hero__slide--fit-m .vt-hero__ambient { display: block; }
+  .vt-hero--below-header .vt-hero__slide--fit-m .vt-hero__designed img { object-fit: contain; }
+}

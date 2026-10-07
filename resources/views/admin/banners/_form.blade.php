@@ -48,16 +48,26 @@
     <h3 class="section-title">Content</h3>
 
 
-    <p class="hint banner-hero-note" data-show-for="home_hero" hidden>Hero slides are pictures only: upload the desktop and mobile images below (with your text and “Shop now” button already designed into them) and enter the page to open when someone clicks the picture.</p>
+    <div class="toggle-row banner-textimg" data-show-for="home_hero" hidden>
+        <span>
+            <strong>Show text &amp; buttons on this slide</strong>
+            <small><b>Off</b> — picture only: upload a finished design (text and “Shop now” already in the image) and set where a click on the picture goes.<br><b>On</b> — the website shows its own small label, heading and buttons over the picture or video. Fill in only what you want shown; empty fields are simply not displayed.</small>
+        </span>
+        <label class="switch">
+            <input type="checkbox" name="show_text" value="1" id="banner-show-text" @checked(old('show_text', $isEdit ? $banner->show_text : false))>
+            <span class="slider"></span>
+        </label>
+    </div>
 
-    <div class="offer-form-row" data-hide-for="home_hero">
+    <div class="offer-form-row" data-hide-for="home_hero" data-hero-text>
         <label class="offer-label">Title <span>:-</span></label>
         <div class="offer-field form-group">
-            <input type="text" name="title" value="{{ old('title', $isEdit ? $banner->title : '') }}" placeholder="e.g. Sacred Living by Vastutathastu" maxlength="255">
+            <input type="text" name="title" value="{{ old('title', ($isEdit && $banner->title !== 'Hero slide') ? $banner->title : '') }}" placeholder="e.g. Sacred Living by Vastutathastu" maxlength="255">
+            @error('title')<p class="field-error">{{ $message }}</p>@enderror
         </div>
     </div>
 
-    <div class="offer-form-row" data-hide-for="instagram_post home_hero">
+    <div class="offer-form-row" data-hide-for="instagram_post home_hero" data-hero-text>
         <label class="offer-label">Subtitle <span>:-</span></label>
         <div class="offer-field form-group">
             <input type="text" name="subtitle" value="{{ old('subtitle', $isEdit ? $banner->subtitle : '') }}" placeholder="Optional small label, e.g. Personal Vedic Guidance" maxlength="255">
@@ -72,22 +82,22 @@
     </div>
 
     <div class="product-pricing-row" data-hide-for="instagram_post">
-        <div class="form-group" data-hide-for="home_hero">
+        <div class="form-group" data-hide-for="home_hero" data-hero-text>
             <label>Button 1 text</label>
             <input type="text" name="button_text" value="{{ old('button_text', $isEdit ? $banner->button_text : '') }}" placeholder="e.g. Shop now" maxlength="100">
         </div>
         <div class="form-group">
-            <label><span data-hide-for="home_hero">Button 1 link</span><span data-show-for="home_hero" hidden>Link when the picture is clicked</span></label>
+            <label><span data-hide-for="home_hero" data-hero-text>Button 1 link</span><span data-show-for="home_hero" data-hero-pic hidden>Link when the picture is clicked</span></label>
             <input type="text" name="button_link" value="{{ old('button_link', $isEdit ? $banner->button_link : '') }}" placeholder="e.g. /shop or /rudraksha" maxlength="500">
         </div>
     </div>
 
     <div class="product-pricing-row" style="margin-top:12px;">
-        <div class="form-group" data-hide-for="instagram_post home_hero">
+        <div class="form-group" data-hide-for="instagram_post home_hero" data-hero-text>
             <label>Button 2 text</label>
             <input type="text" name="button_text_2" value="{{ old('button_text_2', $isEdit ? $banner->button_text_2 : '') }}" placeholder="Optional, e.g. Book a consultation" maxlength="100">
         </div>
-        <div class="form-group" data-hide-for="instagram_post home_hero">
+        <div class="form-group" data-hide-for="instagram_post home_hero" data-hero-text>
             <label>Button 2 link</label>
             <input type="text" name="button_link_2" value="{{ old('button_link_2', $isEdit ? $banner->button_link_2 : '') }}" placeholder="Optional link" maxlength="500">
         </div>

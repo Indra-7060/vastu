@@ -217,9 +217,13 @@ class BannerController extends Controller
         ]);
 
         $data['is_active'] = $request->boolean('is_active');
-        // Hero slides are pictures only (text and button are designed into the image); the title is an internal name.
-        if (($data['section'] ?? null) === 'home_hero' && trim((string) ($data['title'] ?? '')) === '') {
-            $data['title'] = 'Hero slide';
+        // Hero slides: picture only (the whole slide links to Button 1 link) unless "Show text & buttons" is on.
+        // The title is optional; without one it is just an internal name.
+        if (($data['section'] ?? null) === 'home_hero') {
+            $data['show_text'] = $request->boolean('show_text');
+            if (trim((string) ($data['title'] ?? '')) === '') {
+                $data['title'] = 'Hero slide';
+            }
         }
         $data['sort_order'] = (int) ($data['sort_order'] ?? 0);
         // Gallery photos may have no caption.

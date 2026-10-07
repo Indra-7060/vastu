@@ -17,5 +17,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/banner-form.js') }}?v=vastu-4"></script>
+<script src="{{ asset('js/banner-form.js') }}?v=vastu-5"></script>
 @endpush

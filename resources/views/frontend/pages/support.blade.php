@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/font-awesome.css') }}">
   @include('frontend.partials.site-config')
 
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=211">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=212">
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vastu/images/favicon-32.png') }}?v=vt2">
@@ -59,7 +59,7 @@
   <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
   <script src="{{ asset('frontend/js/mmenu.js') }}"></script>
   <script src="{{ asset('frontend/js/swiper-bundle.min.js') }}"></script>
-  <script src="{{ asset('frontend/js/script.js?v=vastu-3') }}?v=shared-header-1"></script>
+  <script src="{{ asset('frontend/js/script.js?v=vastu-4') }}?v=shared-header-1"></script>
   <script src="{{ asset('frontend/js/shell-menu-search.js') }}?v=2"></script>
   <script src="{{ asset('frontend/js/frontend-search.js') }}?v=live-3"></script>
 @include('frontend.partials.cart-script')

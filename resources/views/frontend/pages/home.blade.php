@@ -80,7 +80,7 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=211">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=212">
   <title>{{ $pageTitle }}</title>
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
@@ -410,7 +410,7 @@
   <script src="{{ asset('frontend/js/jquery.countdown.js') }}"></script>
   <script src="{{ asset('frontend/js/jarallax.js') }}"></script>
   <script src="{{ asset('frontend/js/wow.min.js') }}"></script>
-  <script src="{{ asset('frontend/js/script.js?v=vastu-3') }}"></script>
+  <script src="{{ asset('frontend/js/script.js?v=vastu-4') }}"></script>
   <script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-6"></script>
   <script src="{{ asset('frontend/js/frontend-search.js') }}?v=live-3"></script>
   @include('frontend.partials.cart-script')

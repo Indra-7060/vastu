@@ -17,7 +17,7 @@
 
   <!-- Title -->
   <title>{{ $pageTitle ?? 'Checkout - Vastutathastu' }}</title>
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=211">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=212">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="{{ asset('vastu/css/checkout.css') }}?v=3">
@@ -229,7 +229,7 @@
 <script src="{{ asset('frontend/js/jarallax.js') }}"></script>
 <script src="{{ asset('frontend/js/wow.min.js') }}"></script>
 <!-- Custom script for all pages --> 
-<script src="{{ asset('frontend/js/script.js?v=vastu-3') }}"></script>
+<script src="{{ asset('frontend/js/script.js?v=vastu-4') }}"></script>
 <script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-6"></script>
 <script src="{{ asset('frontend/js/frontend-search.js') }}?v=live-3"></script>
 @include('frontend.partials.cart-script')

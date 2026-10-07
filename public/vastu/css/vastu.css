@@ -4301,3 +4301,8 @@ body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48p
   .vt-hdr .vt-hdr__logo img { height: 28px; }
 }
 @media (max-width: 767px) { .vt-hdr .vt-lang { margin-left: 0; } }
+/* Mobile menu: full-colour brand icons (same as footer) with a slow, smooth hover */
+.mmx-social { display: flex; align-items: center; gap: 14px; }
+.mmx-social a { display: inline-flex; line-height: 0; transition: transform .6s cubic-bezier(.22, .61, .36, 1), filter .6s ease; }
+.mmx-social a:hover, .mmx-social a:focus-visible { transform: translateY(-2px) scale(1.06); filter: brightness(1.05); }
+.mmx-social .vt-bicon { width: 30px; height: 30px; display: block; }

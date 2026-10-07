@@ -1,6 +1,6 @@
 @php
   $isShop = $activeCategory === null;
-  $heading = $search !== '' ? 'Results for “'.$search.'”' : ($isShop ? 'New Arrivals' : ($activeCategory->page_heading ?: $activeCategory->title));
+  $heading = $search !== '' ? 'Results for “'.$search.'”' : ($isShop ? 'New Arrivals' : $activeCategory->page_heading_text);
   $intro = $isShop
       ? 'Discover the latest sacred products from Vastutathastu — authentic Rudraksha, energised Yantras, crystal malas and Vastu essentials, chosen to bring harmony to your home and workplace.'
       : ($activeCategory->page_description ?: ($activeCategory->short_description ?: 'Authentic '.$activeCategory->title.' from Vastutathastu, chosen with care and energised before dispatch.'));
@@ -168,7 +168,7 @@
         <p>Every Vastutathastu product is selected under the guidance of Makrannd Sardeshmukh, with more than 22 years of experience in Vedic Vastushastra, astrology and numerology. Explore Rudraksha, Yantras, malas, crystal trees and puja essentials — and book a personal consultation if you would like help choosing the right piece for your space.</p>
       </section>
 
-      {{-- "You may also like": the other categories in the same endless slider as "Sacred Energy, Refined" --}}
+      {{-- "Other Categories": the other categories in the same endless slider as "Sacred Energy, Refined" --}}
       @php
         $moreCategories = $categories->where('slug', '!=', $activeCategory?->slug)->filter(fn ($c) => $c->image)->values()
             ->map(fn ($c) => ['name' => $c->title, 'sub' => '', 'price' => 'Explore', 'image_url' => $c->image_url, 'url' => $c->frontendUrl(), 'badge' => false])
@@ -176,7 +176,7 @@
       @endphp
       @if(count($moreCategories) > 1)
         <div class="vt-plp__related">
-          @include('frontend.partials.vastu-product-carousel', ['title' => 'You may also like', 'items' => $moreCategories, 'id' => 'vt-plp-more'])
+          @include('frontend.partials.vastu-product-carousel', ['title' => 'Other Categories', 'items' => $moreCategories, 'id' => 'vt-plp-more'])
         </div>
       @endif
     </main>

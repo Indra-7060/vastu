@@ -25,8 +25,8 @@
 
         <div class="form-group form-group--full">
             <label>Category page heading</label>
-            <input type="text" name="page_heading" maxlength="120" value="{{ old('page_heading', $category->page_heading ?? '') }}" placeholder="{{ isset($category) ? $category->title : 'e.g. Rudraksh' }}">
-            <p class="hint">The big title at the top of this category's page. Leave empty to use the category name. Changing it does not rename the category or its web address.</p>
+            <input type="text" name="page_heading" maxlength="120" value="{{ old('page_heading', $category->page_heading_text) }}" placeholder="{{ \App\Models\Category::defaultPageHeading($category->title) }}">
+            <p class="hint">The big title at the top of this category's page (by default “Vastu Tathastu” + the category name). Changing it does not rename the category or its web address.</p>
         </div>
 
         <div class="form-group form-group--full">

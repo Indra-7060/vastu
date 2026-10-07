@@ -24,8 +24,8 @@
 
         <div class="form-group form-group--full">
             <label>Category page heading</label>
-            <input type="text" name="page_heading" maxlength="120" value="{{ old('page_heading', '') }}" placeholder="e.g. Rudraksh">
-            <p class="hint">The big title at the top of this category's page. Leave empty to use the category name. Changing it does not rename the category or its web address.</p>
+            <input type="text" name="page_heading" maxlength="120" value="{{ old('page_heading', '') }}" placeholder="Vastu Tathastu + category name" data-default-heading>
+            <p class="hint">The big title at the top of this category's page. Fills in as “Vastu Tathastu” + the category name; change it if you like. Changing it does not rename the category or its web address.</p>
         </div>
 
         <div class="form-group form-group--full">
@@ -64,4 +64,17 @@
         </div>
     </form>
 </div>
+<script>
+    // Category page heading follows the title ("Vastu Tathastu <title>") until the admin edits it.
+    (function () {
+        var title = document.querySelector('input[name="title"]');
+        var heading = document.querySelector('[data-default-heading]');
+        if (!title || !heading) return;
+        var auto = heading.value === '';
+        heading.addEventListener('input', function () { auto = heading.value === ''; });
+        title.addEventListener('input', function () {
+            if (auto) heading.value = title.value.trim() ? 'Vastu Tathastu ' + title.value.trim() : '';
+        });
+    })();
+</script>
 @endsection

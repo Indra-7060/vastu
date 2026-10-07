@@ -140,6 +140,8 @@ class InstagramFeed
     {
         $line = trim(strtok(str_replace("\r", '', $caption), "\n") ?: '');
         $line = trim(preg_replace('/(^|\s)#\S+/u', '', $line));
+        // drop emojis (🙏🌹👍 …) so the card title reads cleanly
+        $line = trim(preg_replace('/[\x{1F000}-\x{1FAFF}\x{2600}-\x{27BF}\x{FE0F}\x{200D}]/u', '', $line));
 
         return Str::limit($line, 60);
     }

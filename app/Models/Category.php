@@ -59,6 +59,18 @@ class Category extends Model
         return asset('storage/'.$this->image);
     }
 
+    /** Default heading for a category page when none is set in the admin: "Vastu Tathastu <Category>". */
+    public static function defaultPageHeading(?string $title): string
+    {
+        return trim('Vastu Tathastu '.trim((string) $title));
+    }
+
+    /** The big title on this category's page (Admin → Categories → Category page heading). */
+    public function getPageHeadingTextAttribute(): string
+    {
+        return filled($this->page_heading) ? $this->page_heading : self::defaultPageHeading($this->title);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

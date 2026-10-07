@@ -173,7 +173,7 @@ class BannerController extends Controller
             'images' => array_merge($imageRule, ['array']),
             'images.*' => [
                 'file',
-                'mimes:png,jpg,jpeg,mp4,webm,ogg,mov',
+                'mimes:png,jpg,jpeg,webp,mp4,webm,ogg,mov',
                 'max:51200',
                 function (string $attribute, $value, \Closure $fail) use ($media) {
                     if ($media !== 'image_or_video' && str_starts_with((string) $value->getMimeType(), 'video/')) {
@@ -182,7 +182,7 @@ class BannerController extends Controller
                 },
             ],
             'mobile_images' => ['nullable', 'array'],
-            'mobile_images.*' => ['nullable', 'image', 'mimes:png,jpg,jpeg', 'max:4096'],
+            'mobile_images.*' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:8192'],
             'image_titles' => ['nullable', 'array'],
             'image_titles.*' => ['nullable', 'string', 'max:255'],
             'image_subtitles' => ['nullable', 'array'],
@@ -198,11 +198,26 @@ class BannerController extends Controller
             'existing_sort' => ['nullable', 'array'],
             'remove_images' => ['nullable', 'array'],
             'remove_images.*' => ['integer'],
+            // per existing image: replace the desktop file / add or replace the mobile image / remove the mobile image
+            'replace_images' => ['nullable', 'array'],
+            'replace_images.*' => [
+                'nullable', 'file', 'mimes:png,jpg,jpeg,webp,mp4,webm,ogg,mov', 'max:51200',
+                function (string $attribute, $value, \Closure $fail) use ($media) {
+                    if ($value && $media !== 'image_or_video' && str_starts_with((string) $value->getMimeType(), 'video/')) {
+                        $fail('Videos can only be uploaded to the Home — Hero section.');
+                    }
+                },
+            ],
+            'replace_mobile' => ['nullable', 'array'],
+            'replace_mobile.*' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:8192'],
+            'remove_mobile' => ['nullable', 'array'],
+            'remove_mobile.*' => ['integer'],
         ], [
             'images.required' => 'Please upload an image (or a video for the Home — Hero).',
         ]);
 
         $data['is_active'] = $request->boolean('is_active');
+        $data['text_in_image'] = $request->input('section') === 'home_hero' && $request->boolean('text_in_image');
         $data['sort_order'] = (int) ($data['sort_order'] ?? 0);
         // Gallery photos may have no caption.
         $data['title'] = (string) ($data['title'] ?? '');
@@ -222,7 +237,10 @@ class BannerController extends Controller
             $data['existing_button_texts'],
             $data['existing_button_links'],
             $data['existing_sort'],
-            $data['remove_images']
+            $data['remove_images'],
+            $data['replace_images'],
+            $data['replace_mobile'],
+            $data['remove_mobile']
         );
 
         return $data;
@@ -263,6 +281,28 @@ class BannerController extends Controller
 
     private function updateExistingImages(Request $request, Banner $banner): void
     {
+        // Desktop / mobile files changed on an existing image (no need to delete the whole image)
+        $removeMobile = array_map('intval', (array) $request->input('remove_mobile', []));
+        foreach ($banner->images as $image) {
+            $changes = [];
+            if ($file = $request->file('replace_images.'.$image->id)) {
+                Storage::disk('public')->delete($image->image);
+                $changes['image'] = $file->store('banners', 'public');
+            }
+            if ($file = $request->file('replace_mobile.'.$image->id)) {
+                if ($image->mobile_image) {
+                    Storage::disk('public')->delete($image->mobile_image);
+                }
+                $changes['mobile_image'] = $file->store('banners/mobile', 'public');
+            } elseif (in_array($image->id, $removeMobile, true) && $image->mobile_image) {
+                Storage::disk('public')->delete($image->mobile_image);
+                $changes['mobile_image'] = null;
+            }
+            if ($changes) {
+                $image->update($changes);
+            }
+        }
+
         $titles = $request->input('existing_titles', []);
         $subtitles = $request->input('existing_subtitles', []);
         $buttonTexts = $request->input('existing_button_texts', []);

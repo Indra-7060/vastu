@@ -4216,3 +4216,17 @@ body .vt-contact .vt-contact__grid { row-gap: 14px; }
 .vt-home .vt-photostrip .vt-h3 { margin: 0 0 28px; text-align: center; }
 /* Services page: group headings 48px like the other section headings (scale down on small screens) */
 body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48px) !important; line-height: 1.1 !important; }
+
+/* ---------- Hero: designed banners (headline & button are part of the picture) ---------- */
+.vt-hero--below-header { height: calc(100svh - var(--vt-hdr-h, 76px)); min-height: 0; max-height: none; }
+@supports not (height: 100svh) { .vt-hero--below-header { height: calc(100vh - var(--vt-hdr-h, 76px)); } }
+.vt-hero__slide--designed { background: #f3eee6; }
+.vt-hero__slide--designed .vt-hero__ambient {
+  position: absolute; inset: -40px; background: var(--amb-d) center / cover no-repeat; filter: blur(28px) saturate(1.05); opacity: .85; transform: scale(1.06);
+}
+.vt-hero__designed { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.vt-hero__designed picture { display: contents; }
+.vt-hero__designed img { width: 100%; height: 100%; object-fit: contain; display: block; user-select: none; -webkit-user-drag: none; }
+@media (max-width: 767px) {
+  .vt-hero__slide--designed .vt-hero__ambient { background-image: var(--amb-m, var(--amb-d)); }
+}

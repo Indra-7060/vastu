@@ -58,7 +58,7 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=198">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=199">
   <title>{{ $pageTitle }}</title>
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
@@ -87,7 +87,10 @@
       </section>
       @elseif($bannerImage)
       <section class="vt-plp__banner" aria-hidden="true">
-        <img src="{{ $bannerImage }}" alt="" data-vt-zoom>
+        <picture>
+          @if($isShop && $shopBanner && $shopBanner->mobile_image)<source media="(max-width: 767px)" srcset="{{ \App\Support\SiteBanners::url($shopBanner->mobile_image) }}">@endif
+          <img src="{{ $bannerImage }}" alt="" data-vt-zoom>
+        </picture>
       </section>
       @else
       <div class="vt-plp__banner vt-plp__banner--plain" aria-hidden="true"></div>

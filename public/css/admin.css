@@ -2976,3 +2976,30 @@ body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-
   .cms-banner:has(.cms-quick) { flex-wrap: wrap; }
   .cms-quick { order: 3; flex-basis: 100%; }
 }
+
+/* Banner form: desktop + mobile image slots */
+.banner-size-guide { margin: -6px 0 16px; padding: 10px 12px; border-radius: 8px; background: #f5f8fb; border: 1px solid #e3eaf2; line-height: 1.6; }
+.banner-variants-list { display: grid; gap: 14px; }
+.banner-variants { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(160px, .7fr); gap: 16px; padding: 14px; border: 1px solid var(--line, #e5e7eb); border-radius: 12px; background: #fff; }
+.banner-variants--new { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); border-style: dashed; background: #fbfcfd; }
+.banner-variant { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.banner-variant--meta { justify-content: space-between; }
+.banner-variant__label { margin: 0; font-size: 13px; font-weight: 700; color: var(--ink, #111827); }
+.banner-variant__req { font-weight: 500; color: var(--muted, #6b7280); }
+.banner-variant__preview { position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; background: #f3f4f6; border: 1px solid var(--line, #e5e7eb); }
+.banner-variant__preview--wide { aspect-ratio: 16 / 9; }
+.banner-variant__preview--tall { aspect-ratio: 9 / 16; max-height: 260px; }
+.banner-variant__preview img, .banner-variant__preview video { width: 100%; height: 100%; object-fit: contain; display: block; }
+.banner-variant__empty { padding: 12px; font-size: 12px; line-height: 1.4; text-align: center; color: var(--muted, #6b7280); }
+.banner-variant__file { display: flex; flex-direction: column; gap: 4px; margin: 0; font-size: 12px; font-weight: 600; color: var(--muted, #6b7280); }
+.banner-variant__file input, .banner-variant input[type="file"] { font-size: 13px; max-width: 100%; }
+.banner-variant__new:empty { display: none; }
+.banner-variant__new img, .banner-variant__new video { display: block; max-width: 100%; max-height: 180px; border-radius: 8px; border: 2px solid #1c75bc; }
+.banner-variant__new small { display: block; margin-top: 4px; font-size: 12px; color: #1c75bc; }
+.banner-textimg { align-items: flex-start; gap: 16px; padding: 12px 14px; margin-bottom: 14px; border-radius: 10px; background: #fff8eb; border: 1px solid #f3dfb5; }
+.banner-textimg > span { display: flex; flex-direction: column; gap: 4px; }
+.banner-textimg small { font-size: 12.5px; line-height: 1.5; color: #6b5a3e; font-weight: 400; }
+@media (max-width: 900px) {
+  .banner-variants, .banner-variants--new { grid-template-columns: 1fr; }
+  .banner-variant__preview--tall { max-height: 320px; max-width: 200px; }
+}

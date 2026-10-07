@@ -20,11 +20,13 @@ class Banner extends Model
         'button_text_2',
         'button_link_2',
         'is_active',
+        'text_in_image',
         'sort_order',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'text_in_image' => 'boolean',
     ];
 
     public function images()

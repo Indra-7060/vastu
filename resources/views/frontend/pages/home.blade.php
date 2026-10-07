@@ -7,6 +7,9 @@
   // Editable sections come from Admin → Home Content → Sections & Images.
   $B = \App\Support\SiteBanners::class;
   $heroSlides = $B::all('home_hero');
+  // Designed banners carry their own logo and text: keep the header solid above them instead of over them.
+  $heroDesigned = $heroSlides->contains(fn ($s) => $s->text_in_image);
+  if ($heroDesigned) { $vtHeaderOverlay = false; }
   $hero = $heroSlides->first();
   $heroMedia = $B::media($hero);
   $spotlightBanner = $B::first('home_spotlight');
@@ -51,7 +54,7 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=198">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=199">
   <title>{{ $pageTitle }}</title>
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
@@ -72,7 +75,7 @@
     <main class="vt-home body_content">
       {{-- Hero slideshow (Sections & Images → Home — Hero; one banner per slide) --}}
       @if($heroSlides->isNotEmpty())
-      <section class="vt-hero{{ $heroSlides->count() > 1 ? ' vt-hero--slideshow' : '' }}" aria-roledescription="carousel" aria-label="Featured" data-vt-hero tabindex="-1">
+      <section class="vt-hero{{ $heroSlides->count() > 1 ? ' vt-hero--slideshow' : '' }}{{ $heroDesigned ? ' vt-hero--below-header' : '' }}" aria-roledescription="carousel" aria-label="Featured" data-vt-hero tabindex="-1">
         <div class="vt-hero__viewport">
           <div class="vt-hero__track" data-vt-hero-track>
             @foreach($heroSlides as $slide)
@@ -88,20 +91,39 @@
                 // so its text sits on the right.
                 $textRight = str_contains(strtolower((string) $slide->button_link), '/founder');
               @endphp
-              <div class="vt-hero__slide{{ $loop->first ? ' is-selected' : '' }}{{ $framed ? ' vt-hero__slide--framed' : '' }}{{ $textRight ? ' vt-hero__slide--text-right' : '' }}" role="group" aria-roledescription="slide" aria-label="{{ $loop->iteration }} of {{ $loop->count }}" data-vt-hero-slide>
-                @if($media && $media->is_video)
+              @php
+                $designed = $slide->text_in_image && $media && ! $media->is_video;
+                if ($designed) { $framed = false; }
+                $mobileUrl = $media && $media->mobile_image ? $B::url($media->mobile_image) : null;
+              @endphp
+              <div class="vt-hero__slide{{ $loop->first ? ' is-selected' : '' }}{{ $framed ? ' vt-hero__slide--framed' : '' }}{{ $textRight ? ' vt-hero__slide--text-right' : '' }}{{ $designed ? ' vt-hero__slide--designed' : '' }}" role="group" aria-roledescription="slide" aria-label="{{ $loop->iteration }} of {{ $loop->count }}" data-vt-hero-slide>
+                @if($designed)
+                  {{-- Designed banner: the whole picture (desktop or mobile version), never cropped, the slide is one link --}}
+                  <div class="vt-hero__ambient" style="--amb-d:url('{{ $B::url($media->image) }}');@if($mobileUrl)--amb-m:url('{{ $mobileUrl }}');@endif" aria-hidden="true"></div>
+                  <a class="vt-hero__designed" href="{{ $B::link($slide->button_link, route('shop')) }}" draggable="false">
+                    <picture>
+                      @if($mobileUrl)<source media="(max-width: 767px)" srcset="{{ $mobileUrl }}">@endif
+                      <img src="{{ $B::url($media->image) }}" alt="{{ $slide->title }}" draggable="false" @unless($loop->first) loading="lazy" @endunless>
+                    </picture>
+                  </a>
+                  @if($loop->first)<h1 class="vt-sr-only" id="vt-hero-title">{{ $slide->title }}</h1>@endif
+                @elseif($media && $media->is_video)
                   <video class="vt-hero__media" autoplay muted loop playsinline preload="{{ $loop->first ? 'metadata' : 'none' }}" @if($media->mobile_image) poster="{{ $B::url($media->mobile_image) }}?v={{ @filemtime(public_path('storage/'.$media->mobile_image)) }}" @endif aria-hidden="true">
                     <source src="{{ $B::url($media->image) }}?v={{ @filemtime(public_path('storage/'.$media->image)) }}" type="{{ $media->video_mime_type }}">
                   </video>
                 @elseif($media && $framed)
                   <div class="vt-hero__ambient" style="background-image:url('{{ $B::url($media->image) }}')" aria-hidden="true"></div>
-                  <img class="vt-hero__framed" src="{{ $B::url($media->image) }}" alt="{{ $slide->title }}" draggable="false" style="--src-w: {{ $srcW }}px" @unless($loop->first) loading="lazy" @endunless>
+                  <picture>
+                    @if($mobileUrl)<source media="(max-width: 767px)" srcset="{{ $mobileUrl }}">@endif
+                    <img class="vt-hero__framed" src="{{ $B::url($media->image) }}" alt="{{ $slide->title }}" draggable="false" style="--src-w: {{ $srcW }}px" @unless($loop->first) loading="lazy" @endunless>
+                  </picture>
                 @elseif($media)
                   <picture>
                     @if($media->mobile_image)<source media="(max-width: 767px)" srcset="{{ $B::url($media->mobile_image) }}">@endif
                     <img class="vt-hero__media" src="{{ $B::url($media->image) }}" alt="" draggable="false" @unless($loop->first) loading="lazy" @endunless>
                   </picture>
                 @endif
+                @unless($designed)
                 <div class="vt-hero__shade"></div>
                 <div class="vt-hero__content">
                   @if($slide->subtitle)<p class="vt-hero__kicker">{{ $slide->subtitle }}</p>@endif
@@ -117,6 +139,7 @@
                   </div>
                   @endif
                 </div>
+                @endunless
               </div>
             @endforeach
           </div>

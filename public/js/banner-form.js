@@ -44,13 +44,13 @@
             if (mediaCard) mediaCard.hidden = media === 'none';
             if (input) {
                 input.setAttribute('accept', media === 'image_or_video'
-                    ? '.png,.jpg,.jpeg,.mp4,.webm,.mov,image/png,image/jpeg,video/mp4,video/webm,video/quicktime'
-                    : '.png,.jpg,.jpeg,image/png,image/jpeg');
+                    ? '.png,.jpg,.jpeg,.webp,.mp4,.webm,.mov,image/png,image/jpeg,image/webp,video/mp4,video/webm,video/quicktime'
+                    : '.png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp');
             }
             if (mediaNote) {
                 mediaNote.textContent = media === 'image_or_video'
-                    ? 'Upload a video (mp4, webm, mov up to 50 MB) or a wide image. For a video, also add a still image — it is shown while the video loads.'
-                    : 'Upload a JPG or PNG image (up to 4 MB).';
+                    ? 'Each slide: a desktop video (mp4, webm, mov up to 50 MB) or image, plus an optional mobile image. For a video, the mobile image is also shown while the video loads.'
+                    : 'Upload a JPG or PNG image (up to 50 MB).';
             }
         }
 
@@ -59,29 +59,35 @@
             applySection();
         }
 
-        if (input && preview && meta) {
+        // Live previews: new desktop file, new mobile file, and replacements on existing images.
+        function showPreview(file, box) {
+            if (!box) return;
+            box.innerHTML = '';
+            if (!file) return;
+            const url = URL.createObjectURL(file);
+            box.innerHTML = file.type.indexOf('video/') === 0
+                ? '<video src="' + url + '" controls muted preload="metadata"></video><small>New: ' + file.name + '</small>'
+                : '<img src="' + url + '" alt=""><small>New: ' + file.name + '</small>';
+        }
+        const mobileInput = document.getElementById('banner-mobile-image');
+        const mobilePreview = document.getElementById('banner-mobile-preview');
+        const mobileLabel = document.getElementById('banner-mobile-label');
+        if (input) {
             input.addEventListener('change', function () {
-                preview.innerHTML = '';
-                meta.innerHTML = '';
-                Array.from(input.files || []).forEach(function (file, index) {
-                    const url = URL.createObjectURL(file);
-                    const isVideo = file.type.indexOf('video/') === 0;
-                    const thumb = document.createElement('div');
-                    thumb.className = 'gallery-thumb';
-                    thumb.innerHTML = isVideo
-                        ? '<video src="' + url + '" controls muted preload="metadata" style="width:100%;height:100%;object-fit:cover;"></video>'
-                        : '<img src="' + url + '" alt="">';
-                    preview.appendChild(thumb);
-
-                    const row = document.createElement('div');
-                    row.className = 'banner-meta-row';
-                    row.innerHTML =
-                        '<div class="form-group"><label>' + (isVideo ? 'Still image for the video (recommended)' : 'Mobile image (optional)') + '</label>' +
-                        '<input type="file" name="mobile_images[' + index + ']" accept=".png,.jpg,.jpeg,image/png,image/jpeg"></div>';
-                    meta.appendChild(row);
-                });
+                const file = input.files && input.files[0];
+                showPreview(file, preview);
+                if (mobileLabel) {
+                    const isVideo = file && file.type.indexOf('video/') === 0;
+                    mobileLabel.innerHTML = (isVideo ? 'Still image for the video (shown on phones and while it loads)' : 'Mobile image') + ' <span class="banner-variant__req">(optional)</span>';
+                }
             });
         }
+        if (mobileInput) {
+            mobileInput.addEventListener('change', function () { showPreview(mobileInput.files && mobileInput.files[0], mobilePreview); });
+        }
+        form.querySelectorAll('input[type="file"][data-preview-into]').forEach(function (el) {
+            el.addEventListener('change', function () { showPreview(el.files && el.files[0], form.querySelector(el.getAttribute('data-preview-into'))); });
+        });
 
         if (window.FormValidator) {
             FormValidator.init(form, {

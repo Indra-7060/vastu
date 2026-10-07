@@ -22,7 +22,10 @@
 @endphp
 <div class="for-blog blog-big position-relative">
   <div class="thumb overflow-hidden">
-    <img src="{{ $featuredImage }}" alt="{{ $featuredPost->title }}" class="img-fluid w-100">
+    <picture>
+      @if($bannerImg && $bannerImg->mobile_image)<source media="(max-width: 767px)" srcset="{{ asset('storage/'.$bannerImg->mobile_image) }}">@endif
+      <img src="{{ $featuredImage }}" alt="{{ $featuredPost->title }}" class="img-fluid w-100">
+    </picture>
   </div>
   <div class="details position-absolute w-100 h-100 top-0 start-0 p60">
     <div class="info">

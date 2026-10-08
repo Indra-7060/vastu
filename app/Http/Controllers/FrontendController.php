@@ -59,11 +59,18 @@ class FrontendController extends Controller
         // Photo strip above the consultation banner: every active photo from Admin → Gallery.
         $galleryStrip = collect(\App\Support\GalleryCategories::all())
             ->flatMap(fn ($meta, $slug) => \App\Support\SiteBanners::all($meta['section'])
-                ->map(fn ($banner) => [
-                    'image' => ($m = \App\Support\SiteBanners::media($banner)) ? \App\Support\SiteBanners::url($m->image) : null,
-                    'alt' => $banner->title ?: $meta['label'],
-                    'url' => route('gallery', $slug),
-                ]))
+                ->map(function ($banner) use ($meta, $slug) {
+                    $m = \App\Support\SiteBanners::media($banner);
+                    // the photo's own shape, so each card shows the whole photo (no heads cut off)
+                    $size = $m && ! str_starts_with((string) $m->image, 'http') ? @getimagesize(public_path('storage/'.ltrim($m->image, '/'))) : null;
+                    return [
+                        'image' => $m ? \App\Support\SiteBanners::url($m->image) : null,
+                        'alt' => $banner->title ?: $meta['label'],
+                        'url' => route('gallery', $slug),
+                        'w' => $size[0] ?? 1,
+                        'h' => $size[1] ?? 1,
+                    ];
+                }))
             ->filter(fn ($photo) => $photo['image'])
             ->values();
 

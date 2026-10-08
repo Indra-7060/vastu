@@ -80,7 +80,7 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=216">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=217">
   <title>{{ $pageTitle }}</title>
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
@@ -384,7 +384,7 @@
               @foreach($galleryStrip as $photo)
                 <div class="vt-carousel__slide">
                   <a class="vt-card vt-card--photo" href="{{ $photo['url'] }}" aria-label="{{ $photo['alt'] }} — open gallery">
-                    <span class="vt-card__img"><img src="{{ $photo['image'] }}" alt="{{ $photo['alt'] }}" loading="lazy" decoding="async" width="400" height="400"></span>
+                    <span class="vt-card__img" style="aspect-ratio: {{ $photo['w'] }} / {{ $photo['h'] }}"><img src="{{ $photo['image'] }}" alt="{{ $photo['alt'] }}" loading="lazy" decoding="async" width="{{ $photo['w'] }}" height="{{ $photo['h'] }}"></span>
                   </a>
                 </div>
               @endforeach

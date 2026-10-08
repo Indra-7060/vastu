@@ -4321,3 +4321,10 @@ body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48p
 .vt-hdr.vt-hdr--overlay.is-solid::before, .vt-hdr.vt-hdr--overlay:hover::before, .vt-hdr.vt-hdr--overlay.is-mega-open::before { opacity: 0; }
 @media (max-width: 767px) { .vt-hdr.vt-hdr--overlay::before { height: calc(var(--vt-hdr-h) + 80px); } }
 .vt-hdr.vt-hdr--overlay:not(.is-solid):not(:hover):not(.is-mega-open) { box-shadow: none; }
+/* Our Clients strip: every card the same height, width follows the photo, so no photo is ever cropped */
+.vt-home .vt-photostrip .vt-carousel__slide { flex: 0 0 auto; padding: 0 10px 0 2px; }
+.vt-home .vt-photostrip .vt-card--photo { width: auto; }
+.vt-home .vt-photostrip .vt-card--photo .vt-card__img { height: 300px; width: auto; }
+.vt-home .vt-photostrip .vt-card--photo .vt-card__img img { object-fit: contain; }
+@media (max-width: 991px) { .vt-home .vt-photostrip .vt-card--photo .vt-card__img { height: 260px; } }
+@media (max-width: 767px) { .vt-home .vt-photostrip .vt-card--photo .vt-card__img { height: 220px; } .vt-home .vt-photostrip .vt-carousel__slide { flex-basis: auto; } }

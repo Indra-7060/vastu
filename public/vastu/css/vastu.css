@@ -4306,3 +4306,6 @@ body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48p
 .mmx-social a { display: inline-flex; line-height: 0; transition: transform .6s cubic-bezier(.22, .61, .36, 1), filter .6s ease; }
 .mmx-social a:hover, .mmx-social a:focus-visible { transform: translateY(-2px) scale(1.06); filter: brightness(1.05); }
 .mmx-social .vt-bicon { width: 30px; height: 30px; display: block; }
+/* Phones: a hero with a text slide is tall enough for its heading and buttons */
+@media (max-width: 767px) { .vt-hero.vt-hero--below-header.vt-hero--has-text { min-height: 520px; } }
+.vt-hero.vt-hero--below-header { width: 100%; max-width: 100%; }

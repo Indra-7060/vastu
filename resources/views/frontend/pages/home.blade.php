@@ -9,8 +9,8 @@
   $heroSlides = $B::all('home_hero');
   // Hero slides are pictures only (text, logo and button are designed into the images):
   // the header sits solid above them instead of over them.
+  // The header is transparent over the hero at the top of the page and turns white on scroll (desktop and mobile).
   $heroDesigned = $heroSlides->isNotEmpty();
-  if ($heroDesigned) { $vtHeaderOverlay = false; }
   // Hero shape = the most common shape of the slide PICTURES (desktop images on desktop, mobile images on
   // phones). Videos are ignored (they are trimmed to fit). A picture of another shape is shown whole (no crop).
   $sizeOf = function (?string $path) {
@@ -80,7 +80,7 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=212">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=214">
   <title>{{ $pageTitle }}</title>
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
@@ -101,7 +101,7 @@
     <main class="vt-home body_content">
       {{-- Hero slideshow (Sections & Images → Home — Hero; one banner per slide) --}}
       @if($heroSlides->isNotEmpty())
-      <section class="vt-hero{{ $heroSlides->count() > 1 ? ' vt-hero--slideshow' : '' }}{{ $heroDesigned ? ' vt-hero--below-header' : '' }}" style="--hero-ar-d: {{ $heroAspectD }}; --hero-ar-m: {{ $heroAspectM }};" aria-roledescription="carousel" aria-label="Featured" data-vt-hero tabindex="-1">
+      <section class="vt-hero{{ $heroSlides->count() > 1 ? ' vt-hero--slideshow' : '' }}{{ $heroDesigned ? ' vt-hero--below-header' : '' }}{{ $heroSlides->contains(fn ($s) => $s->show_text) ? ' vt-hero--has-text' : '' }}" style="--hero-ar-d: {{ $heroAspectD }}; --hero-ar-m: {{ $heroAspectM }};" aria-roledescription="carousel" aria-label="Featured" data-vt-hero tabindex="-1">
         <h1 class="vt-sr-only" id="vt-hero-title">Vastutathastu — Sacred Living</h1>
         <div class="vt-hero__viewport">
           <div class="vt-hero__track" data-vt-hero-track>

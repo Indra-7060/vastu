@@ -14,11 +14,9 @@
         </div>
         <div class="form-group">
             <label>Rating *</label>
-            <select name="rating" required>
-                @foreach([5, 4, 3, 2, 1] as $n)
-                    <option value="{{ $n }}" @selected((int) old('rating', $review->rating) === $n)>{{ str_repeat('★', $n) }} ({{ $n }})</option>
-                @endforeach
-            </select>
+            <input type="number" name="rating" min="1" max="5" step="0.1" value="{{ old('rating', rtrim(rtrim(number_format((float) $review->rating, 1), '0'), '.')) }}" required>
+            <p class="hint">From 1 to 5, decimals allowed — e.g. 4.5 shows four and a half stars.</p>
+            @error('rating')<p class="field-error">{{ $message }}</p>@enderror
         </div>
         <div class="form-group span-2">
             <label>Review text *</label>

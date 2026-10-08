@@ -3017,3 +3017,6 @@ body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-
 .review-photo { display: flex; flex-direction: column; gap: 6px; margin: 0; }
 .review-photo img { width: 110px; height: 110px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line, #e5e7eb); }
 .review-avatar-preview img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; }
+.review-stars { position: relative; display: inline-block; letter-spacing: 1px; color: #d1d5db; }
+.review-stars::before { content: "★★★★★"; }
+.review-stars::after { content: "★★★★★"; position: absolute; left: 0; top: 0; width: var(--pct, 100%); overflow: hidden; white-space: nowrap; color: #e2a400; }

@@ -14,7 +14,7 @@ class CustomerReview extends Model
         'review_date' => 'date',
         'show_google' => 'boolean',
         'is_active' => 'boolean',
-        'rating' => 'integer',
+        'rating' => 'float',
     ];
 
     public function scopeActive($query)

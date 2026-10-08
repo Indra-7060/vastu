@@ -4361,3 +4361,10 @@ html.vt-rmodal-open { overflow: hidden; }
 .vt-rmodal__photo { display: block; border-radius: 10px; overflow: hidden; background: #f3eee6; }
 .vt-rmodal__photo img { display: block; width: 100%; height: 100%; aspect-ratio: 1 / 1; object-fit: cover; transition: transform .5s ease; }
 .vt-rmodal__photo:hover img { transform: scale(1.04); }
+
+/* Star ratings filled to the exact value (e.g. 4.5): gold stars clipped over grey ones */
+.vt-stars { position: relative; display: inline-block; font-size: inherit; line-height: 1; letter-spacing: 2px; color: #d9d2c5; vertical-align: middle; }
+.vt-stars::before { content: "★★★★★"; }
+.vt-stars::after { content: "★★★★★"; position: absolute; left: 0; top: 0; width: var(--pct, 100%); overflow: hidden; white-space: nowrap; color: #e2a400; }
+.vt-stars__num { margin-left: 6px; font: 600 13px/1 var(--vt-sans); color: #8b7d6c; vertical-align: middle; letter-spacing: 0; }
+.vt-rmodal__stars .vt-stars__num { font-size: 15px; }

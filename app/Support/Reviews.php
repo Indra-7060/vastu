@@ -10,7 +10,7 @@ use Throwable;
  * Customer reviews for the home page, written by the admin in Admin → Home Content → Customer Reviews.
  * The rating badge (rating, count, "View all reviews" link) comes from Admin → Settings → Site Details → Reviews badge.
  *
- * Each review: name, photo (URL|null), rating 1–5, text, date (Carbon|null), images (URLs), google (bool).
+ * Each review: name, photo (URL|null), rating 1–5 (one decimal, e.g. 4.5), text, date (Carbon|null), images (URLs), google (bool).
  */
 class Reviews
 {
@@ -42,7 +42,7 @@ class Reviews
                     'id' => $r->id,
                     'name' => $r->name,
                     'photo' => $r->photo_url,
-                    'rating' => max(1, min(5, (int) $r->rating)),
+                    'rating' => round(max(1, min(5, (float) $r->rating)), 1),
                     'text' => $r->text,
                     'date' => $r->review_date,
                     'images' => $r->image_urls,

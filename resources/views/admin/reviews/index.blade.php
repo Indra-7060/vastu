@@ -63,7 +63,7 @@
                             <span><strong>{{ $review->name }}</strong></span>
                         </div>
                     </td>
-                    <td class="nowrap" style="color:#e2a400;">{{ str_repeat('★', $review->rating) }}<span style="color:#d1d5db;">{{ str_repeat('★', 5 - $review->rating) }}</span></td>
+                    <td class="nowrap"><span class="review-stars" style="--pct: {{ $review->rating / 5 * 100 }}%"></span> <strong>{{ rtrim(rtrim(number_format($review->rating, 1), '0'), '.') }}</strong></td>
                     <td><small>{{ \Illuminate\Support\Str::limit($review->text, 90) }}</small></td>
                     <td>
                         @if($review->image_urls)

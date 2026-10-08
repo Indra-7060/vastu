@@ -82,7 +82,7 @@ class CustomerReviewController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
-            'rating' => ['required', 'integer', 'min:1', 'max:5'],
+            'rating' => ['required', 'numeric', 'min:1', 'max:5'],
             'text' => ['required', 'string', 'max:2000'],
             'review_date' => ['nullable', 'date'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
@@ -97,7 +97,7 @@ class CustomerReviewController extends Controller
 
         $review->fill([
             'name' => $data['name'],
-            'rating' => (int) $data['rating'],
+            'rating' => round((float) $data['rating'], 1),
             'text' => $data['text'],
             'review_date' => $data['review_date'] ?? null,
             'sort_order' => (int) ($data['sort_order'] ?? 0),

@@ -80,7 +80,7 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=218">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=219">
   <title>{{ $pageTitle }}</title>
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
@@ -220,7 +220,9 @@
         $spotCta = $spotlightBanner?->button_text ?: 'Shop Shree Yantras';
         $reviewSummary = \App\Support\Reviews::summary();
         $reviews = \App\Support\Reviews::all();
-        $stars = fn (int $n) => str_repeat('★', $n).str_repeat('☆', 5 - $n);
+        // stars filled to the exact rating (4.5 = four and a half gold stars)
+        $fmtRating = fn ($n) => rtrim(rtrim(number_format((float) $n, 1), '0'), '.');
+        $stars = fn ($n) => '<span class="vt-stars" style="--pct: '.round((float) $n / 5 * 100, 1).'%" aria-hidden="true"></span>';
       @endphp
       <section class="vt-yantra" aria-labelledby="vt-yantra-title">
         <div class="vt-yantra__inner">
@@ -241,7 +243,7 @@
                   <img src="{{ asset('vastu/images/reviews/google.svg') }}" width="16" height="16" alt="Google">
                   <strong>{{ rtrim(rtrim(number_format((float) $reviewSummary['rating'], 1), '0'), '.') }}/5</strong>
                 </p>
-                <p class="vt-yantra__stars" aria-hidden="true">★★★★★</p>
+                <p class="vt-yantra__stars" aria-hidden="true">{!! $stars($reviewSummary['rating']) !!}</p>
                 <p class="vt-yantra__count">Based on {{ (int) $reviewSummary['count'] }}+ reviews</p>
                 <a class="vt-yantra__all" href="{{ $reviewSummary['url'] }}" target="_blank" rel="noopener">View all reviews <span aria-hidden="true">→</span></a>
               </div>
@@ -272,14 +274,14 @@
                     </span>
                     @if($review['google'])<img class="vt-review__g" src="{{ asset('vastu/images/reviews/google-small.svg') }}" width="14" height="14" alt="Google review">@endif
                   </div>
-                  <p class="vt-review__stars" aria-label="{{ $review['rating'] }} out of 5 stars">{{ $stars($review['rating']) }}</p>
+                  <p class="vt-review__stars" aria-label="{{ $fmtRating($review['rating']) }} out of 5 stars">{!! $stars($review['rating']) !!}<span class="vt-stars__num">{{ $fmtRating($review['rating']) }}</span></p>
                   <p class="vt-review__text">"{{ \Illuminate\Support\Str::limit($review['text'], 160) }}"</p>
                   <div class="vt-review__foot">
                     @if($review['date'])<p class="vt-review__date">{{ $review['date']->format('j M Y') }}</p>@endif
                     @if($review['images'])<span class="vt-review__pics"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>{{ count($review['images']) }}</span>@endif
                   </div>
                   <template data-vt-review-full>
-                    <p class="vt-rmodal__stars" aria-label="{{ $review['rating'] }} out of 5 stars">{{ $stars($review['rating']) }}</p>
+                    <p class="vt-rmodal__stars" aria-label="{{ $fmtRating($review['rating']) }} out of 5 stars">{!! $stars($review['rating']) !!}<span class="vt-stars__num">{{ $fmtRating($review['rating']) }}</span></p>
                     <p class="vt-rmodal__text">"{{ $review['text'] }}"</p>
                     @if($review['date'])<p class="vt-rmodal__date">{{ $review['date']->format('j M Y') }}</p>@endif
                     @if($review['images'])

@@ -277,13 +277,13 @@
                   <p class="vt-review__stars" aria-label="{{ $fmtRating($review['rating']) }} out of 5 stars">{!! $stars($review['rating']) !!}<span class="vt-stars__num">{{ $fmtRating($review['rating']) }}</span></p>
                   <p class="vt-review__text">"{{ \Illuminate\Support\Str::limit($review['text'], 160) }}"</p>
                   <div class="vt-review__foot">
-                    @if($review['date'])<p class="vt-review__date">{{ $review['date']->format('j M Y') }}</p>@endif
+                    @if($review['date_label'])<p class="vt-review__date">{{ $review['date_label'] }}</p>@endif
                     @if($review['images'])<span class="vt-review__pics"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>{{ count($review['images']) }}</span>@endif
                   </div>
                   <template data-vt-review-full>
                     <p class="vt-rmodal__stars" aria-label="{{ $fmtRating($review['rating']) }} out of 5 stars">{!! $stars($review['rating']) !!}<span class="vt-stars__num">{{ $fmtRating($review['rating']) }}</span></p>
                     <p class="vt-rmodal__text">"{{ $review['text'] }}"</p>
-                    @if($review['date'])<p class="vt-rmodal__date">{{ $review['date']->format('j M Y') }}</p>@endif
+                    @if($review['date_label'])<p class="vt-rmodal__date">{{ $review['date_label'] }}</p>@endif
                     @if($review['images'])
                       <div class="vt-rmodal__photos">
                         @foreach($review['images'] as $img)

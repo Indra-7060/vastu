@@ -84,7 +84,10 @@ class CustomerReviewController extends Controller
             'name' => ['required', 'string', 'max:120'],
             'rating' => ['required', 'numeric', 'min:1', 'max:5'],
             'text' => ['required', 'string', 'max:2000'],
-            'review_date' => ['nullable', 'date'],
+            'review_date' => ['nullable', 'date', 'before_or_equal:today'],
+            'date_style' => ['nullable', 'in:date,ago'],
+            'ago_amount' => ['nullable', 'integer', 'min:1', 'max:200'],
+            'ago_unit' => ['nullable', 'in:days,weeks,months,years'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
             'photo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
             'images' => ['nullable', 'array', 'max:10'],
@@ -99,7 +102,8 @@ class CustomerReviewController extends Controller
             'name' => $data['name'],
             'rating' => round((float) $data['rating'], 1),
             'text' => $data['text'],
-            'review_date' => $data['review_date'] ?? null,
+            'review_date' => $this->reviewDate($data),
+            'date_style' => ($data['date_style'] ?? 'date') === 'ago' ? 'ago' : 'date',
             'sort_order' => (int) ($data['sort_order'] ?? 0),
             'is_active' => $request->boolean('is_active'),
             'show_google' => $request->boolean('show_google'),
@@ -130,6 +134,16 @@ class CustomerReviewController extends Controller
         $review->images = array_slice($images, 0, 10) ?: null;
 
         $review->save();
+    }
+
+    /** "Time ago" entered as e.g. 6 months → the date 6 months back; otherwise the picked date. */
+    private function reviewDate(array $data): ?string
+    {
+        if (($data['date_style'] ?? 'date') === 'ago' && ! empty($data['ago_amount']) && ! empty($data['ago_unit'])) {
+            return now()->sub($data['ago_unit'], (int) $data['ago_amount'])->toDateString();
+        }
+
+        return $data['review_date'] ?? null;
     }
 
     private function deleteFile(?string $path): void

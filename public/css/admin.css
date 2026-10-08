@@ -3020,3 +3020,8 @@ body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-
 .review-stars { position: relative; display: inline-block; letter-spacing: 1px; color: #d1d5db; }
 .review-stars::before { content: "★★★★★"; }
 .review-stars::after { content: "★★★★★"; position: absolute; left: 0; top: 0; width: var(--pct, 100%); overflow: hidden; white-space: nowrap; color: #e2a400; }
+.review-date-style { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 2px 0 10px; }
+.review-date-style__opt { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-weight: 600; cursor: pointer; }
+.review-date-style__opt small { font-weight: 400; color: var(--muted, #6b7280); }
+.review-date-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.review-date-row[hidden] { display: none; }

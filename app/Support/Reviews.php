@@ -45,6 +45,7 @@ class Reviews
                     'rating' => round(max(1, min(5, (float) $r->rating)), 1),
                     'text' => $r->text,
                     'date' => $r->review_date,
+                    'date_label' => $r->date_label,
                     'images' => $r->image_urls,
                     'google' => $r->show_google,
                 ])->values()->all();

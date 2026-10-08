@@ -75,7 +75,7 @@
                             <small>—</small>
                         @endif
                     </td>
-                    <td class="nowrap"><small>{{ optional($review->review_date)->format('j M Y') ?: '—' }}</small></td>
+                    <td class="nowrap"><small>{{ $review->date_label ?: '—' }}</small></td>
                     <td>
                         <form method="POST" action="{{ route('admin.reviews.toggle', $review) }}">
                             @csrf

@@ -24,9 +24,33 @@
             @error('text')<p class="field-error">{{ $message }}</p>@enderror
             <p class="hint">The card shows the first few lines; the full text appears when a visitor clicks the review.</p>
         </div>
-        <div class="form-group">
+        <div class="form-group span-2">
+            @php
+                $dateStyle = old('date_style', $review->date_style ?: 'date');
+                $agoGuess = ['amount' => '', 'unit' => 'months'];
+                if ($review->review_date) {
+                    $days = $review->review_date->diffInDays(now());
+                    $agoGuess = $days >= 365 ? ['amount' => intdiv($days, 365), 'unit' => 'years'] : ($days >= 30 ? ['amount' => intdiv($days, 30), 'unit' => 'months'] : ($days >= 7 ? ['amount' => intdiv($days, 7), 'unit' => 'weeks'] : ['amount' => max(1, $days), 'unit' => 'days']));
+                }
+            @endphp
             <label>Review date</label>
-            <input type="date" name="review_date" value="{{ old('review_date', optional($review->review_date)->format('Y-m-d')) }}">
+            <div class="review-date-style">
+                <label class="review-date-style__opt"><input type="radio" name="date_style" value="date" @checked($dateStyle !== 'ago')> Exact date <small>e.g. 12 Aug 2025</small></label>
+                <label class="review-date-style__opt"><input type="radio" name="date_style" value="ago" @checked($dateStyle === 'ago')> Time ago, like Google <small>e.g. 6 months ago</small></label>
+            </div>
+            <div class="review-date-row" data-date-pane="date" @if($dateStyle === 'ago') hidden @endif>
+                <input type="date" name="review_date" max="{{ now()->format('Y-m-d') }}" value="{{ old('review_date', optional($review->review_date)->format('Y-m-d')) }}">
+            </div>
+            <div class="review-date-row" data-date-pane="ago" @if($dateStyle !== 'ago') hidden @endif>
+                <input type="number" name="ago_amount" min="1" max="200" value="{{ old('ago_amount', $agoGuess['amount']) }}" placeholder="6" style="max-width:110px;">
+                <select name="ago_unit" style="max-width:160px;">
+                    @foreach(['days' => 'days ago', 'weeks' => 'weeks ago', 'months' => 'months ago', 'years' => 'years ago'] as $u => $l)
+                        <option value="{{ $u }}" @selected(old('ago_unit', $agoGuess['unit']) === $u)>{{ $l }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <p class="hint">“Time ago” is copied from Google (e.g. 6 months ago). The website keeps it up to date — next month it shows “7 months ago”.</p>
+            @error('review_date')<p class="field-error">{{ $message }}</p>@enderror
         </div>
         <div class="form-group">
             <label>Display order</label>
@@ -87,3 +111,12 @@
     <button type="submit" class="btn btn-primary">Save review</button>
     <a href="{{ route('admin.reviews.index') }}" class="btn btn-light">Cancel</a>
 </div>
+
+<script>
+    // Review date: switch between the date picker and the "time ago" fields
+    document.querySelectorAll('input[name="date_style"]').forEach(function (r) {
+        r.addEventListener('change', function () {
+            document.querySelectorAll('[data-date-pane]').forEach(function (p) { p.hidden = p.getAttribute('data-date-pane') !== r.value; });
+        });
+    });
+</script>

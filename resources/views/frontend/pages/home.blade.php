@@ -80,7 +80,7 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=217">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=218">
   <title>{{ $pageTitle }}</title>
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
@@ -219,7 +219,7 @@
         $spotText = $spotlightBanner?->description ?: 'Discover the most sacred and powerful yantra. Shree Yantra embodies wealth, prosperity, and harmony. Artfully crafted in your choice of pure Brass, CNC-precision metals, or natural Sphatik (crystal). A sacred center for your home, sanctuary, or professional space.';
         $spotCta = $spotlightBanner?->button_text ?: 'Shop Shree Yantras';
         $reviewSummary = \App\Support\Reviews::summary();
-        $reviews = \App\Support\Reviews::top(3);
+        $reviews = \App\Support\Reviews::all();
         $stars = fn (int $n) => str_repeat('★', $n).str_repeat('☆', 5 - $n);
       @endphp
       <section class="vt-yantra" aria-labelledby="vt-yantra-title">
@@ -248,25 +248,62 @@
             </div>
 
             @if($reviews)
-            <div class="vt-yantra__reviews">
-              <p class="vt-yantra__kicker">What our customers say</p>
-              <div class="vt-yantra__cards">
+            {{-- Reviews written in Admin → Home Content → Customer Reviews: 3 at a time, arrows / swipe for more;
+                 clicking a review opens it with the customer's product photos --}}
+            <div class="vt-yantra__reviews" data-vt-reviews>
+              <div class="vt-yantra__reviews-head">
+                <p class="vt-yantra__kicker">What our customers say</p>
+                @if(count($reviews) > 3)
+                <div class="vt-reviews__nav">
+                  <button type="button" class="vt-reviews__arrow" data-vt-reviews-prev aria-label="Previous reviews"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+                  <button type="button" class="vt-reviews__arrow" data-vt-reviews-next aria-label="Next reviews"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+                </div>
+                @endif
+              </div>
+              <div class="vt-yantra__cards vt-reviews__track" data-vt-reviews-track>
                 @foreach($reviews as $review)
-                <article class="vt-review">
+                <article class="vt-review" role="button" tabindex="0" data-vt-review="{{ $loop->index }}" aria-label="Read the review by {{ $review['name'] }}{{ $review['images'] ? ' and see their photos' : '' }}">
                   <div class="vt-review__top">
                     <span class="vt-review__who">
                       <span class="vt-review__avatar" aria-hidden="true">
-                        @if($review['photo'])<img src="{{ $review['photo'] }}" alt="" width="28" height="28" loading="lazy" referrerpolicy="no-referrer">@else{{ mb_strtoupper(mb_substr($review['name'], 0, 1)) }}@endif
+                        @if($review['photo'])<img src="{{ $review['photo'] }}" alt="" width="28" height="28" loading="lazy">@else{{ mb_strtoupper(mb_substr($review['name'], 0, 1)) }}@endif
                       </span>
                       <span class="vt-review__name notranslate" translate="no">{{ $review['name'] }}</span>
                     </span>
-                    <img class="vt-review__g" src="{{ asset('vastu/images/reviews/google-small.svg') }}" width="14" height="14" alt="Google review">
+                    @if($review['google'])<img class="vt-review__g" src="{{ asset('vastu/images/reviews/google-small.svg') }}" width="14" height="14" alt="Google review">@endif
                   </div>
                   <p class="vt-review__stars" aria-label="{{ $review['rating'] }} out of 5 stars">{{ $stars($review['rating']) }}</p>
                   <p class="vt-review__text">"{{ \Illuminate\Support\Str::limit($review['text'], 160) }}"</p>
-                  @if($review['date'])<p class="vt-review__date">{{ $review['date']->format('j M Y') }}</p>@endif
+                  <div class="vt-review__foot">
+                    @if($review['date'])<p class="vt-review__date">{{ $review['date']->format('j M Y') }}</p>@endif
+                    @if($review['images'])<span class="vt-review__pics"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>{{ count($review['images']) }}</span>@endif
+                  </div>
+                  <template data-vt-review-full>
+                    <p class="vt-rmodal__stars" aria-label="{{ $review['rating'] }} out of 5 stars">{{ $stars($review['rating']) }}</p>
+                    <p class="vt-rmodal__text">"{{ $review['text'] }}"</p>
+                    @if($review['date'])<p class="vt-rmodal__date">{{ $review['date']->format('j M Y') }}</p>@endif
+                    @if($review['images'])
+                      <div class="vt-rmodal__photos">
+                        @foreach($review['images'] as $img)
+                          <a href="{{ $img }}" target="_blank" rel="noopener" class="vt-rmodal__photo"><img src="{{ $img }}" alt="Photo shared by {{ $review['name'] }}" loading="lazy"></a>
+                        @endforeach
+                      </div>
+                    @endif
+                  </template>
                 </article>
                 @endforeach
+              </div>
+            </div>
+
+            <div class="vt-rmodal" data-vt-rmodal hidden>
+              <div class="vt-rmodal__backdrop" data-vt-rmodal-close></div>
+              <div class="vt-rmodal__box" role="dialog" aria-modal="true" aria-labelledby="vt-rmodal-name">
+                <button type="button" class="vt-rmodal__close" data-vt-rmodal-close aria-label="Close">&times;</button>
+                <div class="vt-rmodal__head">
+                  <span class="vt-review__avatar" data-vt-rmodal-avatar aria-hidden="true"></span>
+                  <strong id="vt-rmodal-name" class="notranslate" translate="no" data-vt-rmodal-name></strong>
+                </div>
+                <div data-vt-rmodal-body></div>
               </div>
             </div>
             @endif
@@ -414,6 +451,43 @@
   <script src="{{ asset('frontend/js/site-drawers.js') }}?v=vastu-6"></script>
   <script src="{{ asset('frontend/js/frontend-search.js') }}?v=live-3"></script>
   @include('frontend.partials.cart-script')
+  @if(!empty($reviews))
+  <script>
+    // Customer reviews: arrows slide the row; a click opens the review with its photos.
+    (function () {
+      var box = document.querySelector('[data-vt-reviews]'); if (!box) return;
+      var track = box.querySelector('[data-vt-reviews-track]');
+      var prev = box.querySelector('[data-vt-reviews-prev]'), next = box.querySelector('[data-vt-reviews-next]');
+      function step() { var c = track.querySelector('.vt-review'); return c ? c.getBoundingClientRect().width + 12 : track.clientWidth; }
+      function arrows() {
+        if (!prev) return;
+        prev.disabled = track.scrollLeft < 4;
+        next.disabled = track.scrollLeft + track.clientWidth > track.scrollWidth - 4;
+      }
+      if (prev) {
+        prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+        next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+        track.addEventListener('scroll', arrows, { passive: true }); window.addEventListener('resize', arrows); arrows();
+      }
+      var modal = document.querySelector('[data-vt-rmodal]'), last = null;
+      function open(card) {
+        last = card;
+        modal.querySelector('[data-vt-rmodal-name]').textContent = card.querySelector('.vt-review__name').textContent;
+        modal.querySelector('[data-vt-rmodal-avatar]').innerHTML = card.querySelector('.vt-review__avatar').innerHTML;
+        modal.querySelector('[data-vt-rmodal-body]').innerHTML = card.querySelector('[data-vt-review-full]').innerHTML;
+        modal.hidden = false; document.documentElement.classList.add('vt-rmodal-open');
+        modal.querySelector('.vt-rmodal__close').focus();
+      }
+      function close() { modal.hidden = true; document.documentElement.classList.remove('vt-rmodal-open'); if (last) last.focus(); }
+      track.querySelectorAll('[data-vt-review]').forEach(function (card) {
+        card.addEventListener('click', function () { open(card); });
+        card.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(card); } });
+      });
+      modal.querySelectorAll('[data-vt-rmodal-close]').forEach(function (el) { el.addEventListener('click', close); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
+    })();
+  </script>
+  @endif
 </body>
 
 </html>

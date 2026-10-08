@@ -38,6 +38,15 @@ class SiteSettings
                     'social_facebook' => ['label' => 'Facebook', 'type' => 'url', 'default' => 'https://www.facebook.com/VastutathastuMakranndofficial/'],
                 ],
             ],
+            'reviews' => [
+                'label' => 'Reviews badge',
+                'hint' => 'The rating box beside the customer reviews on the home page (Admin → Home Content → Customer Reviews).',
+                'fields' => [
+                    'reviews_rating' => ['label' => 'Rating out of 5', 'type' => 'text', 'default' => '4.9', 'hint' => 'e.g. 4.9'],
+                    'reviews_count' => ['label' => 'Number of reviews', 'type' => 'text', 'default' => '120', 'hint' => 'Shown as “Based on 120+ reviews”.'],
+                    'reviews_url' => ['label' => '“View all reviews” link', 'type' => 'url', 'default' => 'https://www.google.com/search?q=Vastutathastu+Pune+reviews', 'hint' => 'e.g. your Google Business reviews page. Leave empty to hide the link.'],
+                ],
+            ],
             'footer' => [
                 'label' => 'Footer text',
                 'hint' => 'Text in the footer on every page.',

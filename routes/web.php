@@ -211,6 +211,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('consultations/{consultation}', [\App\Http\Controllers\Admin\ConsultationController::class, 'update'])->name('consultations.update');
         Route::patch('consultations/{consultation}/status', [\App\Http\Controllers\Admin\ConsultationController::class, 'updateStatus'])->name('consultations.status');
         Route::delete('consultations/{consultation}', [\App\Http\Controllers\Admin\ConsultationController::class, 'destroy'])->name('consultations.destroy');
+        Route::post('reviews/summary', [\App\Http\Controllers\Admin\CustomerReviewController::class, 'summary'])->name('reviews.summary');
+        Route::resource('reviews', \App\Http\Controllers\Admin\CustomerReviewController::class)->except(['show']);
+        Route::patch('reviews/{review}/toggle', [\App\Http\Controllers\Admin\CustomerReviewController::class, 'toggleStatus'])->name('reviews.toggle');
         Route::resource('stores', \App\Http\Controllers\Admin\StoreController::class)->except(['show']);
         Route::patch('stores/{store}/toggle', [\App\Http\Controllers\Admin\StoreController::class, 'toggleStatus'])->name('stores.toggle');
 

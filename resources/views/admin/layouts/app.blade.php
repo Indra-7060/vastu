@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v=vastu-pro-31">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v=vastu-pro-32">
     <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
     <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vastu/images/favicon-32.png') }}?v=vt2">
@@ -61,13 +61,14 @@
                     || \App\Support\BannerSections::isGallery(request('section'))
                     || ($navBanner instanceof \App\Models\Banner && \App\Support\BannerSections::isGallery($navBanner->section)));
             @endphp
-            <div class="nav-group {{ request()->routeIs('admin.banners.*') && ! $navGallery ? 'open has-active' : '' }}">
+            <div class="nav-group {{ (request()->routeIs('admin.banners.*') && ! $navGallery) || request()->routeIs('admin.reviews.*') ? 'open has-active' : '' }}">
                 <button type="button" class="nav-toggle" onclick="this.parentElement.classList.toggle('open')">
                     <span><span class="nav-ico">@include('admin.partials.icon', ['name' => 'home'])</span> Home Content</span>
                     <span class="chevron">@include('admin.partials.icon', ['name' => 'chevron', 'size' => 16])</span>
                 </button>
                 <div class="nav-sub">
                     <a href="{{ route('admin.banners.index') }}" class="{{ request()->routeIs('admin.banners.*') && ! $navGallery ? 'active' : '' }}">Sections & Images</a>
+                    <a href="{{ route('admin.reviews.index') }}" class="{{ request()->routeIs('admin.reviews.*') ? 'active' : '' }}">Customer Reviews</a>
                 </div>
             </div>
 

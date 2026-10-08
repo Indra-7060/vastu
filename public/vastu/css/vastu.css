@@ -4309,3 +4309,15 @@ body .vt-services .vt-services__title { font-size: clamp(24px, 2.6vw + 11px, 48p
 /* Phones: a hero with a text slide is tall enough for its heading and buttons */
 @media (max-width: 767px) { .vt-hero.vt-hero--below-header.vt-hero--has-text { min-height: 520px; } }
 .vt-hero.vt-hero--below-header { width: 100%; max-width: 100%; }
+
+/* Transparent header: dark gradient at the very top that fades into the picture (like cofur.in);
+   it fades away when the header turns white on scroll / hover / open menu */
+.vt-hdr.vt-hdr--overlay::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; z-index: -1; pointer-events: none;
+  height: calc(var(--vt-hdr-h) + 130px);
+  background: linear-gradient(180deg, rgba(0, 0, 0, .62) 0%, rgba(0, 0, 0, .42) 35%, rgba(0, 0, 0, .18) 68%, rgba(0, 0, 0, 0) 100%);
+  opacity: 1; transition: opacity .35s ease;
+}
+.vt-hdr.vt-hdr--overlay.is-solid::before, .vt-hdr.vt-hdr--overlay:hover::before, .vt-hdr.vt-hdr--overlay.is-mega-open::before { opacity: 0; }
+@media (max-width: 767px) { .vt-hdr.vt-hdr--overlay::before { height: calc(var(--vt-hdr-h) + 80px); } }
+.vt-hdr.vt-hdr--overlay:not(.is-solid):not(:hover):not(.is-mega-open) { box-shadow: none; }

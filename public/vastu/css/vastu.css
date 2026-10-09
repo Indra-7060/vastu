@@ -4399,3 +4399,5 @@ html body .vt-footer .vt-ftr__contact .vt-ftr__cicon { width: 26px !important; h
 html body .vt-footer .vt-ftr__contact .vt-ftr__cicon { margin-top: 1px !important; }
 /* The handset icon's shape reads high next to the numbers: drop it a little more than the other icons. */
 html body .vt-footer .vt-ftr__contact.vt-ftr__phones .vt-ftr__cicon { margin-top: 3px !important; }
+/* "Discover Material Guide" button: 28px top/bottom, 12px left/right (client request). */
+html body.vt-home .vt-yantra__btn--ghost, html body .vt-home .vt-yantra__btn--ghost { padding: 28px 12px; }

@@ -80,7 +80,7 @@
   <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}?v=vastu-4">
   <link rel="stylesheet" href="{{ asset('frontend/css/custom.css') }}?v=vastu-3">
   <link rel="stylesheet" href="{{ asset('frontend/css/site-drawers.css') }}?v=vastu-2">
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=228">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=230">
   <title>{{ $pageTitle }}</title>
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
@@ -425,6 +425,25 @@
                   <a class="vt-card vt-card--photo" href="{{ $photo['url'] }}" aria-label="{{ $photo['alt'] }} — open gallery">
                     <span class="vt-card__img" style="aspect-ratio: {{ $photo['w'] }} / {{ $photo['h'] }}"><img src="{{ $photo['image'] }}" alt="{{ $photo['alt'] }}" loading="lazy" decoding="async" width="{{ $photo['w'] }}" height="{{ $photo['h'] }}"></span>
                   </a>
+                </div>
+              @endforeach
+            </div>
+          </div>
+        </section>
+      @endif
+      {{-- "Client Logos" strip: glides endlessly like "Our Clients" (logos from Admin → Gallery → Client Logos) --}}
+      @if(($clientLogos ?? collect())->count() > 1)
+        <section class="vt-products vt-photostrip vt-photostrip--logos" aria-labelledby="vt-logostrip-title">
+          <div class="vt-container">
+            <h2 class="vt-h3" id="vt-logostrip-title">Client Logos</h2>
+          </div>
+          <div class="vt-carousel" data-vt-carousel data-vt-marquee>
+            <div class="vt-carousel__track" data-vt-track>
+              @foreach($clientLogos as $logo)
+                <div class="vt-carousel__slide">
+                  <div class="vt-card vt-card--photo vt-card--logo">
+                    <span class="vt-card__img" style="aspect-ratio: {{ $logo['w'] }} / {{ $logo['h'] }}"><img src="{{ $logo['image'] }}" alt="{{ $logo['alt'] }}" title="{{ $logo['alt'] }}" loading="lazy" decoding="async" width="{{ $logo['w'] }}" height="{{ $logo['h'] }}"></span>
+                  </div>
                 </div>
               @endforeach
             </div>

@@ -74,7 +74,23 @@ class FrontendController extends Controller
             ->filter(fn ($photo) => $photo['image'])
             ->values();
 
-        return view('frontend.pages.home', compact('homeCategories', 'featuredProducts', 'journalPosts', 'galleryStrip'));
+        // "Client Logos" strip under "Our Clients": Admin → Gallery → Client Logos.
+        $clientLogos = \App\Support\SiteBanners::all('gallery_client_logos')
+            ->map(function ($banner) {
+                $m = \App\Support\SiteBanners::media($banner);
+                $size = $m && ! str_starts_with((string) $m->image, 'http') ? @getimagesize(public_path('storage/'.ltrim($m->image, '/'))) : null;
+
+                return [
+                    'image' => $m ? \App\Support\SiteBanners::url($m->image) : null,
+                    'alt' => $banner->title ?: 'Client logo',
+                    'w' => $size[0] ?? 1,
+                    'h' => $size[1] ?? 1,
+                ];
+            })
+            ->filter(fn ($logo) => $logo['image'])
+            ->values();
+
+        return view('frontend.pages.home', compact('homeCategories', 'featuredProducts', 'journalPosts', 'galleryStrip', 'clientLogos'));
     }
 
     /** Price bands offered in the listing filter: key => [label, min, max]. */

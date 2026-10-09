@@ -4387,3 +4387,13 @@ html body .vt-footer .vt-ftr__contact .vt-ftr__cicon { width: 26px !important; h
 .vt-footer .vt-ftr__phone { display: inline-flex; white-space: nowrap; }
 .vt-footer .vt-ftr__phone-sep { color: rgba(255, 255, 255, .6); }
 @media (min-width: 1200px) and (max-width: 1599px) { html body .vt-footer .vt-ftr .vt-ftr__phone-list { column-gap: 6px !important; } html body .vt-footer .vt-ftr .vt-ftr__address .vt-ftr__phone-sep { font-size: 15px !important; } }
+
+/* "Client Logos" strip (below "Our Clients"): same endless glide and cards, logos shown whole on white. */
+.vt-home .vt-photostrip--logos { background: #f7f5ee; }
+.vt-home .vt-photostrip--logos .vt-card--logo { cursor: default; }
+.vt-home .vt-photostrip--logos .vt-card--logo .vt-card__img { height: 170px; background: #fff; }
+.vt-home .vt-photostrip--logos .vt-card--logo .vt-card__img img { object-fit: contain; }
+@media (max-width: 991px) { .vt-home .vt-photostrip--logos .vt-card--logo .vt-card__img { height: 140px; } }
+@media (max-width: 767px) { .vt-home .vt-photostrip--logos .vt-card--logo .vt-card__img { height: 110px; } }
+/* Footer contact icons: centre each icon on the visible middle of the first text line (it sat ~2px high). */
+html body .vt-footer .vt-ftr__contact .vt-ftr__cicon { margin-top: 1px !important; }

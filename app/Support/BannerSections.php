@@ -112,6 +112,14 @@ class BannerSections
                 'media' => 'image',
                 'multi' => true,
             ],
+            'gallery_client_logos' => [
+                'label' => 'Gallery — Client Logos',
+                'page' => 'Home page ("Client Logos" strip above the footer)',
+                'hint' => 'Logos of companies and brands that are Vastutathastu clients (from the old website). They glide endlessly on the home page, below "Our Clients". Title = the client\'s name. One logo per entry; Display order sets the order. Any shape works; a logo on a white or transparent background looks best.',
+                'fields' => ['Title' => 'Client / company name', 'Media' => 'Logo (PNG or JPG, 300px+ recommended)'],
+                'media' => 'image',
+                'multi' => true,
+            ],
             'shop_banner' => [
                 'label' => 'New Arrivals Page Banner',
                 'page' => 'Shop / New Arrivals',

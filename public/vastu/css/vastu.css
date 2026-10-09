@@ -4397,3 +4397,5 @@ html body .vt-footer .vt-ftr__contact .vt-ftr__cicon { width: 26px !important; h
 @media (max-width: 767px) { .vt-home .vt-photostrip--logos .vt-card--logo .vt-card__img { height: 110px; } }
 /* Footer contact icons: centre each icon on the visible middle of the first text line (it sat ~2px high). */
 html body .vt-footer .vt-ftr__contact .vt-ftr__cicon { margin-top: 1px !important; }
+/* The handset icon's shape reads high next to the numbers: drop it a little more than the other icons. */
+html body .vt-footer .vt-ftr__contact.vt-ftr__phones .vt-ftr__cicon { margin-top: 3px !important; }

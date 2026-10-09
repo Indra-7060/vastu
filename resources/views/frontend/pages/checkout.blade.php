@@ -17,7 +17,7 @@
 
   <!-- Title -->
   <title>{{ $pageTitle ?? 'Checkout - Vastutathastu' }}</title>
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=225">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=226">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="{{ asset('vastu/css/checkout.css') }}?v=3">

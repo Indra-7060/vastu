@@ -8,6 +8,8 @@
     $sizeQuantities = old('size_quantities', $hasProduct ? $product->sizes->mapWithKeys(fn ($size) => [$size->id => $size->pivot->quantity ?? 0])->all() : []);
     $selectedCategory = old('category_id', $hasProduct ? $product->category_id : '');
     $selectedSub = old('sub_category_id', $hasProduct ? $product->sub_category_id : '');
+    $selectedExtraCats = collect(old('extra_category_ids', $hasProduct && $product->exists ? $product->extraCategories()->pluck('categories.id')->all() : []))
+        ->map(fn ($id) => (int) $id)->all();
     $hasOld = session()->hasOldInput();
     $flag = function (string $key, bool $default) use ($hasOld, $hasProduct, $product) {
         if ($hasOld) {
@@ -71,6 +73,22 @@
                         <option value="{{ $category->id }}" data-slug="{{ $category->slug }}" @selected($selectedCategory == $category->id)>{{ $category->title }}</option>
                     @endforeach
                 </select>
+            </div>
+            {{-- Extra categories: the product is also listed on these category pages (multiple choice). --}}
+            <div class="form-group multi-cat" data-multi-cat>
+                <button type="button" class="multi-cat__toggle" data-multi-cat-toggle aria-haspopup="true" aria-expanded="false">
+                    <span class="multi-cat__summary" data-multi-cat-summary>Also show in other categories…</span>
+                </button>
+                <div class="multi-cat__menu" data-multi-cat-menu hidden>
+                    <p class="multi-cat__hint">Tick every other category this product fits in. It stays in its main category too.</p>
+                    @foreach($categories as $category)
+                        <label class="multi-cat__opt" data-cat-id="{{ $category->id }}">
+                            <input type="checkbox" name="extra_category_ids[]" value="{{ $category->id }}" @checked(in_array($category->id, $selectedExtraCats, true))>
+                            <span>{{ $category->title }}</span>
+                        </label>
+                    @endforeach
+                </div>
+                <div class="multi-cat__chips" data-multi-cat-chips></div>
             </div>
             {{-- Sub-category, Brand and Offer are hidden (never used). Set $showUnusedFields = true to show them again. --}}
             @php $showUnusedFields = false; @endphp
@@ -310,6 +328,44 @@
     </div>
     <button type="button" class="btn btn-light" data-add-row data-target="highlights-repeater" data-template="highlight-template">+ Add Highlight</button>
 </div>
+
+<script>
+(function () {
+    var box = document.querySelector('[data-multi-cat]');
+    if (!box) return;
+    var toggle = box.querySelector('[data-multi-cat-toggle]'), menu = box.querySelector('[data-multi-cat-menu]'),
+        summary = box.querySelector('[data-multi-cat-summary]'), chips = box.querySelector('[data-multi-cat-chips]'),
+        main = document.getElementById('product-category');
+    function render() {
+        var mainId = main ? main.value : '';
+        var names = [];
+        chips.innerHTML = '';
+        box.querySelectorAll('.multi-cat__opt').forEach(function (opt) {
+            var cb = opt.querySelector('input'), isMain = opt.getAttribute('data-cat-id') === mainId;
+            opt.hidden = isMain;
+            if (isMain) cb.checked = false;
+            if (!cb.checked) return;
+            var name = opt.querySelector('span').textContent;
+            names.push(name);
+            var chip = document.createElement('button');
+            chip.type = 'button'; chip.className = 'multi-cat__chip'; chip.title = 'Remove ' + name;
+            chip.innerHTML = '<span></span><b aria-hidden="true">×</b>';
+            chip.querySelector('span').textContent = name;
+            chip.addEventListener('click', function () { cb.checked = false; render(); });
+            chips.appendChild(chip);
+        });
+        summary.textContent = names.length ? 'Also in ' + names.length + (names.length === 1 ? ' category' : ' categories') : 'Also show in other categories…';
+        box.classList.toggle('has-value', names.length > 0);
+    }
+    function open(state) { menu.hidden = !state; toggle.setAttribute('aria-expanded', state ? 'true' : 'false'); box.classList.toggle('is-open', state); }
+    toggle.addEventListener('click', function () { open(menu.hidden); });
+    document.addEventListener('click', function (e) { if (!box.contains(e.target)) open(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') open(false); });
+    menu.addEventListener('change', render);
+    if (main) main.addEventListener('change', render);
+    render();
+})();
+</script>
 
 <script type="text/template" id="highlight-template">
     <div class="detail-repeater__row" data-repeater-row>

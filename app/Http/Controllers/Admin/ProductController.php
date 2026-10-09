@@ -35,7 +35,11 @@ class ProductController extends Controller
         }
 
         if ($request->filled('category_id')) {
-            $query->where('category_id', $request->category_id);
+            // Includes products that are also listed in this category ("Also show in").
+            $categoryId = (int) $request->category_id;
+            $query->where(fn ($q) => $q->where('category_id', $categoryId)
+                ->orWhereIn('id', DB::table('category_product_positions')->select('product_id')
+                    ->where('category_id', $categoryId)->where('is_extra', true)));
         }
 
         if ($request->filled('brand_id')) {
@@ -83,6 +87,7 @@ class ProductController extends Controller
             $data = $this->storeImages($request, $data);
             $product = Product::create($data);
             $this->syncRelations($product, $request);
+            $this->syncExtraCategories($product, $request);
             $this->storeGallery($request, $product);
 
             return $product;
@@ -114,6 +119,7 @@ class ProductController extends Controller
             $data = $this->storeImages($request, $data, $product);
             $product->update($data);
             $this->syncRelations($product, $request);
+            $this->syncExtraCategories($product, $request);
             $this->storeGallery($request, $product);
             $this->deleteGalleryImages($request, $product);
         });
@@ -280,6 +286,8 @@ class ProductController extends Controller
             'title' => ['required', 'string', 'max:255', $titleRule],
             'category_id' => ['required', 'exists:categories,id'],
             'sub_category_id' => ['nullable', 'exists:sub_categories,id'],
+            'extra_category_ids' => ['nullable', 'array'],
+            'extra_category_ids.*' => ['integer', 'exists:categories,id'],
             'material' => ['nullable', 'string', 'max:80'],
             'badge' => ['nullable', Rule::in(['New', 'Bestseller', 'Energised', 'Limited Edition'])],
             'brand_id' => ['nullable', 'exists:brands,id'],
@@ -519,6 +527,35 @@ class ProductController extends Controller
         }
 
         return $items;
+    }
+
+    /**
+     * "Also show in" categories: the product stays in its main category and is also listed on these pages.
+     * Stored as is_extra rows in category_product_positions (the same rows Arrange Products uses), so a newly
+     * added category puts the product at the end of that page; drag it into place in Arrange Products.
+     */
+    private function syncExtraCategories(Product $product, Request $request): void
+    {
+        $wanted = collect($request->input('extra_category_ids', []))
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn ($id) => $id > 0 && $id !== (int) $product->category_id)
+            ->unique()->values();
+
+        DB::table('category_product_positions')
+            ->where('product_id', $product->id)->where('is_extra', true)
+            ->whereNotIn('category_id', $wanted->all())
+            ->delete();
+
+        $existing = DB::table('category_product_positions')->where('product_id', $product->id)
+            ->whereIn('category_id', $wanted->all())->pluck('category_id')->map(fn ($id) => (int) $id)->all();
+
+        foreach ($wanted->diff($existing) as $categoryId) {
+            $max = (int) DB::table('category_product_positions')->where('category_id', $categoryId)->max('position');
+            DB::table('category_product_positions')->insert([
+                'category_id' => $categoryId, 'product_id' => $product->id, 'is_extra' => true,
+                'position' => $max + 1, 'created_at' => now(), 'updated_at' => now(),
+            ]);
+        }
     }
 
     private function syncRelations(Product $product, Request $request): void

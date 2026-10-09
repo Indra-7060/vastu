@@ -82,6 +82,14 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    /** Extra categories this product is also listed in (Admin → Products → "Also show in", or Arrange Products). */
+    public function extraCategories()
+    {
+        return $this->belongsToMany(Category::class, 'category_product_positions')
+            ->wherePivot('is_extra', true)
+            ->withPivot('position');
+    }
+
     public function subCategory()
     {
         return $this->belongsTo(SubCategory::class);

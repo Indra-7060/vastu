@@ -27,6 +27,17 @@
       'Facebook' => $S::get('social_facebook'),
   ]);
   $phone = $S::get('contact_phone');
+  // All phone numbers: the main one + "More phone numbers" (one per line), shown as "+91 9673 366 920"
+  $fmtPhone = function (string $n) {
+      $d = preg_replace('/\D+/', '', $n);
+      if (strlen($d) === 12 && str_starts_with($d, '91')) { $d = substr($d, 2); }
+      return strlen($d) === 10 ? '+91 '.substr($d, 0, 4).' '.substr($d, 4, 3).' '.substr($d, 7) : trim($n);
+  };
+  $phones = collect(array_merge([$phone], preg_split('/[\r\n,]+/', (string) $S::get('contact_phones_more'))))
+      ->map(fn ($n) => trim((string) $n))->filter()
+      ->unique(fn ($n) => substr(preg_replace('/\D+/', '', $n), -10))
+      ->map(fn ($n) => ['label' => $fmtPhone($n), 'tel' => (strlen($d = preg_replace('/\D+/', '', $n)) === 10 ? '+91'.$d : '+'.ltrim($d, '+'))])
+      ->values();
   $email = $S::get('contact_email');
   $whatsapp = preg_replace('/\D+/', '', $S::get('contact_whatsapp'));
   // Social order in the footer: Instagram, YouTube, then Facebook (only those that are set).
@@ -57,13 +68,13 @@
           <img src="{{ asset('vastu/images/logo.svg') }}?v=2" width="244" height="68" alt="Vastutathastu — The Trusted Brand">
         </a>
         @if($S::get('footer_about'))<p class="vt-ftr__about">{{ $S::get('footer_about') }}</p>@endif
-        @if($S::get('footer_location') || $phone || $email)
+        @if($S::get('footer_location') || $phones->isNotEmpty() || $email)
         <address class="vt-ftr__address">
           @if($S::get('footer_location'))
             <span class="vt-ftr__contact"><svg class="vt-ftr__cicon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21.25s-7-5.6-7-11.25a7 7 0 0 1 14 0c0 5.65-7 11.25-7 11.25Z"/><circle cx="12" cy="10" r="2.6"/></svg><span>{{ $S::get('footer_location') }}</span></span>
           @endif
-          @if($phone)
-            <a class="vt-ftr__contact" href="tel:{{ preg_replace('/[^\d+]/', '', $phone) }}"><svg class="vt-ftr__cicon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.2 3.75h3.1l1.55 3.9-1.95 1.3a10.9 10.9 0 0 0 5.15 5.15l1.3-1.95 3.9 1.55v3.1a1.55 1.55 0 0 1-1.55 1.55A14.9 14.9 0 0 1 3.65 5.3 1.55 1.55 0 0 1 5.2 3.75Z"/></svg><span>{{ $phone }}</span></a>
+          @if($phones->isNotEmpty())
+            <span class="vt-ftr__contact vt-ftr__phones"><svg class="vt-ftr__cicon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.2 3.75h3.1l1.55 3.9-1.95 1.3a10.9 10.9 0 0 0 5.15 5.15l1.3-1.95 3.9 1.55v3.1a1.55 1.55 0 0 1-1.55 1.55A14.9 14.9 0 0 1 3.65 5.3 1.55 1.55 0 0 1 5.2 3.75Z"/></svg><span class="vt-ftr__phone-list">@foreach($phones as $p)<a href="tel:{{ $p['tel'] }}">{{ $p['label'] }}</a>@endforeach</span></span>
           @endif
           @if($email)
             <a class="vt-ftr__contact" href="mailto:{{ $email }}"><svg class="vt-ftr__cicon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4.5 7 7.5 6 7.5-6"/></svg><span>{{ $email }}</span></a>

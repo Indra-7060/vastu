@@ -23,6 +23,7 @@ class SiteSettings
                 'hint' => 'Shown in the footer. Leave a field empty to hide it.',
                 'fields' => [
                     'contact_phone' => ['label' => 'Phone', 'type' => 'text', 'default' => '', 'hint' => 'e.g. +91 98765 43210'],
+                    'contact_phones_more' => ['label' => 'More phone numbers', 'type' => 'textarea', 'default' => "9673366920\n9422035223\n9822773336\n8380079001\n9657611496", 'hint' => 'One number per line. Shown in the footer under the main phone number; each one can be tapped to call.'],
                     'contact_whatsapp' => ['label' => 'WhatsApp number', 'type' => 'text', 'default' => '919075566319', 'hint' => 'With country code (91 for India), e.g. 919075566319. Used by the green WhatsApp button on every page and the footer link. Leave empty to hide the button.'],
                     'whatsapp_message' => ['label' => 'WhatsApp opening message', 'type' => 'text', 'default' => 'Hello Vastutathastu, I would like to know more.', 'hint' => 'Typed into the chat for the customer when they tap the button. Leave empty for a blank chat.'],
                     'contact_email' => ['label' => 'Email', 'type' => 'email', 'default' => ''],
@@ -51,7 +52,7 @@ class SiteSettings
                 'label' => 'Footer text',
                 'hint' => 'Text in the footer on every page.',
                 'fields' => [
-                    'footer_about' => ['label' => 'About line (under the logo)', 'type' => 'textarea', 'default' => 'Authentic Vedic wisdom and sacred products for harmonious homes, workplaces, and lives.'],
+                    'footer_about' => ['label' => 'About line (under the logo)', 'type' => 'textarea', 'default' => '', 'hint' => 'Optional. Leave empty to show no text under the logo.'],
                     'footer_tagline' => ['label' => 'Tagline (under the location)', 'type' => 'text', 'default' => 'Guidance • Products • Consultations'],
                     'newsletter_title' => ['label' => 'Newsletter heading', 'type' => 'text', 'default' => 'Sacred guidance, delivered.'],
                     'newsletter_text' => ['label' => 'Newsletter text', 'type' => 'textarea', 'default' => 'Receive new product updates, Vedic insights, and practical guidance.'],

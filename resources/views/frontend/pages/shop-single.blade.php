@@ -18,7 +18,7 @@
   <!-- Title -->
   <title>{{ $pageTitle ?? ($product->title ?? 'Product') . ' - Vastutathastu' }}</title>
 
-  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=219">
+  <link rel="stylesheet" href="{{ asset('vastu/css/vastu.css') }}?v=220">
   <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
   <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vastu/images/favicon-32.png') }}?v=vt2">

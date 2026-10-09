@@ -4384,3 +4384,6 @@ html.vt-rmodal-open { overflow: hidden; }
 /* Footer contact icons: sized to the text and optically centred on the first line */
 html body .vt-footer .vt-ftr__contact { grid-template-columns: 26px minmax(0, 1fr); column-gap: 12px; }
 html body .vt-footer .vt-ftr__contact .vt-ftr__cicon { width: 26px !important; height: 26px !important; margin-top: -1px !important; }
+.vt-footer .vt-ftr__phone { display: inline-flex; white-space: nowrap; }
+.vt-footer .vt-ftr__phone-sep { color: rgba(255, 255, 255, .6); }
+@media (min-width: 1200px) and (max-width: 1599px) { html body .vt-footer .vt-ftr .vt-ftr__phone-list { column-gap: 6px !important; } html body .vt-footer .vt-ftr .vt-ftr__address .vt-ftr__phone-sep { font-size: 15px !important; } }

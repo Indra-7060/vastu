@@ -27,11 +27,11 @@
       'Facebook' => $S::get('social_facebook'),
   ]);
   $phone = $S::get('contact_phone');
-  // All phone numbers: the main one + "More phone numbers" (one per line), shown as "+91 9673 366 920"
+  // All phone numbers: the main one + "More phone numbers" (one per line), shown as "96733 66920" (the link dials +91)
   $fmtPhone = function (string $n) {
       $d = preg_replace('/\D+/', '', $n);
       if (strlen($d) === 12 && str_starts_with($d, '91')) { $d = substr($d, 2); }
-      return strlen($d) === 10 ? '+91 '.substr($d, 0, 4).' '.substr($d, 4, 3).' '.substr($d, 7) : trim($n);
+      return strlen($d) === 10 ? substr($d, 0, 5).' '.substr($d, 5) : trim($n);
   };
   $phones = collect(array_merge([$phone], preg_split('/[\r\n,]+/', (string) $S::get('contact_phones_more'))))
       ->map(fn ($n) => trim((string) $n))->filter()

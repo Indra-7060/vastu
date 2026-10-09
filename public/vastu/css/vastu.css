@@ -4372,3 +4372,12 @@ html.vt-rmodal-open { overflow: hidden; }
 .vt-footer .vt-ftr__phone-list { display: flex; flex-direction: column; gap: 2px; }
 .vt-footer .vt-ftr__phone-list a { color: inherit; text-decoration: none; white-space: nowrap; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: color .4s ease, background-size .4s ease; width: max-content; }
 .vt-footer .vt-ftr__phone-list a:hover { color: var(--ftr-accent, #8dc63f); background-size: 100% 1px; }
+/* Footer contact block: calmer colours, numbers in two columns so the column isn't overly tall */
+.vt-footer .vt-ftr__contact, .vt-footer .vt-ftr__contact span, .vt-footer .vt-ftr__phone-list a { color: rgba(255, 255, 255, .86); }
+.vt-footer a.vt-ftr__contact:hover, .vt-footer .vt-ftr__phone-list a:hover { color: var(--ftr-accent, #8dc63f); }
+.vt-footer .vt-ftr__address { max-width: 340px; }
+.vt-footer .vt-ftr__phone-list { display: grid; grid-template-columns: repeat(2, max-content); column-gap: 22px; row-gap: 4px; }
+@media (max-width: 1199px) and (min-width: 768px) { .vt-footer .vt-ftr__phone-list { grid-template-columns: max-content; } }
+.vt-footer .vt-ftr__phone-list { display: flex !important; flex-direction: row !important; flex-wrap: wrap; column-gap: 20px; row-gap: 4px; max-width: 300px; }
+.vt-footer .vt-ftr__phone-list a { font-variant-numeric: tabular-nums; min-width: 9.5ch; }
+@media (min-width: 1200px) and (max-width: 1599px) { html body .vt-footer .vt-ftr .vt-ftr__phone-list { column-gap: 12px; } html body .vt-footer .vt-ftr .vt-ftr__address .vt-ftr__phone-list a { font-size: 15px !important; min-width: 0; } }

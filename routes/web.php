@@ -186,6 +186,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('products/check-title', [ProductController::class, 'checkTitle'])->name('products.check-title');
         Route::get('products/sub-categories', [ProductController::class, 'subCategories'])->name('products.sub-categories');
         Route::post('products/bulk', [ProductController::class, 'bulkAction'])->name('products.bulk');
+        Route::get('products/arrange', [\App\Http\Controllers\Admin\ProductArrangeController::class, 'index'])->name('products.arrange');
+        Route::post('products/arrange/{category}', [\App\Http\Controllers\Admin\ProductArrangeController::class, 'save'])->name('products.arrange.save');
+        Route::post('products/arrange/{category}/add', [\App\Http\Controllers\Admin\ProductArrangeController::class, 'add'])->name('products.arrange.add');
+        Route::delete('products/arrange/{category}/{product}', [\App\Http\Controllers\Admin\ProductArrangeController::class, 'remove'])->name('products.arrange.remove');
         Route::resource('products', ProductController::class);
         Route::patch('products/{product}/toggle', [ProductController::class, 'toggleStatus'])->name('products.toggle');
         Route::patch('products/{product}/featured', [ProductController::class, 'toggleFeatured'])->name('products.featured');

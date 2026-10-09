@@ -139,7 +139,13 @@ class FrontendController extends Controller
         // Base query: the page's scope (category + search) before the visitor's filters.
         $base = Product::query()->active();
         if ($activeCategory) {
-            $base->where('category_id', $activeCategory->id ?? 0);
+            // the category's own products + products from other categories added to it in Admin → Arrange Products
+            $catId = (int) ($activeCategory->id ?? 0);
+            $base->where(function ($q) use ($catId) {
+                $q->where('category_id', $catId)
+                    ->orWhereIn('id', fn ($sub) => $sub->select('product_id')->from('category_product_positions')
+                        ->where('category_id', $catId)->where('is_extra', true));
+            });
         }
         if ($request->boolean('featured')) {
             $base->where('is_featured', true);   // "Top picks" link in the Shop menu (Admin → Products → Featured)
@@ -157,6 +163,11 @@ class FrontendController extends Controller
             // Search results: best match first.
             $productsQuery->orderByRaw('FIELD(id, '.implode(',', array_map('intval', $searchIds)).')');
         } else {
+            if ($sort === 'recommended' && $activeCategory && $activeCategory->id) {
+                // the admin's order for this category first (Admin → Products Master → Arrange Products)
+                $pos = '(select cpp.position from category_product_positions cpp where cpp.category_id = '.(int) $activeCategory->id.' and cpp.product_id = products.id)';
+                $productsQuery->orderByRaw("$pos is null")->orderByRaw($pos);
+            }
             $this->applyListingSort($productsQuery, $sort);
         }
 

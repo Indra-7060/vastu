@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v=vastu-pro-34">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v=vastu-pro-35">
     <link rel="icon" type="image/svg+xml" href="{{ asset('vastu/images/favicon.svg') }}?v=vt2">
     <link rel="icon" type="image/png" sizes="50x50" href="{{ asset('vastu/images/favicon-50.png') }}?v=vt2">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('vastu/images/favicon-32.png') }}?v=vt2">
@@ -51,7 +51,8 @@
                     @if($showUnused)
                         <a href="{{ route('admin.offers.index') }}" class="{{ request()->routeIs('admin.offers.*') ? 'active' : '' }}">Offers</a>
                     @endif
-                    <a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">Products</a>
+                    <a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.*') && ! request()->routeIs('admin.products.arrange*') ? 'active' : '' }}">Products</a>
+                    <a href="{{ route('admin.products.arrange') }}" class="{{ request()->routeIs('admin.products.arrange*') ? 'active' : '' }}">Arrange Products</a>
                 </div>
             </div>
 

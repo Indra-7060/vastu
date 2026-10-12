@@ -3,12 +3,13 @@
   // (empty until products are added) and the rest open placeholder info pages.
   $info = fn (string $slug) => route('info', $slug);
   // Category links: the homepage categories first (Admin → Categories → "Show on home"), then the other
-  // active categories — 6 in the "Category" column and up to 6 more in the column next to it (no heading).
-  $allCats = \App\Models\Category::query()->where('is_active', true)
-      ->orderByDesc('show_on_home')->orderBy('sort_order')->orderBy('title')->take(12)->get()
+  // active categories — 8 in the "Category" column and up to 8 more in the column next to it (no heading).
+  // Service-type categories (e.g. Kundali Guidance) are left out: they belong to guidance, not products.
+  $allCats = \App\Models\Category::query()->where('is_active', true)->where('slug', 'not like', '%guidance%')
+      ->orderByDesc('show_on_home')->orderBy('sort_order')->orderBy('title')->take(16)->get()
       ->mapWithKeys(fn ($c) => [$c->title => $c->frontendUrl()]);
-  $shopLinks = $allCats->take(6)->all();
-  $moreShopLinks = $allCats->slice(6)->all();
+  $shopLinks = $allCats->take(8)->all();
+  $moreShopLinks = $allCats->slice(8)->all();
   $aboutLinks = [
       'Vastu Consultation' => $info('vastu-consultation'),
       'Astrology' => $info('astrology'),

@@ -4404,3 +4404,26 @@ html body.vt-home .vt-yantra__btn--ghost, html body .vt-home .vt-yantra__btn--gh
 html body.vt-home .vt-yantra__btn--primary, html body .vt-home .vt-yantra__btn--primary { box-sizing: border-box; min-height: 54px; }
 /* Footer: the second column continues "Category" — no heading of its own on tablet/desktop (space kept so the lists line up). */
 @media (min-width: 768px) { .vt-ftr__group--guidance .vt-ftr__heading { visibility: hidden; } }
+
+/* Information / policy pages (/info/...): same type system as the rest of the site —
+   serif uppercase page title, Manrope sub-headings and body, content in a white card. */
+.vt-content-page .vt-info-content {
+  margin-top: 8px; padding: clamp(28px, 4vw, 56px) clamp(22px, 4.5vw, 64px);
+  background: #fff; border: 1px solid rgba(49, 27, 11, .08); border-radius: 12px;
+  box-shadow: 0 10px 30px -18px rgba(49, 27, 11, .25);
+}
+html body .vt-content-page .vt-info-content :is(h2, h3, h4) {
+  font-family: var(--vt-sans) !important; font-weight: 700 !important; text-transform: none; letter-spacing: 0;
+  color: var(--vt-ink); margin: 34px 0 10px; line-height: 1.35;
+}
+html body .vt-content-page .vt-info-content h2 { font-size: 22px !important; }
+html body .vt-content-page .vt-info-content h3 { font-size: 19px !important; }
+html body .vt-content-page .vt-info-content h4 { font-size: 17px !important; }
+html body .vt-content-page .vt-info-content :is(h2, h3, h4):first-child { margin-top: 0; }
+html body .vt-content-page .vt-info-content :is(p, li) { font-family: var(--vt-sans); font-size: 16px !important; line-height: 1.75; color: #3d3a35; }
+html body .vt-content-page .vt-info-content p { margin: 0 0 14px; }
+html body .vt-content-page .vt-info-content > p:first-child { font-size: 17px !important; color: var(--vt-ink); }
+html body .vt-content-page .vt-info-content > p:last-child { margin-bottom: 0; padding-top: 22px; margin-top: 30px; border-top: 1px solid rgba(49, 27, 11, .1); }
+html body .vt-content-page .vt-info-content a { color: var(--vt-bronze); text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+html body .vt-content-page .vt-info-content a:hover { color: var(--vt-ink); }
+@media (max-width: 767px) { .vt-content-page .vt-info-content { border-radius: 10px; } html body .vt-content-page .vt-info-content h3 { font-size: 18px !important; } }

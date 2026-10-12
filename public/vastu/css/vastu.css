@@ -4402,3 +4402,5 @@ html body .vt-footer .vt-ftr__contact.vt-ftr__phones .vt-ftr__cicon { margin-top
 /* "Discover Material Guide": same size as "Shop Shree Yantras" beside it (54px tall, 28px side padding). */
 html body.vt-home .vt-yantra__btn--ghost, html body .vt-home .vt-yantra__btn--ghost { box-sizing: border-box; min-height: 54px; padding: 0 28px; }
 html body.vt-home .vt-yantra__btn--primary, html body .vt-home .vt-yantra__btn--primary { box-sizing: border-box; min-height: 54px; }
+/* Footer: the second column continues "Category" — no heading of its own on tablet/desktop (space kept so the lists line up). */
+@media (min-width: 768px) { .vt-ftr__group--guidance .vt-ftr__heading { visibility: hidden; } }

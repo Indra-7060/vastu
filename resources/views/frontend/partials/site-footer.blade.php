@@ -2,21 +2,17 @@
   // Every footer item stays on Vastutathastu pages: shop items open their category
   // (empty until products are added) and the rest open placeholder info pages.
   $info = fn (string $slug) => route('info', $slug);
-  // Shop links: the real categories shown on the homepage (Admin → Categories → "Show on home").
-  $shopLinks = \App\Models\Category::query()->where('is_active', true)->where('show_on_home', true)
-      ->orderBy('sort_order')->orderBy('title')->take(6)->get()
-      ->mapWithKeys(fn ($c) => [$c->title => $c->frontendUrl()])->all();
-  $guidanceLinks = [
+  // Category links: the homepage categories first (Admin → Categories → "Show on home"), then the other
+  // active categories — 6 in the "Category" column and up to 6 more in the column next to it (no heading).
+  $allCats = \App\Models\Category::query()->where('is_active', true)
+      ->orderByDesc('show_on_home')->orderBy('sort_order')->orderBy('title')->take(12)->get()
+      ->mapWithKeys(fn ($c) => [$c->title => $c->frontendUrl()]);
+  $shopLinks = $allCats->take(6)->all();
+  $moreShopLinks = $allCats->slice(6)->all();
+  $aboutLinks = [
       'Vastu Consultation' => $info('vastu-consultation'),
       'Astrology' => $info('astrology'),
       'Numerology' => $info('numerology'),
-      'Energy Analysis' => $info('energy-analysis'),
-      'Book Appointment' => $info('book-appointment'),
-  ];
-  $aboutLinks = [
-      'Our Story' => $info('our-story'),
-      'Testimonials' => $info('testimonials'),
-      'Blogs' => route('blog'),
       'Contact Us' => route('contact'),
   ];
   // Contact details, social links and footer text: Admin → Settings → Site Details.
@@ -42,8 +38,9 @@
   $whatsapp = preg_replace('/\D+/', '', $S::get('contact_whatsapp'));
   // Social order in the footer: Instagram, YouTube, then Facebook (only those that are set).
   $socialLinks = array_filter(array_replace(['Instagram' => null, 'YouTube' => null, 'Facebook' => null], $socialLinks));
-  $navGroups = ['Explore' => $shopLinks, 'Guidance' => $guidanceLinks, 'Company' => $aboutLinks];
-  $navLabels = ['Explore' => 'Category', 'Guidance' => 'Guidance', 'Company' => 'Quick links'];
+  // The second column continues the categories: its heading is hidden on wider screens (phones show "More categories").
+  $navGroups = ['Explore' => $shopLinks, 'Guidance' => $moreShopLinks, 'Company' => $aboutLinks];
+  $navLabels = ['Explore' => 'Category', 'Guidance' => 'More categories', 'Company' => 'Quick links'];
 @endphp
 <footer class="vt-footer site-footer">
   @php $cta = \App\Support\SiteBanners::first('consultation_cta'); @endphp

@@ -4412,18 +4412,17 @@ html body.vt-home .vt-yantra__btn--primary, html body .vt-home .vt-yantra__btn--
   background: #fff; border: 1px solid rgba(49, 27, 11, .08); border-radius: 12px;
   box-shadow: 0 10px 30px -18px rgba(49, 27, 11, .25);
 }
+/* One consistent scale on every info / policy page: all paragraphs 16px #3d3a35, all sub-headings 18px bold ink, same spacing. */
 html body .vt-content-page .vt-info-content :is(h2, h3, h4) {
-  font-family: var(--vt-sans) !important; font-weight: 700 !important; text-transform: none; letter-spacing: 0;
-  color: var(--vt-ink); margin: 34px 0 10px; line-height: 1.35;
+  font-family: var(--vt-sans) !important; font-size: 18px !important; font-weight: 700 !important; line-height: 1.4 !important;
+  text-transform: none !important; letter-spacing: 0 !important; color: var(--vt-ink) !important; margin: 28px 0 8px !important;
 }
-html body .vt-content-page .vt-info-content h2 { font-size: 22px !important; }
-html body .vt-content-page .vt-info-content h3 { font-size: 19px !important; }
-html body .vt-content-page .vt-info-content h4 { font-size: 17px !important; }
-html body .vt-content-page .vt-info-content :is(h2, h3, h4):first-child { margin-top: 0; }
-html body .vt-content-page .vt-info-content :is(p, li) { font-family: var(--vt-sans); font-size: 16px !important; line-height: 1.75; color: #3d3a35; }
-html body .vt-content-page .vt-info-content p { margin: 0 0 14px; }
-html body .vt-content-page .vt-info-content > p:first-child { font-size: 17px !important; color: var(--vt-ink); }
-html body .vt-content-page .vt-info-content > p:last-child { margin-bottom: 0; padding-top: 22px; margin-top: 30px; border-top: 1px solid rgba(49, 27, 11, .1); }
-html body .vt-content-page .vt-info-content a { color: var(--vt-bronze); text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
-html body .vt-content-page .vt-info-content a:hover { color: var(--vt-ink); }
-@media (max-width: 767px) { .vt-content-page .vt-info-content { border-radius: 10px; } html body .vt-content-page .vt-info-content h3 { font-size: 18px !important; } }
+html body .vt-content-page .vt-info-content :is(h2, h3, h4):first-child { margin-top: 0 !important; }
+html body .vt-content-page .vt-info-content :is(p, li) {
+  font-family: var(--vt-sans) !important; font-size: 16px !important; font-weight: 400 !important; line-height: 1.7 !important;
+  color: #3d3a35 !important; margin: 0 0 12px !important;
+}
+html body .vt-content-page .vt-info-content > p:last-child { margin: 28px 0 0 !important; padding-top: 20px; border-top: 1px solid rgba(49, 27, 11, .1); }
+html body .vt-content-page .vt-info-content a { color: var(--vt-bronze) !important; text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+html body .vt-content-page .vt-info-content a:hover { color: var(--vt-ink) !important; }
+@media (max-width: 767px) { .vt-content-page .vt-info-content { border-radius: 10px; } }

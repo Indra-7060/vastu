@@ -183,6 +183,9 @@ class BannerController extends Controller
             ],
             'mobile_images' => ['nullable', 'array'],
             'mobile_images.*' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:8192'],
+            // Home — Hero video slides: optional tall video for phones
+            'mobile_videos' => ['nullable', 'array'],
+            'mobile_videos.*' => ['nullable', 'file', 'mimes:mp4,webm,mov', 'max:51200'],
             'image_titles' => ['nullable', 'array'],
             'image_titles.*' => ['nullable', 'string', 'max:255'],
             'image_subtitles' => ['nullable', 'array'],
@@ -210,6 +213,10 @@ class BannerController extends Controller
             ],
             'replace_mobile' => ['nullable', 'array'],
             'replace_mobile.*' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:8192'],
+            'replace_mobile_video' => ['nullable', 'array'],
+            'replace_mobile_video.*' => ['nullable', 'file', 'mimes:mp4,webm,mov', 'max:51200'],
+            'remove_mobile_video' => ['nullable', 'array'],
+            'remove_mobile_video.*' => ['integer'],
             'remove_mobile' => ['nullable', 'array'],
             'remove_mobile.*' => ['integer'],
         ], [
@@ -247,7 +254,10 @@ class BannerController extends Controller
             $data['remove_images'],
             $data['replace_images'],
             $data['replace_mobile'],
-            $data['remove_mobile']
+            $data['remove_mobile'],
+            $data['mobile_videos'],
+            $data['replace_mobile_video'],
+            $data['remove_mobile_video']
         );
 
         return $data;
@@ -265,6 +275,7 @@ class BannerController extends Controller
         $buttonTexts = $request->input('image_button_texts', []);
         $buttonLinks = $request->input('image_button_links', []);
         $mobileFiles = $request->file('mobile_images', []);
+        $mobileVideos = $request->file('mobile_videos', []);
 
         foreach ($request->file('images') as $index => $file) {
             $sort++;
@@ -273,9 +284,11 @@ class BannerController extends Controller
                 $mobilePath = $mobileFiles[$index]->store('banners/mobile', 'public');
             }
 
+            $isVideo = str_starts_with((string) $file->getMimeType(), 'video/');
             $banner->images()->create([
                 'image' => $file->store('banners', 'public'),
                 'mobile_image' => $mobilePath,
+                'mobile_video' => $isVideo && ! empty($mobileVideos[$index]) ? $mobileVideos[$index]->store('banners/mobile', 'public') : null,
                 'title' => $titles[$index] ?? null,
                 'subtitle' => $subtitles[$index] ?? null,
                 'button_text' => $buttonTexts[$index] ?? null,
@@ -290,6 +303,7 @@ class BannerController extends Controller
     {
         // Desktop / mobile files changed on an existing image (no need to delete the whole image)
         $removeMobile = array_map('intval', (array) $request->input('remove_mobile', []));
+        $removeMobileVideo = array_map('intval', (array) $request->input('remove_mobile_video', []));
         foreach ($banner->images as $image) {
             $changes = [];
             if ($file = $request->file('replace_images.'.$image->id)) {
@@ -304,6 +318,15 @@ class BannerController extends Controller
             } elseif (in_array($image->id, $removeMobile, true) && $image->mobile_image) {
                 Storage::disk('public')->delete($image->mobile_image);
                 $changes['mobile_image'] = null;
+            }
+            if ($file = $request->file('replace_mobile_video.'.$image->id)) {
+                if ($image->mobile_video) {
+                    Storage::disk('public')->delete($image->mobile_video);
+                }
+                $changes['mobile_video'] = $file->store('banners/mobile', 'public');
+            } elseif (in_array($image->id, $removeMobileVideo, true) && $image->mobile_video) {
+                Storage::disk('public')->delete($image->mobile_video);
+                $changes['mobile_video'] = null;
             }
             if ($changes) {
                 $image->update($changes);
@@ -352,6 +375,9 @@ class BannerController extends Controller
         }
         if ($image->mobile_image) {
             Storage::disk('public')->delete($image->mobile_image);
+        }
+        if ($image->mobile_video) {
+            Storage::disk('public')->delete($image->mobile_video);
         }
     }
 

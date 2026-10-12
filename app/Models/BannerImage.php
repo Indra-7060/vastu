@@ -13,6 +13,7 @@ class BannerImage extends Model
         'banner_id',
         'image',
         'mobile_image',
+        'mobile_video',
         'title',
         'subtitle',
         'button_text',
@@ -39,7 +40,18 @@ class BannerImage extends Model
 
     public function getVideoMimeTypeAttribute(): string
     {
-        return match (strtolower(pathinfo((string) $this->image, PATHINFO_EXTENSION))) {
+        return self::mimeFor($this->image);
+    }
+
+    /** MIME type of the phone video (Home — Hero video slides). */
+    public function getMobileVideoMimeTypeAttribute(): string
+    {
+        return self::mimeFor($this->mobile_video);
+    }
+
+    private static function mimeFor(?string $path): string
+    {
+        return match (strtolower(pathinfo((string) $path, PATHINFO_EXTENSION))) {
             'webm' => 'video/webm',
             'ogg', 'ogv' => 'video/ogg',
             'mov' => 'video/quicktime',

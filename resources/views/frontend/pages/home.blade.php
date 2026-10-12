@@ -120,6 +120,7 @@
               <div class="vt-hero__slide vt-hero__slide--text{{ $loop->first ? ' is-selected' : '' }}" role="group" aria-roledescription="slide" aria-label="{{ $loop->iteration }} of {{ $loop->count }}" data-vt-hero-slide>
                 @if($media && $media->is_video)
                   <video class="vt-hero__media" autoplay muted loop playsinline preload="{{ $loop->first ? 'metadata' : 'none' }}" @if($media->mobile_image) poster="{{ $mobileUrl }}?v={{ @filemtime(public_path('storage/'.$media->mobile_image)) }}" @endif aria-hidden="true">
+                    @if($media->mobile_video)<source media="(max-width: 767px)" src="{{ $B::url($media->mobile_video) }}?v={{ @filemtime(public_path('storage/'.$media->mobile_video)) }}" type="{{ $media->mobile_video_mime_type }}">@endif
                     <source src="{{ $B::url($media->image) }}?v={{ @filemtime(public_path('storage/'.$media->image)) }}" type="{{ $media->video_mime_type }}">
                   </video>
                 @elseif($media)
@@ -147,6 +148,7 @@
               <div class="vt-hero__slide vt-hero__slide--designed{{ $loop->first ? ' is-selected' : '' }}{{ $media && $media->is_video ? ' vt-hero__slide--video' : '' }}{{ $offShape($sz['d'], $shapeD) ? ' vt-hero__slide--fit-d' : '' }}{{ $offShape($sz['m'], $shapeM) ? ' vt-hero__slide--fit-m' : '' }}" role="group" aria-roledescription="slide" aria-label="{{ $loop->iteration }} of {{ $loop->count }}" data-vt-hero-slide>
                 @if($media && $media->is_video)
                   <video class="vt-hero__media" autoplay muted loop playsinline preload="{{ $loop->first ? 'metadata' : 'none' }}" @if($media->mobile_image) poster="{{ $mobileUrl }}?v={{ @filemtime(public_path('storage/'.$media->mobile_image)) }}" @endif aria-hidden="true">
+                    @if($media->mobile_video)<source media="(max-width: 767px)" src="{{ $B::url($media->mobile_video) }}?v={{ @filemtime(public_path('storage/'.$media->mobile_video)) }}" type="{{ $media->mobile_video_mime_type }}">@endif
                     <source src="{{ $B::url($media->image) }}?v={{ @filemtime(public_path('storage/'.$media->image)) }}" type="{{ $media->video_mime_type }}">
                   </video>
                   @if($slideLink)<a class="vt-hero__designed" href="{{ $slideLink }}" aria-label="{{ $slideName }}" draggable="false"></a>@endif

@@ -28,7 +28,7 @@ class BannerSections
                 'label' => 'Home — Hero',
                 'page' => 'Home',
                 'hint' => 'Full-screen slideshow at the top of the homepage. Each banner is one slide; slides change every 5 seconds (ordered by Display order). Each slide is either a finished picture that opens a link when clicked, or — with “Show text & buttons on this slide” switched on — a picture or video with the website’s own label, heading and buttons on top.',
-                'fields' => ['Link when the picture is clicked' => 'Picture-only slides: e.g. /rudraksh or /product/umbra-spray', 'Subtitle, Title, Buttons' => 'Only when “Show text & buttons” is on; all optional', 'Desktop image / video' => 'Wide, 1920×1080', 'Mobile image' => 'Tall, 1080×1920 — shown on phones (for a video: also its loading still)'],
+                'fields' => ['Link when the picture is clicked' => 'Picture-only slides: e.g. /rudraksh or /product/umbra-spray', 'Subtitle, Title, Buttons' => 'Only when “Show text & buttons” is on; all optional', 'Desktop image / video' => 'Wide, 1920×1080', 'Mobile image' => 'Tall, 1080×1920 — shown on phones (for a video: also its loading still)', 'Mobile video' => 'Video slides only: tall 1080×1920 MP4 (up to 50 MB) played on phones instead of the desktop video'],
                 'media' => 'image_or_video',
                 'multi' => true,
             ],

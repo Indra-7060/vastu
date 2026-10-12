@@ -57,7 +57,7 @@
             }
             if (mediaNote) {
                 mediaNote.textContent = media === 'image_or_video'
-                    ? 'Each slide: a desktop video (mp4, webm, mov up to 50 MB) or image, plus an optional mobile image. For a video, the mobile image is also shown while the video loads.'
+                    ? 'Each slide: a desktop video (mp4, webm, mov up to 50 MB) or image, plus an optional mobile image. For a video you can also add a tall mobile video (1080×1920) for phones; the mobile image is shown while the video loads.'
                     : 'Upload a JPG or PNG image (up to 50 MB).';
             }
         }
@@ -86,6 +86,8 @@
             input.addEventListener('change', function () {
                 const file = input.files && input.files[0];
                 showPreview(file, preview);
+                const mobileVideoBox = document.getElementById('banner-mobile-video-box');
+                if (mobileVideoBox) mobileVideoBox.hidden = !(file && file.type.indexOf('video/') === 0);
                 if (mobileLabel) {
                     const isVideo = file && file.type.indexOf('video/') === 0;
                     mobileLabel.innerHTML = (isVideo ? 'Still image for the video (shown on phones and while it loads)' : 'Mobile image') + ' <span class="banner-variant__req">(optional)</span>';

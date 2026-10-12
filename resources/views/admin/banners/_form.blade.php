@@ -154,6 +154,27 @@
                             <label class="remove-check"><input type="checkbox" name="remove_mobile[]" value="{{ $image->id }}"> Remove mobile image</label>
                         @endif
                     </div>
+                    @if($image->is_video)
+                    <div class="banner-variant">
+                        <p class="banner-variant__label">Mobile video <span class="banner-variant__req">(optional)</span></p>
+                        <div class="banner-variant__preview banner-variant__preview--tall">
+                            @if($image->mobile_video)
+                                <video src="{{ asset('storage/'.$image->mobile_video) }}" controls muted preload="metadata"></video>
+                            @else
+                                <span class="banner-variant__empty">No mobile video yet — phones play the desktop video, trimmed to fit</span>
+                            @endif
+                        </div>
+                        <label class="banner-variant__file">
+                            <span>{{ $image->mobile_video ? 'Replace mobile video' : 'Add mobile video' }}</span>
+                            <input type="file" name="replace_mobile_video[{{ $image->id }}]" accept=".mp4,.webm,.mov,video/mp4,video/webm,video/quicktime" data-preview-into="#mobvid-prev-{{ $image->id }}">
+                        </label>
+                        <small class="hint">Tall 1080×1920 (9:16) MP4, up to 50 MB. Played on phones; keep the subject in the middle so it fits every phone screen.</small>
+                        <div class="banner-variant__new" id="mobvid-prev-{{ $image->id }}"></div>
+                        @if($image->mobile_video)
+                            <label class="remove-check"><input type="checkbox" name="remove_mobile_video[]" value="{{ $image->id }}"> Remove mobile video</label>
+                        @endif
+                    </div>
+                    @endif
                     <div class="banner-variant banner-variant--meta">
                         <div class="form-group" data-hide-for="home_hero">
                             <label>Order</label>
@@ -178,6 +199,12 @@
             <p class="banner-variant__label" id="banner-mobile-label">Mobile image <span class="banner-variant__req">(optional)</span></p>
             <input type="file" name="mobile_images[0]" id="banner-mobile-image" accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp">
             <div id="banner-mobile-preview" class="banner-variant__new"></div>
+        </div>
+        <div class="banner-variant" id="banner-mobile-video-box" hidden>
+            <p class="banner-variant__label">Mobile video <span class="banner-variant__req">(optional)</span></p>
+            <input type="file" name="mobile_videos[0]" id="banner-mobile-video" accept=".mp4,.webm,.mov,video/mp4,video/webm,video/quicktime" data-preview-into="#banner-mobile-video-preview">
+            <small class="hint">Tall 1080×1920 (9:16) MP4, up to 50 MB. Played on phones instead of the desktop video.</small>
+            <div id="banner-mobile-video-preview" class="banner-variant__new"></div>
         </div>
     </div>
 </div>

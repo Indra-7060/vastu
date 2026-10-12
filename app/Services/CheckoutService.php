@@ -286,7 +286,7 @@ class CheckoutService
             ]);
 
             if ($response->status() === 401) {
-                throw new RuntimeException('Razorpay authentication failed. Please check RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env (Dashboard → API Keys → Test mode).');
+                throw new RuntimeException('Razorpay authentication failed. Please check RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env (Razorpay Dashboard → Account & Settings → API Keys, Live mode).');
             }
 
             throw new RuntimeException($rzpMessage.' Please try again.');
